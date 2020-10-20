@@ -23,7 +23,7 @@ android {
 
     compileSdkVersion 28
     lintOptions {
-        bortOnError false
+        abortOnError false
     }
     signingConfigs {
         debug {
