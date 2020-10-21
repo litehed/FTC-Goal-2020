@@ -3,14 +3,13 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class DriveSystem extends SubsystemBase {
     private MecanumDrive drive;
-    private MotorEx fL, bL, fR, bR;
+    private Motor fL, bL, fR, bR;
 
-    public DriveSystem(MotorEx frontL, MotorEx frontR, MotorEx backL, MotorEx backR){
+    public DriveSystem(Motor frontL, Motor frontR, Motor backL, Motor backR){
         fL = frontL;
         fR = frontR;
         bL = backL;
@@ -20,7 +19,7 @@ public class DriveSystem extends SubsystemBase {
     }
 
     public DriveSystem(HardwareMap hMap, String fLName, String fRName, String bLName, String bRName){
-        this(new MotorEx(hMap, fLName), new MotorEx(hMap, fRName), new MotorEx(hMap, bLName), new MotorEx(hMap, bRName));
+        this(new Motor(hMap, fLName), new Motor(hMap, fRName), new Motor(hMap, bLName), new Motor(hMap, bRName));
     }
 
     //Strafe Speed, Forward Speed, and Turn Speed
