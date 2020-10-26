@@ -5,11 +5,11 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class Shooter extends SubsystemBase {
+public class ShooterSystem extends SubsystemBase {
     private Motor kuunav;
 
-    public Shooter(HardwareMap hmap, String name){
-        kuunav = new Motor(hmap, name);
+    public ShooterSystem(Motor ShooterMotor){
+        kuunav = ShooterMotor;
     }
 
     public void shot(){

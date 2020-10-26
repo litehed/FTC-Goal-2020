@@ -17,10 +17,10 @@ public class DriveSystem extends SubsystemBase {
 
         drive = new MecanumDrive(fL, fR, bL, bR);
     }
-
-    public DriveSystem(HardwareMap hMap, String fLName, String fRName, String bLName, String bRName){
-        this(new Motor(hMap, fLName), new Motor(hMap, fRName), new Motor(hMap, bLName), new Motor(hMap, bRName));
-    }
+    //not in current use and yuou cant make me get rid of it
+//    public DriveSystem(HardwareMap hMap, String fLName, String fRName, String bLName, String bRName){
+//        this(new Motor(hMap, fLName), new Motor(hMap, fRName), new Motor(hMap, bLName), new Motor(hMap, bRName));
+//    }
 
     //Strafe Speed, Forward Speed, and Turn Speed
     public void drive(double strfSpd, double fSpd, double trnSpd){

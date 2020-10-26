@@ -2,22 +2,19 @@ package org.firstinspires.ftc.teamcode.subsystems.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.ShooterSystem;
 
 public class Com_NoShoot extends CommandBase {
 
-    private final Shooter shooter;
+    private final ShooterSystem shooterSystem;
 
-    public Com_NoShoot(Shooter subby){
-        shooter = subby;
-        addRequirements(shooter);
+    public Com_NoShoot(ShooterSystem subby){
+        shooterSystem = subby;
+        addRequirements(shooterSystem);
     }
     @Override
-    public void initialize(){
-        shooter.stoop();
+    public void execute(){
+        shooterSystem.stoop();
     }
-    @Override
-    public boolean isFinished(){
-        return true;
-    }
+
 }
