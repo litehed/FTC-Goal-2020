@@ -43,7 +43,7 @@ public class TeleOpMain extends CommandOpMode {
 
         m_driverOp = new GamepadEx(gamepad1);
 
-        driveCommand = new Com_Drive(mecDrive, ()->m_driverOp.getLeftX(), ()->m_driverOp.getLeftY(), ()->m_driverOp.getRightX());
+        driveCommand = new Com_Drive(mecDrive, m_driverOp::getLeftX, m_driverOp::getLeftY, m_driverOp::getRightX);
         shooterSystem = new ShooterSystem(shot);
         shootCommand = new Com_Shoot(shooterSystem);
         stp = new Com_NoShoot(shooterSystem);
