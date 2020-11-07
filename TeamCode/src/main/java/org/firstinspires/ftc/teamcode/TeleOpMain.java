@@ -16,8 +16,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.DriveSystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSystem;
+import org.firstinspires.ftc.teamcode.subsystems.WobbleSystem;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_Drive;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_NoShoot;
+import org.firstinspires.ftc.teamcode.subsystems.commands.Com_PickUp;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_Shoot;
 
 @TeleOp(name = "CommandBaseTest")
@@ -26,16 +28,18 @@ public class TeleOpMain extends CommandOpMode {
     public double pwrSelect;
 
     private Motor fL, bL, fR, bR;
-    private MotorEx shot;
+    private MotorEx shot, pickup;
 
     private DriveSystem mecDrive;
     private Com_Drive driveCommand;
     private ShooterSystem shooterSystem;
     private Com_Shoot shootCommand;
     private Com_NoShoot stopCommand;
+    private WobbleSystem wobbleSystem;
+    private Com_PickUp pickupCommand;
 
     public GamepadEx m_driverOp, m_toolOp;
-    private Button shooterStart, shooterStop, dpadUp, dpadDown;
+    private Button shooterStart, shooterStop, dpadUp, dpadDown, goalLift;
 
     @Override
     public void initialize() {
@@ -45,7 +49,9 @@ public class TeleOpMain extends CommandOpMode {
         bR = new Motor(hardwareMap, "bR");
 
         shot = new MotorEx(hardwareMap, "shot", Motor.GoBILDA.BARE);
+        pickup = new MotorEx(hardwareMap, "wobble", Motor.GoBILDA.BARE);
         shot.setRunMode(Motor.RunMode.VelocityControl);
+        pickup.setRunMode(Motor.RunMode.VelocityControl);
 
         mecDrive = new DriveSystem(fL, fR, bL, bR);
 
@@ -81,9 +87,15 @@ public class TeleOpMain extends CommandOpMode {
         shooterStop = (new GamepadButton(m_driverOp, GamepadKeys.Button.B))
                 .whenPressed(stopCommand);
 
+        wobbleSystem = new WobbleSystem(pickup);
+        pickupCommand = new Com_PickUp(wobbleSystem);
+
+        goalLift = (new GamepadButton(m_driverOp, GamepadKeys.Button.Y))
+                .whenPressed(pickupCommand);
+
         mecDrive.setDefaultCommand(driveCommand);
 
-        register(mecDrive, shooterSystem);
+        register(mecDrive, shooterSystem, wobbleSystem);
 
         schedule(driveCommand);
     }
