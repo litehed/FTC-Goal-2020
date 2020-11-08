@@ -22,6 +22,8 @@ import org.firstinspires.ftc.teamcode.subsystems.commands.Com_NoShoot;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_PickUp;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_Shoot;
 
+import java.util.Timer;
+
 @TeleOp(name = "CommandBaseTest")
 public class TeleOpMain extends CommandOpMode {
 
@@ -38,6 +40,8 @@ public class TeleOpMain extends CommandOpMode {
     private WobbleSystem wobbleSystem;
     private Com_PickUp pickupCommand;
 
+    private Timer timo;
+
     public GamepadEx m_driverOp, m_toolOp;
     private Button shooterStart, shooterStop, dpadUp, dpadDown, goalLift;
 
@@ -51,7 +55,7 @@ public class TeleOpMain extends CommandOpMode {
         shot = new MotorEx(hardwareMap, "shot", Motor.GoBILDA.BARE);
         pickup = new MotorEx(hardwareMap, "wobble", Motor.GoBILDA.BARE);
         shot.setRunMode(Motor.RunMode.VelocityControl);
-        pickup.setRunMode(Motor.RunMode.VelocityControl);
+        pickup.setRunMode(Motor.RunMode.PositionControl);
 
         mecDrive = new DriveSystem(fL, fR, bL, bR);
 
