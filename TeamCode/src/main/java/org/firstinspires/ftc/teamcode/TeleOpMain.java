@@ -103,8 +103,8 @@ public class TeleOpMain extends CommandOpMode {
         startIntakeCommand = new Com_IntakeStart(intakeSystem);
         stopIntakeCommand = new Com_IntakeStop(intakeSystem);
         toggleIntake = intakeSystem.intakeActive ? new GamepadButton(m_driverOp, GamepadKeys.Button.X)
-                .whenPressed(startIntakeCommand) : new GamepadButton(m_driverOp, GamepadKeys.Button.X)
-                .whenPressed(stopIntakeCommand);
+                .whenPressed(stopIntakeCommand) : new GamepadButton(m_driverOp, GamepadKeys.Button.X)
+                .whenPressed(startIntakeCommand);
 
         mecDrive.setDefaultCommand(driveCommand);
 

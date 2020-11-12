@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class IntakeSystem extends SubsystemBase {
     private Motor intakeMotor;
     private Telemetry telemetry;
-    public boolean intakeActive;
+    public boolean intakeActive = false;
 
     public IntakeSystem(Motor IntakeMotor) {
         intakeMotor = IntakeMotor;
