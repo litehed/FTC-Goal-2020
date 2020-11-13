@@ -40,6 +40,7 @@ public class TeleOpMain extends CommandOpMode {
     private Com_Shoot shootCommand;
     private Com_NoShoot stopCommand;
     //Wobble goal pickup subsystem and command initialization
+    //TODO: Re-add this stuff to Teleop once we can use it
     private WobbleSystem wobbleSystem;
     private Com_PickUp pickupCommand;
     //Intake subsystem and commands initialization
@@ -62,10 +63,10 @@ public class TeleOpMain extends CommandOpMode {
 
         intake = new Motor(hardwareMap, "intake");
         shot = new MotorEx(hardwareMap, "shot", Motor.GoBILDA.BARE);
-        pickup = new MotorEx(hardwareMap, "wobble", Motor.GoBILDA.BARE);
+//        pickup = new MotorEx(hardwareMap, "wobble", Motor.GoBILDA.BARE);
         //^ Bare for testing since thats all we had to test with Ill switch RPM when I see it
         shot.setRunMode(Motor.RunMode.VelocityControl);
-        pickup.setRunMode(Motor.RunMode.PositionControl);
+//        pickup.setRunMode(Motor.RunMode.PositionControl);
 
         mecDrive = new DriveSystem(fL, fR, bL, bR);
 
@@ -100,10 +101,10 @@ public class TeleOpMain extends CommandOpMode {
         shooterStop = (new GamepadButton(m_driverOp, GamepadKeys.Button.B))
                 .whenPressed(stopCommand);
 
-        wobbleSystem = new WobbleSystem(pickup);
-        pickupCommand = new Com_PickUp(wobbleSystem);
-        goalLift = (new GamepadButton(m_driverOp, GamepadKeys.Button.Y))
-                .whenPressed(pickupCommand);
+//        wobbleSystem = new WobbleSystem(pickup);
+//        pickupCommand = new Com_PickUp(wobbleSystem);
+//        goalLift = (new GamepadButton(m_driverOp, GamepadKeys.Button.Y))
+//                .whenPressed(pickupCommand);
 
         intakeSystem = new IntakeSystem(intake);
         startIntakeCommand = new Com_IntakeStart(intakeSystem);
@@ -114,7 +115,7 @@ public class TeleOpMain extends CommandOpMode {
 
         mecDrive.setDefaultCommand(driveCommand);
 
-        register(mecDrive, shooterSystem, wobbleSystem, intakeSystem);
+        register(mecDrive, shooterSystem, intakeSystem);
 
         schedule(driveCommand);
     }
