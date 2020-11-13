@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 
+import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
@@ -56,8 +57,12 @@ public class TeleOpMain extends CommandOpMode {
         bL = new Motor(hardwareMap, "bL");
         bR = new Motor(hardwareMap, "bR");
 
+        //one of our motors is messed up so it has to be inverted woooooo
+        bL.setInverted(true);
+
         shot = new MotorEx(hardwareMap, "shot", Motor.GoBILDA.BARE);
         pickup = new MotorEx(hardwareMap, "wobble", Motor.GoBILDA.BARE);
+        //^ Bare for testing since thats all we had to test with Ill switch RPM when I see it
         shot.setRunMode(Motor.RunMode.VelocityControl);
         pickup.setRunMode(Motor.RunMode.PositionControl);
 
@@ -102,9 +107,9 @@ public class TeleOpMain extends CommandOpMode {
         intakeSystem = new IntakeSystem(intake);
         startIntakeCommand = new Com_IntakeStart(intakeSystem);
         stopIntakeCommand = new Com_IntakeStop(intakeSystem);
-        toggleIntake = intakeSystem.intakeActive ? new GamepadButton(m_driverOp, GamepadKeys.Button.X)
-                .whenPressed(stopIntakeCommand) : new GamepadButton(m_driverOp, GamepadKeys.Button.X)
-                .whenPressed(startIntakeCommand);
+        toggleIntake = new GamepadButton(m_driverOp, GamepadKeys.Button.X)
+                .whenPressed(new ConditionalCommand(startIntakeCommand, stopIntakeCommand, intakeSystem::active))
+                .whenReleased(new InstantCommand(intakeSystem::toggle));
 
         mecDrive.setDefaultCommand(driveCommand);
 
@@ -113,5 +118,4 @@ public class TeleOpMain extends CommandOpMode {
         schedule(driveCommand);
     }
 }
-
 

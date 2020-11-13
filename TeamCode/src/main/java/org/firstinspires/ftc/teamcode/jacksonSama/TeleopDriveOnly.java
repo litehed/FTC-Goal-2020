@@ -26,6 +26,9 @@ public class TeleopDriveOnly extends CommandOpMode {
         bL = new Motor(hardwareMap, "bL");
         bR = new Motor(hardwareMap, "bR");
 
+        //one of our motors is messed up so it has to be inverted woooooo
+        bL.setInverted(true);
+
         mecDrive = new DriveSystem(fL, fR, bL, bR);
 
         m_driverOp = new GamepadEx(gamepad1);

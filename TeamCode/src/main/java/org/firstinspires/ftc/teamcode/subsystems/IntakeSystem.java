@@ -9,20 +9,25 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class IntakeSystem extends SubsystemBase {
     private Motor intakeMotor;
     private Telemetry telemetry;
-    public boolean intakeActive = false;
+    private boolean intakeActive;
 
     public IntakeSystem(Motor IntakeMotor) {
         intakeMotor = IntakeMotor;
+        intakeActive = true;
+    }
+    public boolean active() {
+        return intakeActive;
     }
 
+    public void toggle() {
+        intakeActive = !intakeActive;
+    }
     public void suck() {
         intakeMotor.set(0.9);
-        intakeActive = true;
     }
 
     public void stop() {
         intakeMotor.stopMotor();
-        intakeActive = false;
     }
 
 }
