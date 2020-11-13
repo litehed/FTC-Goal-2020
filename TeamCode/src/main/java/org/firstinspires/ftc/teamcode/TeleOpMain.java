@@ -60,6 +60,7 @@ public class TeleOpMain extends CommandOpMode {
         //one of our motors is messed up so it has to be inverted woooooo
         bL.setInverted(true);
 
+        intake = new Motor(hardwareMap, "intake");
         shot = new MotorEx(hardwareMap, "shot", Motor.GoBILDA.BARE);
         pickup = new MotorEx(hardwareMap, "wobble", Motor.GoBILDA.BARE);
         //^ Bare for testing since thats all we had to test with Ill switch RPM when I see it
