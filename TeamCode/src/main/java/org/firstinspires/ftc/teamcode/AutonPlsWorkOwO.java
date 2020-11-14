@@ -31,19 +31,24 @@ public class AutonPlsWorkOwO extends LinearOpMode {
         fR = new MotorEx(hardwareMap, "fR", Motor.GoBILDA.RPM_435);
         bL = new MotorEx(hardwareMap, "bL", Motor.GoBILDA.RPM_435);
         bR = new MotorEx(hardwareMap, "bR", Motor.GoBILDA.RPM_435);
+
+        Motor.Encoder leftEncoder = fL.encoder.setDistancePerPulse(TICKS_TO_INCHES);
+        Motor.Encoder rightEncoder = fR.encoder.setDistancePerPulse(TICKS_TO_INCHES);
+        rightEncoder.setDirection(Motor.Direction.REVERSE);
+
         TICKS_PER_REV = fL.getCPR();
         TICKS_TO_INCHES = Math.PI * WHEEL_DIAMETER / TICKS_PER_REV;
 
         left = new MotorGroup(fL, bL);
         right = new MotorGroup(fR, bR);
 
+
+
         diffy = new DifferentialDrive(left, right);
-        diffyOdom = new DifferentialOdometry(() -> fL.getCurrentPosition() * TICKS_TO_INCHES,
-                () -> fR.getCurrentPosition() * TICKS_TO_INCHES,
-                TRACKWIDTH);
+        diffyOdom = new DifferentialOdometry(leftEncoder::getDistance, rightEncoder::getDistance, TRACKWIDTH);
         waitForStart();
         while (opModeIsActive()&& !isStopRequested()) {
-            diffyOdom.updatePosition(5, 5);
+//            diffyOdom.updatePosition(5, 5); will forever remain
             diffyOdom.updatePose();
         }
     }
