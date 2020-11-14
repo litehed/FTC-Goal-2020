@@ -10,7 +10,7 @@ import com.arcrobotics.ftclib.kinematics.DifferentialOdometry;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Autonomous(name="Srihith")
+@Autonomous(name="AutonMain")
 public class AutonPlsWorkOwO extends LinearOpMode {
 
     private MotorEx fL, fR, bL, bR;
@@ -18,6 +18,7 @@ public class AutonPlsWorkOwO extends LinearOpMode {
     private MotorGroup left, right;
     private DifferentialDrive diffy;
     private DifferentialOdometry diffyOdom;
+    private PIDController xCont, yCont, hCont;
     private static final double TRACKWIDTH = 13.4;
     private static double TICKS_TO_INCHES;
     private static final double WHEEL_DIAMETER = 4.0;
@@ -42,12 +43,32 @@ public class AutonPlsWorkOwO extends LinearOpMode {
         Motor.Encoder rightEncoder = fR.encoder.setDistancePerPulse(TICKS_TO_INCHES);
         rightEncoder.setDirection(Motor.Direction.REVERSE);
 
+        //TODO: Tune when robot can drive
+        xCont = new PIDController(1, 0, 0);
+        yCont = new PIDController(1, 0, 0);
+        hCont = new PIDController(1, 0, 0);
+
+
         diffy = new DifferentialDrive(left, right);
         diffyOdom = new DifferentialOdometry(leftEncoder::getDistance, rightEncoder::getDistance, TRACKWIDTH);
         waitForStart();
-        while (opModeIsActive()&& !isStopRequested()) {
-//            diffyOdom.updatePosition(5, 5); will forever remain
+        xCont.setSetPoint(8);
+        hCont.setSetPoint(Math.PI);
+        do {
+            if (isStopRequested()) break;
+            diffy.arcadeDrive(
+                    xCont.calculate(diffyOdom.getPose().getX()),
+                    hCont.calculate(diffyOdom.getPose().getHeading())
+            );
             diffyOdom.updatePose();
-        }
+        } while (opModeIsActive() && (!xCont.atSetPoint() || !hCont.atSetPoint()));
+
+        yCont.setSetPoint(0);
+        do {
+            if (isStopRequested()) break;
+            diffy.arcadeDrive(yCont.calculate(diffyOdom.getPose().getY()), 0);
+            diffyOdom.updatePose();
+        } while (opModeIsActive() && !yCont.atSetPoint());
+
     }
 }

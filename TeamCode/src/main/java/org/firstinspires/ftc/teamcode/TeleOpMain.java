@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.subsystems.commands.Com_NoShoot;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_PickUp;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_Shoot;
 
-@TeleOp(name = "CommandBaseTest")
+@TeleOp(name = "TeleOpMain")
 public class TeleOpMain extends CommandOpMode {
 
     public double pwrSelect;
