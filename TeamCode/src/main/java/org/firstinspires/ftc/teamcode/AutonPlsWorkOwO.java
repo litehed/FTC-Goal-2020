@@ -7,8 +7,11 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.hardware.motors.MotorGroup;
 import com.arcrobotics.ftclib.kinematics.DifferentialOdometry;
+import com.arcrobotics.ftclib.util.Timing;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import java.util.concurrent.TimeUnit;
 
 @Autonomous(name="AutonMain")
 public class AutonPlsWorkOwO extends LinearOpMode {
@@ -23,7 +26,7 @@ public class AutonPlsWorkOwO extends LinearOpMode {
     private static double TICKS_TO_INCHES;
     private static final double WHEEL_DIAMETER = 4.0;
     private static double TICKS_PER_REV;
-
+    private Timing.Timer timeywimey = new Timing.Timer(5,TimeUnit.SECONDS);
 
 
     @Override
@@ -55,7 +58,7 @@ public class AutonPlsWorkOwO extends LinearOpMode {
         diffy = new DifferentialDrive(left, right);
         diffyOdom = new DifferentialOdometry(leftEncoder::getDistance, rightEncoder::getDistance, TRACKWIDTH);
         waitForStart();
-
+        timeywimey.start();
         xCont.setSetPoint(2);
         telemetry.addData("Right Motor position", rightEncoder.getPosition());
         telemetry.addData("Left Motor position", leftEncoder.getPosition());
@@ -65,6 +68,9 @@ public class AutonPlsWorkOwO extends LinearOpMode {
             telemetry.addData("Right Motor position", rightEncoder.getPosition());
             telemetry.addData("Left Motor position", leftEncoder.getPosition());
             telemetry.update();
+            if(timeywimey.done()){
+                break;
+            }
             if (isStopRequested()) break;
             diffy.arcadeDrive(
                     xCont.calculate(diffyOdom.getPose().getX()),
