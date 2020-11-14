@@ -89,7 +89,6 @@ public class TeleOpMain extends CommandOpMode {
                         pwrSelect += 0.25;
                     }
                 }));
-
         driveCommand = new Com_Drive(mecDrive, m_driverOp::getLeftX, m_driverOp::getLeftY, m_driverOp::getRightX);
 
         //IMPORTANT: Note to self remember in the Drive System class I just flipped the turn speed and strafe speed
