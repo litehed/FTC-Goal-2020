@@ -33,6 +33,7 @@ public class AutonPlsWorkOwO extends LinearOpMode {
         bL = new MotorEx(hardwareMap, "bL", Motor.GoBILDA.RPM_435);
         bR = new MotorEx(hardwareMap, "bR", Motor.GoBILDA.RPM_435);
 
+        bL.setInverted(true);
         TICKS_PER_REV = fL.getCPR();
         TICKS_TO_INCHES = Math.PI * WHEEL_DIAMETER / TICKS_PER_REV;
 
@@ -43,18 +44,27 @@ public class AutonPlsWorkOwO extends LinearOpMode {
         Motor.Encoder rightEncoder = fR.encoder.setDistancePerPulse(TICKS_TO_INCHES);
         rightEncoder.setDirection(Motor.Direction.REVERSE);
 
+        leftEncoder.reset();
+        rightEncoder.reset();
         //TODO: Tune when robot can drive
-        xCont = new PIDController(1, 0, 0);
-        yCont = new PIDController(1, 0, 0);
-        hCont = new PIDController(1, 0, 0);
+        xCont = new PIDController(0.06, 0.4, 0.0001);
+        yCont = new PIDController(0.06, 0.3, 0.0001);
+        hCont = new PIDController(0.06, 0.3, 0);
 
 
         diffy = new DifferentialDrive(left, right);
         diffyOdom = new DifferentialOdometry(leftEncoder::getDistance, rightEncoder::getDistance, TRACKWIDTH);
         waitForStart();
-        xCont.setSetPoint(8);
+
+        xCont.setSetPoint(2);
+        telemetry.addData("Right Motor position", rightEncoder.getPosition());
+        telemetry.addData("Left Motor position", leftEncoder.getPosition());
+        telemetry.update();
         hCont.setSetPoint(Math.PI);
         do {
+            telemetry.addData("Right Motor position", rightEncoder.getPosition());
+            telemetry.addData("Left Motor position", leftEncoder.getPosition());
+            telemetry.update();
             if (isStopRequested()) break;
             diffy.arcadeDrive(
                     xCont.calculate(diffyOdom.getPose().getX()),
@@ -64,11 +74,17 @@ public class AutonPlsWorkOwO extends LinearOpMode {
         } while (opModeIsActive() && (!xCont.atSetPoint() || !hCont.atSetPoint()));
 
         yCont.setSetPoint(0);
+        telemetry.addData("Right Motor position", rightEncoder.getPosition());
+        telemetry.addData("Left Motor position", leftEncoder.getPosition());
+        telemetry.update();
         do {
+            telemetry.addData("Right Motor position", rightEncoder.getPosition());
+            telemetry.addData("Left Motor position", leftEncoder.getPosition());
+            telemetry.update();
             if (isStopRequested()) break;
             diffy.arcadeDrive(yCont.calculate(diffyOdom.getPose().getY()), 0);
             diffyOdom.updatePose();
         } while (opModeIsActive() && !yCont.atSetPoint());
-
+        telemetry.update();
     }
 }
