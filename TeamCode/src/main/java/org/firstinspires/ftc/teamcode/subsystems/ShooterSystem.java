@@ -11,12 +11,12 @@ import org.firstinspires.ftc.teamcode.TeleOpMain;
 import java.util.function.DoubleSupplier;
 
 public class ShooterSystem extends SubsystemBase {
-    private MotorEx shooterMotor;
+    private Motor shooterMotor;
     private Telemetry telemetry;
     private DoubleSupplier power;
     private boolean shooterActive;
 
-    public ShooterSystem(MotorEx ShooterMotor, Telemetry telemetryIn, DoubleSupplier getPower){
+    public ShooterSystem(Motor ShooterMotor, Telemetry telemetryIn, DoubleSupplier getPower){
         shooterMotor = ShooterMotor;
         telemetry = telemetryIn;
         power = getPower;
