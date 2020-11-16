@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.util.Timing;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -19,7 +20,6 @@ public class AutonFirstComp extends CommandOpMode {
     private DriveSystem mecDrive;
     private ElapsedTime time;
     public GamepadEx m_driverOp, m_toolOp;
-
     @Override
     public void initialize() {
         fL = new Motor(hardwareMap, "fL");
@@ -27,6 +27,7 @@ public class AutonFirstComp extends CommandOpMode {
         bL = new Motor(hardwareMap, "bL");
         bR = new Motor(hardwareMap, "bR");
         //one of our motors is messed up so it has to be inverted woooooo
+
         bL.setInverted(true);
         time = new ElapsedTime();
         mecDrive = new DriveSystem(fL, fR, bL, bR);

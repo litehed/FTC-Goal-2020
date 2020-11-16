@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
@@ -36,13 +37,14 @@ public class ShooterOnly extends CommandOpMode {
 
     public GamepadEx m_driverOp, m_toolOp;
     private Button toggleShooter, dpadUp, dpadDown;
-
+    private RevIMU imu;
     @Override
     public void initialize() {
         fL = new Motor(hardwareMap, "fL");
         fR = new Motor(hardwareMap, "fR");
         bL = new Motor(hardwareMap, "bL");
         bR = new Motor(hardwareMap, "bR");
+        imu = new RevIMU(hardwareMap);
 
 
         //one of our motors is messed up so it has to be inverted woooooo
@@ -73,7 +75,7 @@ public class ShooterOnly extends CommandOpMode {
                     }
                 }));
 
-        driveCommand = new Com_Drive(mecDrive, m_driverOp::getRightX, m_driverOp::getLeftY, m_driverOp::getLeftX);
+        driveCommand = new Com_Drive(mecDrive, m_driverOp::getLeftY, m_driverOp::getLeftX, m_driverOp::getLeftX);
 
         shooterSystem = new ShooterSystem(shot, telemetry, () -> pwrSelect);
         shootCommand = new Com_Shoot(shooterSystem);

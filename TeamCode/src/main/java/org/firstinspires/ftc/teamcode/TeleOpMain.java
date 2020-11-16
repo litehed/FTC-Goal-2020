@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -48,7 +49,6 @@ public class TeleOpMain extends CommandOpMode {
     //TODO: Add servo stuff here
     public GamepadEx m_driverOp, m_toolOp;
     private Button shooterStart, shooterStop, dpadUp, dpadDown, goalLift, toggleIntake;
-
     @Override
     public void initialize() {
         fL = new Motor(hardwareMap, "fL");
@@ -58,6 +58,7 @@ public class TeleOpMain extends CommandOpMode {
 
         //one of our motors is messed up so it has to be inverted woooooo
         bL.setInverted(true);
+
 
         intake = new Motor(hardwareMap, "intake");
         shot = new MotorEx(hardwareMap, "shot", Motor.GoBILDA.BARE);

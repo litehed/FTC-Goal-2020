@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.jacksonSama;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -16,7 +17,7 @@ public class TeleopDriveOnly extends CommandOpMode {
 
     private DriveSystem mecDrive;
     private Com_Drive driveCommand;
-
+    private RevIMU imu;
     public GamepadEx m_driverOp, m_toolOp;
 
     @Override
@@ -26,6 +27,7 @@ public class TeleopDriveOnly extends CommandOpMode {
         bL = new Motor(hardwareMap, "bL");
         bR = new Motor(hardwareMap, "bR");
 
+        imu = new RevIMU(hardwareMap);
         //one of our motors is messed up so it has to be inverted woooooo
         bL.setInverted(true);
 
