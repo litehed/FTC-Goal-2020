@@ -1,17 +1,12 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.jacksonSama;
 
-import com.arcrobotics.ftclib.command.CommandBase;
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.arcrobotics.ftclib.hardware.ServoEx;
-import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
@@ -19,27 +14,18 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.DriveSystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSystem;
-import org.firstinspires.ftc.teamcode.subsystems.RingPushSystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSystem;
-import org.firstinspires.ftc.teamcode.subsystems.WobbleSystem;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_Drive;
-import org.firstinspires.ftc.teamcode.subsystems.commands.Com_IntakeStart;
-import org.firstinspires.ftc.teamcode.subsystems.commands.Com_IntakeStop;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_NoShoot;
-import org.firstinspires.ftc.teamcode.subsystems.commands.Com_PickUp;
-import org.firstinspires.ftc.teamcode.subsystems.commands.Com_Push;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_Shoot;
 
-@TeleOp(name="Kanye West")
-public class TeleopShooter extends CommandOpMode {
+@TeleOp(name="shooteronly")
+public class ShooterOnly extends CommandOpMode {
 
     public double pwrSelect = 1.0;
 
     private Motor fL, bL, fR, bR;
     private MotorEx shot;
-    private CRServo flick;
-    private boolean isEnabled;
 
     private DriveSystem mecDrive;
     private Com_Drive driveCommand;
@@ -47,10 +33,9 @@ public class TeleopShooter extends CommandOpMode {
     private ShooterSystem shooterSystem;
     private Com_Shoot shootCommand;
     private Com_NoShoot stopCommand;
-    private ElapsedTime time;
 
     public GamepadEx m_driverOp, m_toolOp;
-    private Button toggleShooter, dpadUp, dpadDown, servoMove, yourMom;
+    private Button toggleShooter, dpadUp, dpadDown;
 
     @Override
     public void initialize() {
@@ -59,13 +44,9 @@ public class TeleopShooter extends CommandOpMode {
         bL = new Motor(hardwareMap, "bL");
         bR = new Motor(hardwareMap, "bR");
 
-        time = new ElapsedTime();
-        isEnabled = false;
 
         //one of our motors is messed up so it has to be inverted woooooo
         bL.setInverted(true);
-
-        flick = new CRServo(hardwareMap, "push");
 
         shot = new MotorEx(hardwareMap, "shot", Motor.GoBILDA.BARE);
         shot.setRunMode(Motor.RunMode.VelocityControl);
@@ -82,8 +63,6 @@ public class TeleopShooter extends CommandOpMode {
                     } else {
                         pwrSelect -= 0.25;
                     }
-                    telemetry.addData("Shooter power", pwrSelect);
-                    telemetry.update();
                 }));
         dpadUp = new GamepadButton(m_driverOp, GamepadKeys.Button.DPAD_UP)
                 .whenPressed(new InstantCommand(() -> {
@@ -92,55 +71,21 @@ public class TeleopShooter extends CommandOpMode {
                     } else {
                         pwrSelect += 0.25;
                     }
-                    telemetry.addData("Shooter power", pwrSelect);
-                    telemetry.update();
                 }));
+
         driveCommand = new Com_Drive(mecDrive, m_driverOp::getRightX, m_driverOp::getLeftY, m_driverOp::getLeftX);
 
-        //IMPORTANT: Note to self remember in the Drive System class I just flipped the turn speed and strafe speed
         shooterSystem = new ShooterSystem(shot, telemetry, () -> pwrSelect);
         shootCommand = new Com_Shoot(shooterSystem);
         stopCommand = new Com_NoShoot(shooterSystem);
         toggleShooter = new GamepadButton(m_driverOp, GamepadKeys.Button.A)
-                .whileHeld(() -> {
-                    shot.set(pwrSelect);
-                    if (!isEnabled) {
-                        isEnabled = true;
-                        time.reset();
-
-                        flick.set(0.4);
-                        while (time.milliseconds() < 500)
-                            if(isStopRequested())
-                                break;
-                        flick.set(0);
-                        time.reset();
-                        flick.set(-0.3);
-                        while (time.seconds() < 1.2)
-                            if(isStopRequested())
-                                break;
-                        flick.set(0);
-                        time.reset();
-                    }
-                });
-        yourMom = new GamepadButton(m_driverOp, GamepadKeys.Button.B)
-                .whenPressed(() -> {
-                            time.reset();
-                            isEnabled = false;
-                });
-        register(new SubsystemBase(){
-            @Override
-            public void periodic() {
-                telemetry.addData("Shooter power", pwrSelect);
-                telemetry.update();
-            }
-        });
+                .whenPressed(new ConditionalCommand(shootCommand, stopCommand, shooterSystem::active))
+                .whenReleased(new InstantCommand(shooterSystem::toggle));
 
         mecDrive.setDefaultCommand(driveCommand);
 
-        register(mecDrive);
+        register(mecDrive, shooterSystem);
 
         schedule(driveCommand);
     }
 }
-
-

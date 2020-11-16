@@ -11,12 +11,12 @@ import org.firstinspires.ftc.teamcode.TeleOpMain;
 import java.util.function.DoubleSupplier;
 
 public class ShooterSystem extends SubsystemBase {
-    private Motor shooterMotor;
+    private MotorEx shooterMotor;
     private Telemetry telemetry;
     private DoubleSupplier power;
     private boolean shooterActive;
 
-    public ShooterSystem(Motor ShooterMotor, Telemetry telemetryIn, DoubleSupplier getPower){
+    public ShooterSystem(MotorEx ShooterMotor, Telemetry telemetryIn, DoubleSupplier getPower){
         shooterMotor = ShooterMotor;
         telemetry = telemetryIn;
         power = getPower;
@@ -31,12 +31,17 @@ public class ShooterSystem extends SubsystemBase {
         shooterActive = !shooterActive;
     }
     public void shoot(){
-        telemetry.addData("Shooter speed", power.getAsDouble());
-        telemetry.update();
         shooterMotor.set(power.getAsDouble());
     }
 
     public void stop(){
         shooterMotor.stopMotor();
+    }
+
+    @Override
+    public void periodic() {
+        telemetry.addData("Shooter power", power.getAsDouble());
+        telemetry.addData("Shooter active", shooterActive);
+        telemetry.update();
     }
 }
