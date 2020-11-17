@@ -35,7 +35,7 @@ public class ShooterOnly extends CommandOpMode {
     private Com_Shoot shootCommand;
     private Com_NoShoot stopCommand;
 
-    public GamepadEx m_driverOp, m_toolOp;
+    private GamepadEx m_driverOp, m_toolOp;
     private Button toggleShooter, dpadUp, dpadDown;
     private RevIMU imu;
     @Override
