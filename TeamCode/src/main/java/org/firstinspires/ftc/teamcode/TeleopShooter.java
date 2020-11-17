@@ -69,7 +69,7 @@ public class TeleopShooter extends CommandOpMode {
         flick = new CRServo(hardwareMap, "push");
 
         shot = new MotorEx(hardwareMap, "shot", Motor.GoBILDA.BARE);
-        shot.setRunMode(Motor.RunMode.VelocityControl);
+//        shot.setRunMode(Motor.RunMode.VelocityControl);
 
         mecDrive = new DriveSystem(fL, fR, bL, bR);
 

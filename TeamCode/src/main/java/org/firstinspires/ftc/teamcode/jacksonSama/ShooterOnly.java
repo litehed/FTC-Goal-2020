@@ -26,7 +26,7 @@ public class ShooterOnly extends CommandOpMode {
     public double pwrSelect = 1.0;
 
     private Motor fL, bL, fR, bR;
-    private MotorEx shot;
+    private Motor shot;
 
     private DriveSystem mecDrive;
     private Com_Drive driveCommand;
@@ -50,8 +50,8 @@ public class ShooterOnly extends CommandOpMode {
         //one of our motors is messed up so it has to be inverted woooooo
         bL.setInverted(true);
 
-        shot = new MotorEx(hardwareMap, "shot", Motor.GoBILDA.BARE);
-        shot.setRunMode(Motor.RunMode.VelocityControl);
+        shot = new Motor(hardwareMap, "shot", Motor.GoBILDA.BARE);
+//        shot.setRunMode(Motor.RunMode.VelocityControl);
 
         mecDrive = new DriveSystem(fL, fR, bL, bR);
 
@@ -75,7 +75,7 @@ public class ShooterOnly extends CommandOpMode {
                     }
                 }));
 
-        driveCommand = new Com_Drive(mecDrive, m_driverOp::getLeftY, m_driverOp::getLeftX, m_driverOp::getLeftX);
+        driveCommand = new Com_Drive(mecDrive, m_driverOp::getLeftY, m_driverOp::getLeftX, m_driverOp::getRightX);
 
         shooterSystem = new ShooterSystem(shot, telemetry, () -> pwrSelect);
         shootCommand = new Com_Shoot(shooterSystem);
@@ -85,7 +85,7 @@ public class ShooterOnly extends CommandOpMode {
 
         mecDrive.setDefaultCommand(driveCommand);
 
-        register(mecDrive, shooterSystem);
+        register(mecDrive);
 
         schedule(driveCommand);
     }
