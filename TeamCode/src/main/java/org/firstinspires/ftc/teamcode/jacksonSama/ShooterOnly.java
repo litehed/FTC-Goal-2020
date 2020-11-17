@@ -81,7 +81,7 @@ public class ShooterOnly extends CommandOpMode {
         shootCommand = new Com_Shoot(shooterSystem);
         stopCommand = new Com_NoShoot(shooterSystem);
         toggleShooter = new GamepadButton(m_driverOp, GamepadKeys.Button.A)
-                .whenPressed(new ConditionalCommand(shootCommand, stopCommand, shooterSystem::active))
+                .whileHeld(new ConditionalCommand(shootCommand, stopCommand, shooterSystem::active))
                 .whenReleased(new InstantCommand(shooterSystem::toggle));
 
         mecDrive.setDefaultCommand(driveCommand);
