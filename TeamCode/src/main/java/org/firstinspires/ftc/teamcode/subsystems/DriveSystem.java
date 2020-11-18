@@ -43,4 +43,7 @@ public class DriveSystem extends SubsystemBase {
         else
             drive.driveFieldCentric(-strfSpd, -fSpd, -trnSpd, imu.getHeading(), true);
     }
+    public void halt(){
+        drive.stop();
+    }
 }

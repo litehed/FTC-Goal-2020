@@ -12,7 +12,12 @@ public class Com_Vision extends CommandBase {
         addRequirements(subby);
     }
     @Override
-    public void execute(){
+    public void initialize(){
         visionSystem.getStackSize();
+    }
+
+    @Override
+    public boolean isFinished(){
+        return true;
     }
 }
