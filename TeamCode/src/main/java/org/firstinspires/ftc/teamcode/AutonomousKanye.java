@@ -52,9 +52,9 @@ public class AutonomousKanye extends CommandOpMode {
         SequentialCommandGroup wobbleGoal = new SequentialCommandGroup(
                 visionCommand,
                 new SelectCommand(new HashMap<Object, Command>() {{
-                    put(VisionSystem.Size.ZERO, new InstantCommand(() -> {test.set(1);}));
-                    put(VisionSystem.Size.ONE, new InstantCommand(() -> {test.set(0.5);}));
-                    put(VisionSystem.Size.FOUR, new InstantCommand(() -> {test.set(0.1);}));
+                    put(VisionSystem.Size.ZERO, new InstantCommand(() -> test.set(1)));
+                    put(VisionSystem.Size.ONE, new InstantCommand(() -> test.set(0.5)));
+                    put(VisionSystem.Size.FOUR, new InstantCommand(() -> test.set(0.1)));
                 }},visionSystem::getStackSize)
         );
         schedule(wobbleGoal);
