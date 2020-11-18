@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSystem;
+import org.firstinspires.ftc.teamcode.subsystems.commands.Com_DriveTime;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_PickUp;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_Vision;
 
@@ -24,6 +25,7 @@ public class AutonomousKanye extends CommandOpMode {
     private Motor test;
     private UGRectDetector ugRectDetector;
     private DriveSystem mecDrive;
+    private Com_DriveTime driveTime;
 
     private VisionSystem visionSystem;
     private Com_Vision visionCommand;
@@ -53,7 +55,8 @@ public class AutonomousKanye extends CommandOpMode {
                 visionCommand,
                 new SelectCommand(new HashMap<Object, Command>() {{
                     put(VisionSystem.Size.ZERO, new InstantCommand(() -> test.set(1)));
-                    put(VisionSystem.Size.ONE, new InstantCommand(() -> test.set(0.5)));
+                    put(VisionSystem.Size.ONE, new Com_DriveTime(mecDrive,
+                            0D, 0.8, 0D, time, 3.0));
                     put(VisionSystem.Size.FOUR, new InstantCommand(() -> test.set(0.1)));
                 }},visionSystem::getStackSize)
         );
