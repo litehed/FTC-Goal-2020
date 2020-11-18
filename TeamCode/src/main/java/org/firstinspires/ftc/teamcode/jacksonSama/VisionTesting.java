@@ -38,7 +38,6 @@ public class VisionTesting extends CommandOpMode {
                 telemetry.speak("Kono Dio Da!");
                 telemetry.update();
                 motor.set(1);
-
                 break;
             default:
                 break;

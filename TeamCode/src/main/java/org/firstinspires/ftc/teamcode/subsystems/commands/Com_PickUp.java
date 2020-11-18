@@ -9,7 +9,7 @@ public class Com_PickUp extends CommandBase {
 
     public Com_PickUp(WobbleSystem subby){
         wobblySystem = subby;
-        addRequirements(wobblySystem);
+        addRequirements(subby);
     }
     @Override
     public void execute(){

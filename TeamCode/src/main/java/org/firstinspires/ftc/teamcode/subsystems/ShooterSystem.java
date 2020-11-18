@@ -23,19 +23,15 @@ public class ShooterSystem extends SubsystemBase {
         shooterActive = true;
 
     }
-    public boolean active() {
-        return shooterActive;
-    }
 
-    public void toggle() {
-        shooterActive = !shooterActive;
-    }
     public void shoot(){
         shooterMotor.set(power.getAsDouble());
+        shooterActive = true;
     }
 
     public void stop(){
         shooterMotor.stopMotor();
+        shooterActive = false;
     }
 
     @Override
