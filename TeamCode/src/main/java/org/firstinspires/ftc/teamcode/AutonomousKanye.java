@@ -22,7 +22,7 @@ import java.util.HashMap;
 public class AutonomousKanye extends CommandOpMode {
     private Motor fL, bL, fR, bR;
     private Motor test;
-    private UGRectDetector UGRectDetector;
+    private UGRectDetector ugRectDetector;
     private DriveSystem mecDrive;
 
     private VisionSystem visionSystem;
@@ -39,23 +39,24 @@ public class AutonomousKanye extends CommandOpMode {
         bL.setInverted(true);
         //named shot purely because im too lazy to change config
         test = new Motor(hardwareMap, "shot");
-        UGRectDetector = new UGRectDetector(hardwareMap);
-        UGRectDetector.init();
+        ugRectDetector = new UGRectDetector(hardwareMap);
+        ugRectDetector.init();
 
 
         time = new ElapsedTime();
         mecDrive = new DriveSystem(fL, fR, bL, bR);
-        visionSystem = new VisionSystem(UGRectDetector, telemetry);
+        visionSystem = new VisionSystem(ugRectDetector, telemetry);
         visionCommand = new Com_Vision(visionSystem);
         register(mecDrive);
 
         SequentialCommandGroup wobbleGoal = new SequentialCommandGroup(
-                new Com_Vision(visionSystem),
+                visionCommand,
                 new SelectCommand(new HashMap<Object, Command>() {{
                     put(VisionSystem.Size.ZERO, new InstantCommand(() -> {test.set(1);}));
                     put(VisionSystem.Size.ONE, new InstantCommand(() -> {test.set(0.5);}));
                     put(VisionSystem.Size.FOUR, new InstantCommand(() -> {test.set(0.1);}));
                 }},visionSystem::getStackSize)
         );
+        schedule(wobbleGoal);
     }
 }
