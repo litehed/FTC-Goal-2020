@@ -30,7 +30,7 @@ public class TeleOpMain extends CommandOpMode {
     public double pwrSelect;
 
     private Motor fL, bL, fR, bR, intake;
-    private MotorEx shot, pickup;
+    private Motor shot, pickup;
 
     private DriveSystem mecDrive;
     private Com_Drive driveCommand;
@@ -61,7 +61,7 @@ public class TeleOpMain extends CommandOpMode {
 
 
         intake = new Motor(hardwareMap, "intake");
-        shot = new MotorEx(hardwareMap, "shot", Motor.GoBILDA.BARE);
+        shot = new Motor(hardwareMap, "shot", Motor.GoBILDA.BARE);
 //        pickup = new MotorEx(hardwareMap, "wobble", Motor.GoBILDA.BARE);
         //^ Bare for testing since thats all we had to test with Ill switch RPM when I see it
         shot.setRunMode(Motor.RunMode.VelocityControl);

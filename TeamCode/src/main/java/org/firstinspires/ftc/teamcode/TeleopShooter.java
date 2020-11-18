@@ -38,7 +38,7 @@ public class TeleopShooter extends CommandOpMode {
     public double pwrSelect = 1.0;
 
     private Motor fL, bL, fR, bR;
-    private MotorEx shot;
+    private Motor shot;
     private CRServo flick;
     private boolean isEnabled;
 
@@ -68,7 +68,7 @@ public class TeleopShooter extends CommandOpMode {
 
         flick = new CRServo(hardwareMap, "push");
 
-        shot = new MotorEx(hardwareMap, "shot", Motor.GoBILDA.BARE);
+        shot = new Motor(hardwareMap, "shot", Motor.GoBILDA.BARE);
 //        shot.setRunMode(Motor.RunMode.VelocityControl);
 
         mecDrive = new DriveSystem(fL, fR, bL, bR);

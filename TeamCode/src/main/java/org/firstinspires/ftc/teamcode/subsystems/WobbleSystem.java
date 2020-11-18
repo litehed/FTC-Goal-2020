@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.arcrobotics.ftclib.util.Timing;
 
@@ -8,8 +9,8 @@ import java.util.concurrent.TimeUnit;
 
 
 public class WobbleSystem extends SubsystemBase {
-    MotorEx pickyUppy;
-    public WobbleSystem(MotorEx pickMeUpDaddy){
+    Motor pickyUppy;
+    public WobbleSystem(Motor pickMeUpDaddy){
         pickyUppy = pickMeUpDaddy;
     }
 
