@@ -1,22 +1,18 @@
 package org.firstinspires.ftc.teamcode.jacksonSama;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.RevIMU;
-import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.DriveSystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSystem;
-import org.firstinspires.ftc.teamcode.subsystems.commands.Com_Drive;
+import org.firstinspires.ftc.teamcode.subsystems.commands.drive.Com_Drive;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_NoShoot;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_Shoot;
 

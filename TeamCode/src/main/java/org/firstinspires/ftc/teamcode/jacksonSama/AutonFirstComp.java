@@ -2,17 +2,12 @@ package org.firstinspires.ftc.teamcode.jacksonSama;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.arcrobotics.ftclib.util.Timing;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.DriveSystem;
-import org.firstinspires.ftc.teamcode.subsystems.commands.Com_Drive;
-
-import java.util.concurrent.TimeUnit;
 
 @Disabled
 @Autonomous(name="Kanye East")

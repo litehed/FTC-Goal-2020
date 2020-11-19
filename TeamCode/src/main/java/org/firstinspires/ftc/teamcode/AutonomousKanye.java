@@ -11,10 +11,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.DriveSystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSystem;
-import org.firstinspires.ftc.teamcode.subsystems.commands.Com_DriveTime;
-import org.firstinspires.ftc.teamcode.subsystems.commands.Com_PickUp;
+import org.firstinspires.ftc.teamcode.subsystems.commands.drive.Com_DriveTime;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_Vision;
 
 import java.util.HashMap;
