@@ -44,7 +44,6 @@ public class TeleOpMain extends CommandOpMode {
     private IntakeSystem intakeSystem;
     private Com_IntakeStart startIntakeCommand;
     private Com_IntakeStop stopIntakeCommand;
-    //TODO: Add servo stuff here
     public GamepadEx m_driverOp, m_toolOp;
     private Button shooterStart, shooterStop, dpadUp, dpadDown, goalLift, toggleIntake;
     @Override

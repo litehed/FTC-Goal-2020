@@ -52,7 +52,6 @@ public class AutonPlsWorkOwO extends LinearOpMode {
 
         leftEncoder.reset();
         rightEncoder.reset();
-        //TODO: Tune when robot can drive
         xCont = new PIDController(0.06, 0.4, 0.0001);
         yCont = new PIDController(0.06, 0.3, 0.0001);
         hCont = new PIDController(0.06, 0.3, 0);

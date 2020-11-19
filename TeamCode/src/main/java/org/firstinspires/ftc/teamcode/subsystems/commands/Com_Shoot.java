@@ -13,7 +13,6 @@ public class Com_Shoot extends CommandBase{
 
     public Com_Shoot(ShooterSystem subby){
         shooterSystem = subby;
-        //TODO: LOOK HERE V THAT IS RIGHT, NOT shooterSystem
         addRequirements(subby);
     }
     @Override
