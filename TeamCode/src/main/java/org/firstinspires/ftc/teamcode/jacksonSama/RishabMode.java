@@ -27,6 +27,7 @@ public class RishabMode extends LinearOpMode {
             }else{
                 motor.set(0);
             }
+            poopoo.readValue();
         }
     }
 }
