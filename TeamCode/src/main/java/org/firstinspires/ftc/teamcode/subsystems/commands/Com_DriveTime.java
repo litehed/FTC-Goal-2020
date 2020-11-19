@@ -10,10 +10,10 @@ public class Com_DriveTime extends CommandBase {
     private final DriveSystem driveSystem;
     private final Double strafe, forward, turn;
     private final ElapsedTime timey;
-    private final Double timeLength;
+    private final double timeLength;
 
-    public Com_DriveTime(DriveSystem subsystem, Double strafeSpeed,
-                         Double forwardSpeed, Double turnSpeed, ElapsedTime time, Double amnt){
+    public Com_DriveTime(DriveSystem subsystem, double strafeSpeed,
+                         double forwardSpeed, double turnSpeed, ElapsedTime time, double amnt){
         driveSystem = subsystem;
         strafe = strafeSpeed;
         forward = forwardSpeed;
