@@ -15,9 +15,7 @@ public class Com_Rotate extends CommandBase {
     public Com_Rotate(DriveSystem subby, RevIMU revIMU, int degreesIn){
         driveSystem = subby;
         imu = revIMU;
-        //Question to Jackson I did this because I dont know what the imus max value is so I just
-        //said if it exceeds 360 subtract 360, does it have a max value is this needed I dont know
-        degrees = (degreesIn + imu.getHeading()) >= 360 ? (degreesIn + imu.getHeading())-360 : degreesIn + imu.getHeading();
+        degrees = degreesIn + imu.getRotation2d().getDegrees();
         addRequirements(subby);
 
     }
