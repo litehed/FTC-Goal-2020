@@ -19,7 +19,7 @@ public class GroupFour extends SequentialCommandGroup {
                 new Com_DriveTime(drive, 0D, (12/voltageSensor.getVoltage())*-0.55, 0D, time, 7.5),
                 new Com_Rotate(drive, imu, 180),
                 new Com_PutDown(wobbleSystem, time),
-                new Com_DriveTime(drive, 0D, (12/voltageSensor.getVoltage())*-0.55, 0D, time, 4)
+                new Com_DriveTime(drive, 0D, (12/voltageSensor.getVoltage())*-0.55, 0D, time, 3)
         );
     }
 }
