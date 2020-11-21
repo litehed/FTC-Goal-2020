@@ -4,20 +4,23 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
+import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
+import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.DriveSystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSystem;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleSystem;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_IntakeStart;
-import org.firstinspires.ftc.teamcode.subsystems.commands.Com_IntakeStop;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_NoShoot;
+import org.firstinspires.ftc.teamcode.subsystems.commands.Com_OuttakeStart;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_PickUp;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_PutDown;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_Shoot;
@@ -29,8 +32,8 @@ public class TeleopComp2 extends CommandOpMode {
     public double pwrSelect = 1.0;
 
     private Motor fL, bL, fR, bR;
-    private Motor shot, intake;
-    private SimpleServo servo;
+    private Motor shot, intake, wobble;
+    private CRServo servo;
 
     private DriveSystem mecDrive;
     private Com_Drive driveCommand;
@@ -41,15 +44,17 @@ public class TeleopComp2 extends CommandOpMode {
 
     private IntakeSystem intakeSystem;
     private Com_IntakeStart intakeStartCommand;
-    private Com_IntakeStop intakeStopCommand;
+    private Com_OuttakeStart outtakeStartCommand;
 
     private WobbleSystem wobbleSystem;
     private Com_PickUp pickUpCommand;
     private Com_PutDown putDownCommand;
 
     private GamepadEx m_driverOp, m_toolOp;
-    private Button toggleShooter, dpadUp, dpadDown, toggleIntake;
+    private Button toggleShooter, dpadUp, dpadDown, intakeOn, outtakeOn, wobbleButton, wobbleTwo;
     private RevIMU imu;
+    private ElapsedTime elapsedTime;
+
     @Override
     public void initialize() {
         fL = new Motor(hardwareMap, "fL");
@@ -63,14 +68,17 @@ public class TeleopComp2 extends CommandOpMode {
         bL.setInverted(true);
         intake = new Motor(hardwareMap, "intake", Motor.GoBILDA.BARE);
         shot = new Motor(hardwareMap, "shot", Motor.GoBILDA.BARE);
+        wobble = new Motor(hardwareMap, "wobble");
 
-        servo = new SimpleServo(hardwareMap, "servo");
+        servo = new CRServo(hardwareMap, "servo");
 //        shot.setRunMode(Motor.RunMode.VelocityControl);
 
         mecDrive = new DriveSystem(fL, fR, bL, bR);
 
         m_driverOp = new GamepadEx(gamepad1);
         m_toolOp = new GamepadEx(gamepad2);
+        elapsedTime = new ElapsedTime();
+
 
         dpadDown = new GamepadButton(m_driverOp, GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(new InstantCommand(() -> {
@@ -98,12 +106,19 @@ public class TeleopComp2 extends CommandOpMode {
                 .toggleWhenPressed(shootCommand);
         intakeSystem = new IntakeSystem(intake);
         intakeStartCommand = new Com_IntakeStart(intakeSystem);
-        intakeStopCommand = new Com_IntakeStop(intakeSystem);
-        toggleIntake = new GamepadButton(m_driverOp, GamepadKeys.Button.X)
-                .toggleWhenPressed(intakeStartCommand);
-//        wobbleSystem = new WobbleSystem(servo);
-//        pickUpCommand = new Com_PickUp(wobbleSystem);
-//        putDownCommand = new Com_PutDown(wobbleSystem);
+        outtakeStartCommand = new Com_OuttakeStart(intakeSystem);
+       intakeOn = new GamepadButton(m_driverOp, GamepadKeys.Button.RIGHT_BUMPER)
+                .whenHeld(intakeStartCommand);
+       outtakeOn = new GamepadButton(m_driverOp, GamepadKeys.Button.LEFT_BUMPER)
+               .whenHeld(outtakeStartCommand);
+
+        wobbleSystem = new WobbleSystem(servo, wobble);
+        pickUpCommand = new Com_PickUp(wobbleSystem, elapsedTime);
+        putDownCommand = new Com_PutDown(wobbleSystem, elapsedTime);
+        wobbleButton = new GamepadButton(m_driverOp, GamepadKeys.Button.B)
+                .whenPressed(pickUpCommand);
+        wobbleTwo = new GamepadButton(m_driverOp, GamepadKeys.Button.Y)
+                .whenPressed(putDownCommand);
 
         mecDrive.setDefaultCommand(driveCommand);
 

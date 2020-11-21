@@ -15,9 +15,11 @@ public class IntakeSystem extends SubsystemBase {
     }
 
     public void suck() {
+        intakeMotor.set(-0.9);
+    }
+    public void down(){
         intakeMotor.set(0.9);
     }
-
     public void stop() {
         intakeMotor.stopMotor();
     }

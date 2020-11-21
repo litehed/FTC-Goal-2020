@@ -1,16 +1,19 @@
 package org.firstinspires.ftc.teamcode.subsystems.commands.groups;
 
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.hardware.RevIMU;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.subsystems.DriveSystem;
 import org.firstinspires.ftc.teamcode.subsystems.commands.drive.Com_DriveTime;
+import org.firstinspires.ftc.teamcode.subsystems.commands.drive.Com_Rotate;
 
 public class GroupZero extends SequentialCommandGroup {
-    public GroupZero(DriveSystem drive, ElapsedTime time) {
+    public GroupZero(DriveSystem drive, ElapsedTime time, VoltageSensor voltageSensor, RevIMU imu) {
         addCommands(
-                new Com_DriveTime(drive, 0.5, 0D, 0D, time, 2.9),
-                new Com_DriveTime(drive, 0D, 0.55, 0D, time, 3.0)
-                );
+                new Com_DriveTime(drive, (12/voltageSensor.getVoltage())*-0.5, 0D, 0D, time, 3.7),
+                new Com_DriveTime(drive, 0D, (12/voltageSensor.getVoltage())*-0.55, 0D, time, 4.5),
+                new Com_Rotate(drive, imu, 180));
     }
 }
