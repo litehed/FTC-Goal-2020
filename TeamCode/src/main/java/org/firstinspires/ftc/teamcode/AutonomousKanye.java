@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.ScheduleCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.SubsystemBase;
@@ -35,16 +36,16 @@ public class AutonomousKanye extends CommandOpMode {
     private CRServo servo;
     private UGRectDetector ugRectDetector;
     private DriveSystem mecDrive;
-    private Com_DriveTime intialStrafe;
 
     private VisionSystem visionSystem;
     private Com_Vision visionCommand;
 
     private WobbleSystem wobbleSystem;
-
+    private Com_PutDown putDown;
     private ElapsedTime time;
     private RevIMU imu;
     private VoltageSensor voltageSensor;
+
     @Override
     public void initialize() {
         fL = new Motor(hardwareMap, "fL");
@@ -76,10 +77,10 @@ public class AutonomousKanye extends CommandOpMode {
         time = new ElapsedTime();
         mecDrive = new DriveSystem(fL, fR, bL, bR);
         wobbleSystem = new WobbleSystem(servo, wobble);
+        putDown = new Com_PutDown(wobbleSystem, time);
         visionSystem = new VisionSystem(ugRectDetector, telemetry);
         visionCommand = new Com_Vision(visionSystem);
 
-        intialStrafe = new Com_DriveTime(mecDrive,0.5, 0D, 0D, time, 2.0);
                 register(mecDrive, new SubsystemBase(){
             @Override
             public void periodic() {
@@ -90,22 +91,12 @@ public class AutonomousKanye extends CommandOpMode {
         });
 
         SequentialCommandGroup wobbleGoal = new SequentialCommandGroup(
-                intialStrafe,
                 visionCommand,
                 new SelectCommand(new HashMap<Object, Command>() {{
-                    put(VisionSystem.Size.ZERO, new GroupZero(mecDrive, time, voltageSensor, imu));
-                    put(VisionSystem.Size.ONE, new GroupOne(mecDrive, time, voltageSensor));
-                    put(VisionSystem.Size.FOUR, new GroupFour(mecDrive, time, voltageSensor, imu));
-                }},visionSystem::getStackSize), new Com_PutDown(wobbleSystem, time)
-//                new SelectCommand(new HashMap<Object, Command>() {{
-//                    put(VisionSystem.Size.ZERO, new Com_DriveTime(mecDrive,
-//                            0D, -0.5, 0D, time, 2.0));
-//                    put(VisionSystem.Size.ONE, new Com_DriveTime(mecDrive,
-//                            0D, 0.5, 0D, time, 1.0));
-//                    put(VisionSystem.Size.FOUR, new Com_DriveTime(mecDrive,
-//                            0D, 0.5, 0D, time, 1.0));
-//                }},visionSystem::getStackSize)
-
+                    put(VisionSystem.Size.ZERO, new ScheduleCommand(new GroupZero(mecDrive, time, voltageSensor, imu, wobbleSystem)));
+                    put(VisionSystem.Size.ONE, new ScheduleCommand(new GroupOne(mecDrive, time, voltageSensor, wobbleSystem)));
+                    put(VisionSystem.Size.FOUR, new ScheduleCommand(new GroupFour(mecDrive, time, voltageSensor, imu, wobbleSystem)));
+                }},visionSystem::getStackSize)
         );
 
         schedule(wobbleGoal);
