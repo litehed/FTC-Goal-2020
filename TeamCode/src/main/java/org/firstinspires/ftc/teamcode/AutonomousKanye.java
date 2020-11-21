@@ -2,11 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.SubsystemBase;
-import com.arcrobotics.ftclib.controller.PController;
 import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.vision.UGRectDetector;
@@ -22,6 +20,8 @@ import org.firstinspires.ftc.teamcode.subsystems.commands.groups.GroupFour;
 import org.firstinspires.ftc.teamcode.subsystems.commands.groups.GroupZero;
 
 import java.util.HashMap;
+
+import static com.arcrobotics.ftclib.hardware.motors.Motor.ZeroPowerBehavior.BRAKE;
 
 @Autonomous(name="Kanye North")
 public class AutonomousKanye extends CommandOpMode {
@@ -44,11 +44,18 @@ public class AutonomousKanye extends CommandOpMode {
         bR = new Motor(hardwareMap, "bR");
         //one of our motors is messed up so it has to be inverted woooooo
         bL.setInverted(true);
+
+        fL.setZeroPowerBehavior(BRAKE);
+        fR.setZeroPowerBehavior(BRAKE);
+        bL.setZeroPowerBehavior(BRAKE);
+        bR.setZeroPowerBehavior(BRAKE);
+
         //named shot purely because im too lazy to change config
         test = new Motor(hardwareMap, "shot");
         ugRectDetector = new UGRectDetector(hardwareMap);
         ugRectDetector.init();
-        ugRectDetector.setTopRectangle(0.35, 0.40);
+        ugRectDetector.setTopRectangle(0.35, 0.64);
+        ugRectDetector.setBottomRectangle(0.35, 0.53);
         ugRectDetector.setRectangleSize(10, 35);
         imu = new RevIMU(hardwareMap);
         imu.init();
@@ -67,7 +74,11 @@ public class AutonomousKanye extends CommandOpMode {
         });
 
         SequentialCommandGroup wobbleGoal = new SequentialCommandGroup(
+                new Com_DriveTime(mecDrive,0.5, 0D, 0D, time, 0.4),
+                new Com_Rotate(mecDrive, imu, -180),
                 visionCommand,
+                new Com_DriveTime(mecDrive,-0.5, 0D, 0D, time, 1.5),
+                new Com_Rotate(mecDrive, imu, -90),
                 new SelectCommand(new HashMap<Object, Command>() {{
                     put(VisionSystem.Size.ZERO, new GroupZero(mecDrive, time));
                     put(VisionSystem.Size.ONE, new Com_DriveTime(mecDrive,
