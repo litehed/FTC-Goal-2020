@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
-
 import com.arcrobotics.ftclib.command.CommandOpMode;
-import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.hardware.RevIMU;
+import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -15,20 +15,22 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSystem;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleSystem;
-import org.firstinspires.ftc.teamcode.subsystems.commands.drive.Com_Drive;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_IntakeStart;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_IntakeStop;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_NoShoot;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_PickUp;
+import org.firstinspires.ftc.teamcode.subsystems.commands.Com_PutDown;
 import org.firstinspires.ftc.teamcode.subsystems.commands.Com_Shoot;
+import org.firstinspires.ftc.teamcode.subsystems.commands.drive.Com_Drive;
 
-@TeleOp(name = "TeleOpMain")
-public class TeleOpMain extends CommandOpMode {
+@TeleOp(name="Kanye South")
+public class TeleopComp2 extends CommandOpMode {
 
-    public double pwrSelect;
+    public double pwrSelect = 1.0;
 
-    private Motor fL, bL, fR, bR, intake;
-    private Motor shot, pickup;
+    private Motor fL, bL, fR, bR;
+    private Motor shot, intake;
+    private SimpleServo servo;
 
     private DriveSystem mecDrive;
     private Com_Drive driveCommand;
@@ -36,33 +38,34 @@ public class TeleOpMain extends CommandOpMode {
     private ShooterSystem shooterSystem;
     private Com_Shoot shootCommand;
     private Com_NoShoot stopCommand;
-    //Wobble goal pickup subsystem and command initialization
-    //TODO: Re-add this stuff to Teleop once we can use it
-    private WobbleSystem wobbleSystem;
-    private Com_PickUp pickupCommand;
-    //Intake subsystem and commands initialization
+
     private IntakeSystem intakeSystem;
-    private Com_IntakeStart startIntakeCommand;
-    private Com_IntakeStop stopIntakeCommand;
-    public GamepadEx m_driverOp, m_toolOp;
-    private Button shooterStart, shooterStop, dpadUp, dpadDown, goalLift, toggleIntake;
+    private Com_IntakeStart intakeStartCommand;
+    private Com_IntakeStop intakeStopCommand;
+
+    private WobbleSystem wobbleSystem;
+    private Com_PickUp pickUpCommand;
+    private Com_PutDown putDownCommand;
+
+    private GamepadEx m_driverOp, m_toolOp;
+    private Button toggleShooter, dpadUp, dpadDown, toggleIntake;
+    private RevIMU imu;
     @Override
     public void initialize() {
         fL = new Motor(hardwareMap, "fL");
         fR = new Motor(hardwareMap, "fR");
         bL = new Motor(hardwareMap, "bL");
         bR = new Motor(hardwareMap, "bR");
+        imu = new RevIMU(hardwareMap);
+
 
         //one of our motors is messed up so it has to be inverted woooooo
         bL.setInverted(true);
-
-
-        intake = new Motor(hardwareMap, "intake");
+        intake = new Motor(hardwareMap, "intake", Motor.GoBILDA.BARE);
         shot = new Motor(hardwareMap, "shot", Motor.GoBILDA.BARE);
-//        pickup = new MotorEx(hardwareMap, "wobble", Motor.GoBILDA.BARE);
-        //^ Bare for testing since thats all we had to test with Ill switch RPM when I see it
-        shot.setRunMode(Motor.RunMode.VelocityControl);
-//        pickup.setRunMode(Motor.RunMode.PositionControl);
+
+        servo = new SimpleServo(hardwareMap, "servo");
+//        shot.setRunMode(Motor.RunMode.VelocityControl);
 
         mecDrive = new DriveSystem(fL, fR, bL, bR);
 
@@ -85,34 +88,27 @@ public class TeleOpMain extends CommandOpMode {
                         pwrSelect += 0.25;
                     }
                 }));
+
         driveCommand = new Com_Drive(mecDrive, m_driverOp::getLeftX, m_driverOp::getLeftY, m_driverOp::getRightX);
 
-        //IMPORTANT: Note to self remember in the Drive System class I just flipped the turn speed and strafe speed
         shooterSystem = new ShooterSystem(shot, telemetry, () -> pwrSelect);
         shootCommand = new Com_Shoot(shooterSystem);
         stopCommand = new Com_NoShoot(shooterSystem);
-        shooterStart = (new GamepadButton(m_driverOp, GamepadKeys.Button.A))
-                .whenPressed(shootCommand);
-        shooterStop = (new GamepadButton(m_driverOp, GamepadKeys.Button.B))
-                .whenPressed(stopCommand);
-
-//        wobbleSystem = new WobbleSystem(pickup);
-//        pickupCommand = new Com_PickUp(wobbleSystem);
-//        goalLift = (new GamepadButton(m_driverOp, GamepadKeys.Button.Y))
-//                .whenPressed(pickupCommand);
-
+        toggleShooter = new GamepadButton(m_driverOp, GamepadKeys.Button.A)
+                .toggleWhenPressed(shootCommand);
         intakeSystem = new IntakeSystem(intake);
-        startIntakeCommand = new Com_IntakeStart(intakeSystem);
-        stopIntakeCommand = new Com_IntakeStop(intakeSystem);
+        intakeStartCommand = new Com_IntakeStart(intakeSystem);
+        intakeStopCommand = new Com_IntakeStop(intakeSystem);
         toggleIntake = new GamepadButton(m_driverOp, GamepadKeys.Button.X)
-                .whenPressed(new ConditionalCommand(startIntakeCommand, stopIntakeCommand, intakeSystem::active))
-                .whenReleased(new InstantCommand(intakeSystem::toggle));
+                .toggleWhenPressed(intakeStartCommand);
+//        wobbleSystem = new WobbleSystem(servo);
+//        pickUpCommand = new Com_PickUp(wobbleSystem);
+//        putDownCommand = new Com_PutDown(wobbleSystem);
 
         mecDrive.setDefaultCommand(driveCommand);
 
-        register(mecDrive, shooterSystem, intakeSystem);
+        register(mecDrive);
 
         schedule(driveCommand);
     }
 }
-

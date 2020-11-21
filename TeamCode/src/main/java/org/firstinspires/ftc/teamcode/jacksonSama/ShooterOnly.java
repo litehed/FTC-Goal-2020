@@ -71,7 +71,7 @@ public class ShooterOnly extends CommandOpMode {
                     }
                 }));
 
-        driveCommand = new Com_Drive(mecDrive, m_driverOp::getLeftY, m_driverOp::getLeftX, m_driverOp::getRightX);
+        driveCommand = new Com_Drive(mecDrive, m_driverOp::getLeftX, m_driverOp::getLeftY, m_driverOp::getRightX);
 
         shooterSystem = new ShooterSystem(shot, telemetry, () -> pwrSelect);
         shootCommand = new Com_Shoot(shooterSystem);

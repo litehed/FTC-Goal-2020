@@ -13,9 +13,9 @@ public class VisionSystem extends SubsystemBase {
         ZERO, ONE, FOUR
     }
 
-    public VisionSystem(UGRectDetector rectyDetecty, Telemetry telemetry){
+    public VisionSystem(UGRectDetector rectyDetecty, Telemetry telemetryIn){
         ugRectDetector = rectyDetecty;
-
+        telemetry = telemetryIn;
     }
 
     public Size getStackSize(){
