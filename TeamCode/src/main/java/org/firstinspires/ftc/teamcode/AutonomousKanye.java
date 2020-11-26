@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.RevIMU;
+import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.CRServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.vision.UGRectDetector;
@@ -33,7 +34,7 @@ import static com.arcrobotics.ftclib.hardware.motors.Motor.ZeroPowerBehavior.BRA
 public class AutonomousKanye extends CommandOpMode {
     private Motor fL, bL, fR, bR;
     private Motor wobble, test;
-    private CRServo servo;
+    private SimpleServo servo;
     private UGRectDetector ugRectDetector;
     private DriveSystem mecDrive;
 
@@ -61,7 +62,8 @@ public class AutonomousKanye extends CommandOpMode {
         bR.setZeroPowerBehavior(BRAKE);
 
         wobble = new Motor(hardwareMap, "wobble");
-        servo = new CRServo(hardwareMap, "servo");
+        servo = new SimpleServo(hardwareMap, "servo");
+        wobble.setZeroPowerBehavior(BRAKE);
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
         //named shot purely because im too lazy to change config
         test = new Motor(hardwareMap, "shot");
@@ -76,7 +78,7 @@ public class AutonomousKanye extends CommandOpMode {
 
         time = new ElapsedTime();
         mecDrive = new DriveSystem(fL, fR, bL, bR);
-        wobbleSystem = new WobbleSystem(servo, wobble);
+        wobbleSystem = new WobbleSystem(servo, wobble, telemetry);
         putDown = new Com_PutDown(wobbleSystem, time);
         visionSystem = new VisionSystem(ugRectDetector, telemetry);
         visionCommand = new Com_Vision(visionSystem);

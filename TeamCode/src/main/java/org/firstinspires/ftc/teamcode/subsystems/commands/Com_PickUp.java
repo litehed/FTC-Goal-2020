@@ -18,19 +18,17 @@ public class Com_PickUp extends CommandBase {
     @Override
     public void initialize(){
         time.reset();
+        wobblySystem.spinMeRightRoundBaby();
     }
     @Override
     public void execute(){
-        wobblySystem.spinMeRightRoundBaby();
     }
     @Override
     public void end(boolean interrupted){
         wobblySystem.motorUp();
-        if(time.seconds() >= 10)
-            wobblySystem.motorStop();
     }
     @Override
     public boolean isFinished(){
-        return time.seconds() >= 1;
+       return time.seconds() >= 1;
     }
 }

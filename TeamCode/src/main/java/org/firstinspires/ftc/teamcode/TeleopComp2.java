@@ -33,7 +33,7 @@ public class TeleopComp2 extends CommandOpMode {
 
     private Motor fL, bL, fR, bR;
     private Motor shot, intake, wobble;
-    private CRServo servo;
+    private SimpleServo servo;
 
     private DriveSystem mecDrive;
     private Com_Drive driveCommand;
@@ -69,8 +69,10 @@ public class TeleopComp2 extends CommandOpMode {
         intake = new Motor(hardwareMap, "intake", Motor.GoBILDA.BARE);
         shot = new Motor(hardwareMap, "shot", Motor.GoBILDA.BARE);
         wobble = new Motor(hardwareMap, "wobble");
+        wobble.setRunMode(Motor.RunMode.PositionControl);
+        wobble.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
-        servo = new CRServo(hardwareMap, "servo");
+        servo = new SimpleServo(hardwareMap, "servo");
 //        shot.setRunMode(Motor.RunMode.VelocityControl);
 
         mecDrive = new DriveSystem(fL, fR, bL, bR);
@@ -112,7 +114,7 @@ public class TeleopComp2 extends CommandOpMode {
        outtakeOn = new GamepadButton(m_driverOp, GamepadKeys.Button.LEFT_BUMPER)
                .whenHeld(outtakeStartCommand);
 
-        wobbleSystem = new WobbleSystem(servo, wobble);
+        wobbleSystem = new WobbleSystem(servo, wobble, telemetry);
         pickUpCommand = new Com_PickUp(wobbleSystem, elapsedTime);
         putDownCommand = new Com_PutDown(wobbleSystem, elapsedTime);
         wobbleButton = new GamepadButton(m_driverOp, GamepadKeys.Button.B)

@@ -13,10 +13,10 @@ public class GroupOne extends SequentialCommandGroup {
     public GroupOne(DriveSystem drive, ElapsedTime time, VoltageSensor voltageSensor, WobbleSystem wobbleSystem) {
         addCommands(
                 new Com_DriveTime(drive,0.5, 0D, 0D, time, 2.0),
-                new Com_DriveTime(drive, (12 / voltageSensor.getVoltage()) * -0.55, 0D, 0D, time, 4.5),
-                new Com_DriveTime(drive, 0D, (12 / voltageSensor.getVoltage()) * -0.55, 0D, time, 6.6),
+                new Com_DriveTime(drive, (13/voltageSensor.getVoltage()) * -0.55, 0D, 0D, time, 4.5),
+                new Com_DriveTime(drive, 0D, (13/voltageSensor.getVoltage()) * -0.55, 0D, time, 3.9),
                 new Com_PutDown(wobbleSystem, time),
-                new Com_DriveTime(drive, 0D, (12/voltageSensor.getVoltage())*-0.55, 0D, time, 2)
+                new Com_DriveTime(drive, 0D, (13/voltageSensor.getVoltage())*0.55, 0D, time, 2)
                 );
 
     }

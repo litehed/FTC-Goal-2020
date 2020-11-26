@@ -15,8 +15,8 @@ public class GroupZero extends SequentialCommandGroup {
     public GroupZero(DriveSystem drive, ElapsedTime time, VoltageSensor voltageSensor, RevIMU imu, WobbleSystem wobbleSystem) {
         addCommands(
                 new Com_DriveTime(drive,0.5, 0D, 0D, time, 2.0),
-                new Com_DriveTime(drive, (12/voltageSensor.getVoltage())*-0.5, 0D, 0D, time, 4.5),
-                new Com_DriveTime(drive, 0D, (12/voltageSensor.getVoltage())*-0.55, 0D, time, 7.7),
+                new Com_DriveTime(drive, (13/voltageSensor.getVoltage())*-0.5, 0D, 0D, time, 4.5),
+                new Com_DriveTime(drive, 0D, (13/voltageSensor.getVoltage())*-0.55, 0D, time, 3.7),
                 new Com_Rotate(drive, imu, 180),
                 new Com_PutDown(wobbleSystem, time));
 
