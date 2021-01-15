@@ -31,7 +31,5 @@ public class ComboGamepad extends GamepadEx {
         super(gamepad);
     }
 
-    public GamepadButton getComboButtons(GamepadKeys.Button... buttons) {
-        return gamepadButtons.get(buttons);
-    }
+
 }
