@@ -72,7 +72,7 @@ public class TeleMain extends CommandOpMode {
 
         flicker = new SimpleServo(hardwareMap, "flicker", 0, 270);
         grabber = new SimpleServo(hardwareMap, "wobbleS", 0, 270);
-
+        grabber.setInverted(true);
         //imu
         imu = new RevIMU(hardwareMap);
         imu.init();
