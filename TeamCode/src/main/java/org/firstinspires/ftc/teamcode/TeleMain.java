@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.RunCommand;
-import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -13,7 +11,6 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commands.Com_Grabber;
 import org.firstinspires.ftc.teamcode.commands.Com_Intake;
 import org.firstinspires.ftc.teamcode.commands.Com_Outtake;
 import org.firstinspires.ftc.teamcode.commands.Com_PickUp;
@@ -45,10 +42,10 @@ public class TeleMain extends CommandOpMode {
     private Com_Shooter shooterCommand;
     private Com_Intake intakeCommand;
     private Com_Outtake outtakeCommand;
-    private Com_Grabber grabberCommand;
     private Com_PickUp pickUpCommand;
     private Com_PutDown putDownCommand;
     private SequentialShooter shootCommandGroup;
+    private InstantCommand grabberCommand;
     private InstantCommand runFlyWheelCommand;
 
     //Extranious
@@ -107,7 +104,12 @@ public class TeleMain extends CommandOpMode {
         outtakeCommand = new Com_Outtake(intakeSystem);
 
         wobbleSystem = new WobbleSubsystem(arm, grabber);
-        grabberCommand = new Com_Grabber(wobbleSystem);
+        grabberCommand = new InstantCommand(()-> {
+            if(wobbleSystem.isGrabbing())
+                wobbleSystem.openGrabber();
+            else
+                wobbleSystem.closeGrabber();
+            }, wobbleSystem);
         pickUpCommand = new Com_PickUp(wobbleSystem);
         putDownCommand = new Com_PutDown(wobbleSystem);
 

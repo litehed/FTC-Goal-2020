@@ -22,7 +22,6 @@ public class Com_PutDown extends CommandBase {
         arm.setPositionCoefficient(0.005);
         arm.setPositionTolerance(10);
         arm.setTargetPosition(0);
-        wobbleSystem.stopMotor();
     }
 
     @Override

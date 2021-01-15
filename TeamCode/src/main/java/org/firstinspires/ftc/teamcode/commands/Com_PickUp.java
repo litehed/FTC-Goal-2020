@@ -22,7 +22,6 @@ public class Com_PickUp extends CommandBase {
         arm.setPositionCoefficient(0.005);
         arm.setPositionTolerance(10);
         arm.setTargetPosition(134);
-        wobbleSystem.stopMotor();
     }
 
     @Override
