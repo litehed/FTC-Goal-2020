@@ -22,14 +22,13 @@ public class WobbleSubsystem extends SubsystemBase {
             this.arm.resetEncoder();
     }
 
-    //TODO: Set proper positions for grabber
     public void openGrabber(){
         grabbing = false;
         grabber.setPosition(1);
     }
     public void closeGrabber(){
         grabbing = true;
-        grabber.setPosition(.6);
+        grabber.setPosition(0.6);
     }
     public boolean isGrabbing(){
         return grabbing;
