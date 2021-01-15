@@ -46,9 +46,4 @@ public class ShooterSubsystem extends SubsystemBase {
         flicker.setPosition(0.27);
     }
 
-    @Override
-    public void periodic(){
-        telemetry.addData("Shooter Velocity:", flywheel.getCorrectedVelocity());
-        telemetry.update();
-    }
 }
