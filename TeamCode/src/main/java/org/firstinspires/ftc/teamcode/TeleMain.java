@@ -68,6 +68,7 @@ public class TeleMain extends CommandOpMode {
         flyWheel.setInverted(true);
         intakeA = new Motor(hardwareMap, "intakeA");
         arm = new Motor(hardwareMap, "wobble", Motor.GoBILDA.RPM_312);
+        arm.setInverted(true);
 
         flicker = new SimpleServo(hardwareMap, "flicker", 0, 270);
         grabber = new SimpleServo(hardwareMap, "wobbleS", 0, 270);
