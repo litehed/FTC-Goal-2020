@@ -104,7 +104,7 @@ public class TeleMain extends CommandOpMode {
         intakeCommand = new Com_Intake(intakeSystem);
         outtakeCommand = new Com_Outtake(intakeSystem);
 
-        wobbleSystem = new WobbleSubsystem(arm, grabber);
+        wobbleSystem = new WobbleSubsystem(arm, grabber, telemetry);
         grabberCommand = new InstantCommand(()-> {
             if(wobbleSystem.isGrabbing())
                 wobbleSystem.openGrabber();
