@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.vision.UGContourRingDetector;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -15,6 +16,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSystem;
 public class AutonMain extends CommandOpMode {
     //Servos and Motors
     private Motor fL, fR, bL, bR;
+    private SimpleServo grabber;
 
     //Subsystems
     private DriveSystem driveSystem;
@@ -33,6 +35,9 @@ public class AutonMain extends CommandOpMode {
 //        fR = new Motor(hardwareMap, "fR");
 //        bL = new Motor(hardwareMap, "bL");
 //        bR = new Motor(hardwareMap, "bR");
+        grabber = new SimpleServo(hardwareMap, "wobbleS", 0, 270);
+        grabber.setInverted(true);
+        grabber.setPosition(1);
 
         ugContourRingDetector = new UGContourRingDetector(hardwareMap, "poopcam", telemetry, true);
         ugContourRingDetector.init();
@@ -42,5 +47,6 @@ public class AutonMain extends CommandOpMode {
         FtcDashboard.getInstance().startCameraStream(ugContourRingDetector.getCamera(), 30);
 
 //        driveSystem = new DriveSystem(fL, fR, bL, bR);
+
     }
 }
