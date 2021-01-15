@@ -21,7 +21,7 @@ public class Com_PickUp extends CommandBase {
     public void initialize(){
         arm.setPositionCoefficient(0.005);
         arm.setPositionTolerance(10);
-        arm.setTargetPosition(134);
+        arm.setTargetPosition(470);
     }
 
     @Override

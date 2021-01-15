@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.commands.Com_Intake;
 import org.firstinspires.ftc.teamcode.commands.Com_Outtake;
@@ -68,8 +69,9 @@ public class TeleMain extends CommandOpMode {
         flyWheel.setInverted(true);
         intakeA = new Motor(hardwareMap, "intakeA");
         arm = new Motor(hardwareMap, "wobble", Motor.GoBILDA.RPM_312);
-        arm.setInverted(true);
-
+        arm.encoder.setDirection(Motor.Direction.REVERSE);
+        arm.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         flicker = new SimpleServo(hardwareMap, "flicker", 0, 270);
         grabber = new SimpleServo(hardwareMap, "wobbleS", 0, 270);
         grabber.setInverted(true);

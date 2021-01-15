@@ -25,11 +25,11 @@ public class WobbleSubsystem extends SubsystemBase {
     //TODO: Set proper positions for grabber
     public void openGrabber(){
         grabbing = false;
-        grabber.turnToAngle(270);
+        grabber.setPosition(1);
     }
     public void closeGrabber(){
         grabbing = true;
-        grabber.turnToAngle(180);
+        grabber.setPosition(.6);
     }
     public boolean isGrabbing(){
         return grabbing;
@@ -42,10 +42,10 @@ public class WobbleSubsystem extends SubsystemBase {
         arm.stopMotor();
     }
     public void armUp(){
-        arm.set(0.5);
+        arm.set(-0.3);
     }
     public void armDown(){
-        arm.set(0.3);
+        arm.set(-0.15);
     }
     @Override
     public void periodic(){
