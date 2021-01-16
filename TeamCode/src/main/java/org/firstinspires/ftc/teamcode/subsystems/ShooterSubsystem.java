@@ -18,7 +18,7 @@ public class ShooterSubsystem extends SubsystemBase {
         this.flywheel = flywheel;
 
         this.flywheel.setRunMode(Motor.RunMode.VelocityControl);
-        this.flywheel.setVeloCoefficients(1.2, 0, 0.07);
+        this.flywheel.setVeloCoefficients(0.3, 0, 0.01);
         this.flywheel.setFeedforwardCoefficients(0, 1.1);
 
         this.flicker = flicker;
@@ -38,6 +38,10 @@ public class ShooterSubsystem extends SubsystemBase {
         timedAction.run();
     }
 
+    public void resetEncoder(){
+        flywheel.resetEncoder();
+    }
+
     public void flickReset(){
         if (!timedAction.running())
             timedAction.reset();
@@ -46,4 +50,7 @@ public class ShooterSubsystem extends SubsystemBase {
         flicker.setPosition(0.27);
     }
 
+    public void setRunMode(Motor.RunMode runMode){
+        flywheel.setRunMode(runMode);
+    }
 }
