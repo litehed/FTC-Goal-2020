@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -25,11 +24,11 @@ public class WobbleSubsystem extends SubsystemBase {
 
     public void openGrabber(){
         grabbing = false;
-        grabber.setPosition(0.3);
+        grabber.turnToAngle(90);
     }
     public void closeGrabber(){
         grabbing = true;
-        grabber.setPosition(0.4);
+        grabber.setPosition(0);
     }
     public boolean isGrabbing(){
         return grabbing;

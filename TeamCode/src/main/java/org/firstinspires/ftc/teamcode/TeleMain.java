@@ -73,7 +73,7 @@ public class TeleMain extends CommandOpMode {
         arm.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         flicker = new SimpleServo(hardwareMap, "flicker", 0, 270);
         grabber = new SimpleServo(hardwareMap, "wobbleS", 0, 270);
-        grabber.setInverted(true);
+        grabber.turnToAngle(90);
 
         //imu
         imu = new RevIMU(hardwareMap);
