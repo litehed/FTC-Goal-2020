@@ -35,9 +35,9 @@ public class AutonMain extends CommandOpMode {
 //        fR = new Motor(hardwareMap, "fR");
 //        bL = new Motor(hardwareMap, "bL");
 //        bR = new Motor(hardwareMap, "bR");
-        grabber = new SimpleServo(hardwareMap, "wobbleS", 0, 270);
-        grabber.setInverted(true);
-        grabber.setPosition(1);
+//        grabber = new SimpleServo(hardwareMap, "wobbleS", 0, 270);
+//        grabber.setInverted(true);
+//        grabber.setPosition(1);
 
         ugContourRingDetector = new UGContourRingDetector(hardwareMap, "poopcam", telemetry, true);
         ugContourRingDetector.init();

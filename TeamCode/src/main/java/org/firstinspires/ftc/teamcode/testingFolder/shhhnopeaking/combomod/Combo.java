@@ -14,7 +14,15 @@ public class Combo {
         }
     }
 
-    public void setPushTypes(){
-
+    public void setPushTypes(PressTypes... types){
+        for(int b = 0; b < buttons.size(); b++){
+            if (types.equals(PressTypes.HOLD)) {
+                buttons.get(b);
+            }else if(types.equals(PressTypes.ACTIVE)){
+                buttons.get(b);
+            }else if(types.equals(PressTypes.PRESS)){
+                buttons.get(b);
+            }
+        }
     }
 }

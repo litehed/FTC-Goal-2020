@@ -66,15 +66,15 @@ public class TeleMain extends CommandOpMode {
         bR = new Motor(hardwareMap, "bR");
 
         flyWheel = new Motor(hardwareMap, "shoot");
-        flyWheel.setInverted(true);
         intakeA = new Motor(hardwareMap, "intakeA");
         arm = new Motor(hardwareMap, "wobble", Motor.GoBILDA.RPM_312);
-        arm.encoder.setDirection(Motor.Direction.REVERSE);
+
         arm.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         flicker = new SimpleServo(hardwareMap, "flicker", 0, 270);
         grabber = new SimpleServo(hardwareMap, "wobbleS", 0, 270);
         grabber.setInverted(true);
+
         //imu
         imu = new RevIMU(hardwareMap);
         imu.init();
@@ -130,7 +130,7 @@ public class TeleMain extends CommandOpMode {
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(grabberCommand);
         m_driverOp.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(pickUpCommand, putDownCommand);
-
+        
         register(driveSystem);
         driveSystem.setDefaultCommand(driveCommand);
     }
