@@ -2,15 +2,22 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.vision.UGContourRingDetector;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.commands.groups.InitialMovement;
 import org.firstinspires.ftc.teamcode.commands.vision.Com_Contour;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.ContourVisionSystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSystem;
+import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
+import org.firstinspires.ftc.teamcode.testingFolder.shhhnopeaking.ElapsedWait;
 
 @Autonomous(name="PogU")
 public class AutonMain extends CommandOpMode {
@@ -19,7 +26,7 @@ public class AutonMain extends CommandOpMode {
     private SimpleServo grabber;
 
     //Subsystems
-    private DriveSystem driveSystem;
+    private MecanumDriveSubsystem drive;
 
     //Vision
     private UGContourRingDetector ugContourRingDetector;
@@ -31,10 +38,6 @@ public class AutonMain extends CommandOpMode {
 
     @Override
     public void initialize() {
-//        fL = new Motor(hardwareMap, "fL");
-//        fR = new Motor(hardwareMap, "fR");
-//        bL = new Motor(hardwareMap, "bL");
-//        bR = new Motor(hardwareMap, "bR");
 //        grabber = new SimpleServo(hardwareMap, "wobbleS", 0, 270);
 //        grabber.setInverted(true);
 //        grabber.setPosition(1);
@@ -44,9 +47,13 @@ public class AutonMain extends CommandOpMode {
         visionSystem = new ContourVisionSystem(ugContourRingDetector, telemetry);
         visionCommand = new Com_Contour(visionSystem, time);
 
-        FtcDashboard.getInstance().startCameraStream(ugContourRingDetector.getCamera(), 30);
+        drive = new MecanumDriveSubsystem(new SampleMecanumDrive(hardwareMap), false);
 
-//        driveSystem = new DriveSystem(fL, fR, bL, bR);
-
+        SequentialCommandGroup autonomous = new SequentialCommandGroup(
+                new WaitUntilCommand(this::isStarted),
+                visionCommand,
+                new InitialMovement(drive)
+        );
+        schedule(autonomous);
     }
 }
