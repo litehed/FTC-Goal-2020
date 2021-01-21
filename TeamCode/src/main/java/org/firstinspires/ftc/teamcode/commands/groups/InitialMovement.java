@@ -4,7 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
@@ -33,7 +33,7 @@ public class InitialMovement extends SequentialCommandGroup{
                 .splineToConstantHeading(new Vector2d(0.0, -60.0), 0.0)
                 .build();
 
-        Vector2d shootPose = traj1.end().vec().plus(new Vector2d(-32.0, 22.0));
+        Vector2d shootPose = traj1.end().vec().plus(new Vector2d(-30.0, 22.0));
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end(), true)
                 .lineToConstantHeading(shootPose)
@@ -64,8 +64,10 @@ public class InitialMovement extends SequentialCommandGroup{
                 new TrajectoryFollowerCommand(drive, traj2),
                 new InstantCommand(shooter::shoot, shooter),
                 new TurnCommand(drive, Math.toRadians(10)),
+                new WaitCommand(500),
                 new RapidFireCommand(shooter),
-                new ParallelCommandGroup(
+                new ParallelDeadlineGroup(
+                        new WaitCommand(1000),
                         new TurnCommand(drive, Math.toRadians(-10)),
                         new Com_PutDown(wobbleSystem)
                 ),

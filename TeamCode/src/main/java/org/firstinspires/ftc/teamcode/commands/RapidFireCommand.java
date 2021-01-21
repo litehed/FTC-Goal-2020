@@ -19,10 +19,8 @@ public class RapidFireCommand extends CommandBase {
     @Override
     public void initialize() {
         shooterSubsystem.flickReset();
-        shooterSubsystem.resetEncoder();
         numShots = 0;
         shooterSubsystem.setRunMode(Motor.RunMode.VelocityControl);
-        shooterSubsystem.shoot();
     }
 
     @Override
