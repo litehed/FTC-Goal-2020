@@ -25,12 +25,12 @@ public class InitialMovement extends SequentialCommandGroup{
     public InitialMovement(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem, ShooterSubsystem shooter){
         drive.setPoseEstimate(startPose);
         Trajectory traj0 = drive.trajectoryBuilder(startPose)
-                .strafeLeft(12)
+                .forward(20)
                 .build();
 
         Trajectory traj1 = drive.trajectoryBuilder(traj0.end())
-                .back(4.0)
-                .splineToConstantHeading(new Vector2d(0.0, -60.0), 0.0)
+                .back(1.0)
+                .splineToConstantHeading(new Vector2d(4.0, -60.0), 0.0)
                 .build();
 
         Vector2d shootPose = traj1.end().vec().plus(new Vector2d(-43.0, 22.0));
@@ -56,21 +56,20 @@ public class InitialMovement extends SequentialCommandGroup{
 
         addCommands(
                 new TrajectoryFollowerCommand(drive, traj0),
-                new TrajectoryFollowerCommand(drive, traj1),
-                new Com_PutDown(wobbleSystem),
-                new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
-                new WaitCommand(500),
-                new Com_PickUp(wobbleSystem),
-                new TrajectoryFollowerCommand(drive, traj2),
                 new InstantCommand(shooter::shoot, shooter),
                 new TurnCommand(drive, Math.toRadians(10)),
                 new WaitCommand(500),
                 new RapidFireCommand(shooter),
                 new ParallelDeadlineGroup(
                         new WaitCommand(200),
-                        new TurnCommand(drive, Math.toRadians(-10)),
-                        new Com_PutDown(wobbleSystem)
+                        new TurnCommand(drive, Math.toRadians(-10))
                 ),
+                new TrajectoryFollowerCommand(drive, traj1),
+                new Com_PutDown(wobbleSystem),
+                new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
+                new WaitCommand(500),
+                new Com_PickUp(wobbleSystem),
+                new TrajectoryFollowerCommand(drive, traj2),
                 new TrajectoryFollowerCommand(drive, traj3),
                 new TrajectoryFollowerCommand(drive, traj4),
                 new TrajectoryFollowerCommand(drive, traj5)
