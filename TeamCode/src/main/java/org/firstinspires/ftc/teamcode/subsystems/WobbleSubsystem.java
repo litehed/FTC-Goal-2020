@@ -44,7 +44,7 @@ public class WobbleSubsystem extends SubsystemBase {
         arm.set(0.3);
     }
     public void armDown(){
-        arm.set(0.2);
+        arm.set(0.15);
     }
     @Override
     public void periodic(){
