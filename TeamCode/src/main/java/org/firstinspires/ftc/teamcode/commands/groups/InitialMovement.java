@@ -3,21 +3,25 @@ package org.firstinspires.ftc.teamcode.commands.groups;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 
+import org.firstinspires.ftc.teamcode.commands.Com_PutDown;
 import org.firstinspires.ftc.teamcode.commands.rr.TrajectoryFollowerCommand;
-import org.firstinspires.ftc.teamcode.commands.rr.TurnCommand;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
 
 public class InitialMovement extends SequentialCommandGroup{
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
     private Pose2d secondPose = new Pose2d(-65.0, -51.0, Math.toRadians(0.0));
 
-    public InitialMovement(MecanumDriveSubsystem drive){
+    public InitialMovement(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem){
         drive.setPoseEstimate(startPose);
         Trajectory traj1 = drive.trajectoryBuilder(startPose)
-                .back(4.0)
+                .splineTo(startPose.vec().plus(new Vector2d(0, -8.0)), 0)
+                .splineTo(startPose.vec().plus(new Vector2d(4.0, -8.0)), 0)
                 .splineToConstantHeading(new Vector2d(0.0, -60.0), 0.0)
                 .build();
 
@@ -44,6 +48,9 @@ public class InitialMovement extends SequentialCommandGroup{
 
         addCommands(
                 new TrajectoryFollowerCommand(drive, traj1),
+                new Com_PutDown(wobbleSystem),
+                new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
+                new WaitCommand(1000),
                 new TrajectoryFollowerCommand(drive, traj2),
                 new TrajectoryFollowerCommand(drive, traj3),
                 new TrajectoryFollowerCommand(drive, traj4),
