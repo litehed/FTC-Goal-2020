@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.commands.Com_PickUp;
 import org.firstinspires.ftc.teamcode.commands.Com_PutDown;
 import org.firstinspires.ftc.teamcode.commands.RapidFireCommand;
 import org.firstinspires.ftc.teamcode.commands.rr.TrajectoryFollowerCommand;
+import org.firstinspires.ftc.teamcode.commands.rr.TurnCommand;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
@@ -31,13 +33,13 @@ public class InitialMovement extends SequentialCommandGroup{
                 .splineToConstantHeading(new Vector2d(0.0, -60.0), 0.0)
                 .build();
 
-        Vector2d shootPose = traj1.end().vec().plus(new Vector2d(-30.0, 22.0));
+        Vector2d shootPose = traj1.end().vec().plus(new Vector2d(-32.0, 22.0));
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end(), true)
                 .lineToConstantHeading(shootPose)
                 .build();
 
-        Vector2d secondWobble = traj2.end().vec().plus(new Vector2d(-12.0, 12.0));
+        Vector2d secondWobble = traj2.end().vec().plus(new Vector2d(-10.0, 12.0));
 
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end(), 0.0)
                 .splineToLinearHeading(new Pose2d(secondWobble, 0.0), Math.toRadians(-90.0))
@@ -57,11 +59,16 @@ public class InitialMovement extends SequentialCommandGroup{
                 new TrajectoryFollowerCommand(drive, traj1),
                 new Com_PutDown(wobbleSystem),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
-                new WaitCommand(100),
+                new WaitCommand(250),
                 new Com_PickUp(wobbleSystem),
                 new TrajectoryFollowerCommand(drive, traj2),
+                new InstantCommand(shooter::shoot, shooter),
+                new TurnCommand(drive, Math.toRadians(30)),
                 new RapidFireCommand(shooter),
-                new Com_PutDown(wobbleSystem),
+                new ParallelCommandGroup(
+                        new TurnCommand(drive, Math.toRadians(-30)),
+                        new Com_PutDown(wobbleSystem)
+                ),
                 new TrajectoryFollowerCommand(drive, traj3),
                 new TrajectoryFollowerCommand(drive, traj4),
                 new TrajectoryFollowerCommand(drive, traj5)
