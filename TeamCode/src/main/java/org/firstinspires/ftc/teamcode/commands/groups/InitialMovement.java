@@ -20,11 +20,11 @@ public class InitialMovement extends SequentialCommandGroup{
     public InitialMovement(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem){
         drive.setPoseEstimate(startPose);
         Trajectory traj0 = drive.trajectoryBuilder(startPose)
-                .strafeRight(8)
+                .strafeLeft(8)
                 .build();
 
         Trajectory traj1 = drive.trajectoryBuilder(traj0.end())
-                .forward(4.0)
+                .back(4.0)
                 .splineToConstantHeading(new Vector2d(0.0, -60.0), 0.0)
                 .build();
 
@@ -50,6 +50,7 @@ public class InitialMovement extends SequentialCommandGroup{
                 .build();
 
         addCommands(
+                new TrajectoryFollowerCommand(drive, traj0),
                 new TrajectoryFollowerCommand(drive, traj1),
                 new Com_PutDown(wobbleSystem),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
