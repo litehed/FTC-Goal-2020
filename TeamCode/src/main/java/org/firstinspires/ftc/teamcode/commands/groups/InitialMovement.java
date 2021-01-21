@@ -19,9 +19,12 @@ public class InitialMovement extends SequentialCommandGroup{
 
     public InitialMovement(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem){
         drive.setPoseEstimate(startPose);
-        Trajectory traj1 = drive.trajectoryBuilder(startPose)
-                .splineTo(startPose.vec().plus(new Vector2d(0, -8.0)), 0)
-                .splineTo(startPose.vec().plus(new Vector2d(4.0, -8.0)), 0)
+        Trajectory traj0 = drive.trajectoryBuilder(startPose)
+                .strafeRight(8)
+                .build();
+
+        Trajectory traj1 = drive.trajectoryBuilder(traj0.end())
+                .forward(4.0)
                 .splineToConstantHeading(new Vector2d(0.0, -60.0), 0.0)
                 .build();
 
