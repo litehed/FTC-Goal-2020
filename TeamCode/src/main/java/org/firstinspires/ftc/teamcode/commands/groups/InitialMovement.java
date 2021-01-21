@@ -59,14 +59,14 @@ public class InitialMovement extends SequentialCommandGroup{
                 new TrajectoryFollowerCommand(drive, traj1),
                 new Com_PutDown(wobbleSystem),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
-                new WaitCommand(250),
+                new WaitCommand(500),
                 new Com_PickUp(wobbleSystem),
                 new TrajectoryFollowerCommand(drive, traj2),
                 new InstantCommand(shooter::shoot, shooter),
-                new TurnCommand(drive, Math.toRadians(30)),
+                new TurnCommand(drive, Math.toRadians(10)),
                 new RapidFireCommand(shooter),
                 new ParallelCommandGroup(
-                        new TurnCommand(drive, Math.toRadians(-30)),
+                        new TurnCommand(drive, Math.toRadians(-10)),
                         new Com_PutDown(wobbleSystem)
                 ),
                 new TrajectoryFollowerCommand(drive, traj3),
