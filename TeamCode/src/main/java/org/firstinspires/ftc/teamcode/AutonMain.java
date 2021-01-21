@@ -36,11 +36,17 @@ public class AutonMain extends CommandOpMode {
     //Extranious
     private ElapsedTime time;
 
+    //Poses
+
+    //Trajectories
+
     @Override
     public void initialize() {
 //        grabber = new SimpleServo(hardwareMap, "wobbleS", 0, 270);
 //        grabber.setInverted(true);
 //        grabber.setPosition(1);
+
+        time = new ElapsedTime();
 
         ugContourRingDetector = new UGContourRingDetector(hardwareMap, "poopcam", telemetry, true);
         ugContourRingDetector.init();
