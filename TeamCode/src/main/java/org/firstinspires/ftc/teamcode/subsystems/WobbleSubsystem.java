@@ -14,8 +14,7 @@ public class WobbleSubsystem extends SubsystemBase {
             this.arm = arm;
             this.grabber = grabber;
 
-            this.arm.setRunMode(Motor.RunMode.PositionControl);
-            this.arm.resetEncoder();
+        arm.setRunMode(Motor.RunMode.PositionControl);
     }
 
     public void openGrabber(){

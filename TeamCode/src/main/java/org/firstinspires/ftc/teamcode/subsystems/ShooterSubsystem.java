@@ -26,6 +26,10 @@ public class ShooterSubsystem extends SubsystemBase {
         this.telemetry = telemetry;
     }
 
+    public boolean isRunning() {
+        return timedAction.running();
+    }
+
     public void shoot(){
         flywheel.set(1.0);
     }

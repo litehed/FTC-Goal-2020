@@ -16,17 +16,20 @@ import org.firstinspires.ftc.teamcode.commands.vision.Com_Contour;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.ContourVisionSystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
+import org.firstinspires.ftc.teamcode.util.TimedAction;
 
 @Autonomous(name="PogU")
 public class AutonMain extends CommandOpMode {
     //Servos and Motors
-    private Motor fL, fR, bL, bR, arm;
-    private SimpleServo grabber;
+    private Motor fL, fR, bL, bR, arm, flyWheel;
+    private SimpleServo flicker, grabber;
 
     //Subsystems
     private MecanumDriveSubsystem drive;
     private WobbleSubsystem wobble;
+    private ShooterSubsystem shooterSystem;
 
     //Vision
     private UGContourRingDetector ugContourRingDetector;
@@ -34,6 +37,7 @@ public class AutonMain extends CommandOpMode {
     private Com_Contour visionCommand;
 
     //Extranious
+    private TimedAction flickerAction;
     private ElapsedTime time;
 
     //Poses
@@ -51,9 +55,22 @@ public class AutonMain extends CommandOpMode {
         grabber = new SimpleServo(hardwareMap, "wobbleS", 0, 270);
         time = new ElapsedTime();
 
+        flyWheel = new Motor(hardwareMap, "shoot");
+        flicker = new SimpleServo(hardwareMap, "flicker", 0, 270);
+
+        flickerAction = new TimedAction(
+                ()-> flicker.setPosition(0.5),
+                ()-> flicker.setPosition(0.27),
+                600,
+                true
+        );
+
+        shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, telemetry);
+
         ugContourRingDetector = new UGContourRingDetector(hardwareMap, "poopcam", telemetry, true);
         ugContourRingDetector.init();
         visionSystem = new ContourVisionSystem(ugContourRingDetector, telemetry);
+        arm.resetEncoder();
         visionCommand = new Com_Contour(visionSystem, time);
 
         drive = new MecanumDriveSubsystem(new SampleMecanumDrive(hardwareMap), false);
@@ -63,7 +80,7 @@ public class AutonMain extends CommandOpMode {
                 new InstantCommand(wobble::closeGrabber),
                 new WaitUntilCommand(this::isStarted),
                 visionCommand,
-                new InitialMovement(drive, wobble)
+                new InitialMovement(drive, wobble,shooterSystem)
         );
         schedule(autonomous);
     }

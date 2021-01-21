@@ -8,8 +8,10 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.commands.Com_PutDown;
+import org.firstinspires.ftc.teamcode.commands.RapidFireCommand;
 import org.firstinspires.ftc.teamcode.commands.rr.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
 
 public class InitialMovement extends SequentialCommandGroup{
@@ -17,10 +19,10 @@ public class InitialMovement extends SequentialCommandGroup{
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
     private Pose2d secondPose = new Pose2d(-65.0, -51.0, Math.toRadians(0.0));
 
-    public InitialMovement(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem){
+    public InitialMovement(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem, ShooterSubsystem shooter){
         drive.setPoseEstimate(startPose);
         Trajectory traj0 = drive.trajectoryBuilder(startPose)
-                .strafeLeft(8)
+                .strafeLeft(12)
                 .build();
 
         Trajectory traj1 = drive.trajectoryBuilder(traj0.end())
@@ -41,7 +43,7 @@ public class InitialMovement extends SequentialCommandGroup{
                 .build();
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end(), false)
-                .splineToConstantHeading(traj3.end().vec().plus(new Vector2d(-3.0, 3.0)), 0.0)
+                .splineToConstantHeading(traj3.end().vec().plus(new Vector2d(-3.0, 8.0)), 0.0)
                 .build();
 
         Trajectory traj5 = drive.trajectoryBuilder(traj4.end(), 0.0)
@@ -54,8 +56,9 @@ public class InitialMovement extends SequentialCommandGroup{
                 new TrajectoryFollowerCommand(drive, traj1),
                 new Com_PutDown(wobbleSystem),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
-                new WaitCommand(1000),
+                new WaitCommand(50),
                 new TrajectoryFollowerCommand(drive, traj2),
+                new RapidFireCommand(shooter),
                 new TrajectoryFollowerCommand(drive, traj3),
                 new TrajectoryFollowerCommand(drive, traj4),
                 new TrajectoryFollowerCommand(drive, traj5)
