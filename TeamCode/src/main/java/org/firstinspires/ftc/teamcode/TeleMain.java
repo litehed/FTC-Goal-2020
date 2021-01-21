@@ -10,16 +10,15 @@ import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.commands.Com_Intake;
 import org.firstinspires.ftc.teamcode.commands.Com_Outtake;
 import org.firstinspires.ftc.teamcode.commands.Com_PickUp;
 import org.firstinspires.ftc.teamcode.commands.Com_PutDown;
 import org.firstinspires.ftc.teamcode.commands.Com_Shooter;
+import org.firstinspires.ftc.teamcode.commands.drive.Com_Drive;
 import org.firstinspires.ftc.teamcode.commands.groups.SequentialShooter;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSystem;
-import org.firstinspires.ftc.teamcode.commands.drive.Com_Drive;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
@@ -69,8 +68,6 @@ public class TeleMain extends CommandOpMode {
         intakeA = new Motor(hardwareMap, "intakeA");
         arm = new Motor(hardwareMap, "wobble", Motor.GoBILDA.RPM_312);
 
-        arm.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         flicker = new SimpleServo(hardwareMap, "flicker", 0, 270);
         grabber = new SimpleServo(hardwareMap, "wobbleS", 0, 270);
 

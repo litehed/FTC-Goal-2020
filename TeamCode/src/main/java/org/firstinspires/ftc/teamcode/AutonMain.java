@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.vision.UGContourRingDetector;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.commands.groups.InitialMovement;
@@ -44,6 +46,8 @@ public class AutonMain extends CommandOpMode {
 //        grabber.setInverted(true);
 //        grabber.setPosition(1);
         arm = new Motor(hardwareMap, "wobble", Motor.GoBILDA.RPM_312);
+        arm.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         grabber = new SimpleServo(hardwareMap, "wobbleS", 0, 270);
         time = new ElapsedTime();
 
@@ -56,6 +60,7 @@ public class AutonMain extends CommandOpMode {
         wobble = new WobbleSubsystem(arm, grabber);
 
         SequentialCommandGroup autonomous = new SequentialCommandGroup(
+                new InstantCommand(wobble::closeGrabber),
                 new WaitUntilCommand(this::isStarted),
                 visionCommand,
                 new InitialMovement(drive, wobble)
