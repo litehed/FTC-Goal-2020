@@ -30,10 +30,10 @@ public class InitialMovement extends SequentialCommandGroup{
 
         Trajectory traj1 = drive.trajectoryBuilder(traj0.end())
                 .back(1.0)
-                .splineToConstantHeading(new Vector2d(5.0, -60.0), 0.0)
+                .splineToConstantHeading(new Vector2d(1.0, -60.0), 0.0)
                 .build();
 
-        Vector2d shootPose = traj1.end().vec().plus(new Vector2d(-12.0, 22.0));
+        Vector2d shootPose = traj1.end().vec().plus(new Vector2d(-16.0, 22.0));
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end(), true)
                 .lineToConstantHeading(shootPose)
@@ -51,7 +51,7 @@ public class InitialMovement extends SequentialCommandGroup{
 
         Trajectory traj5 = drive.trajectoryBuilder(traj4.end(), 0.0)
                 .splineTo(traj4.end().vec().plus(new Vector2d(16.0, 0.0)), 0.0)
-                .splineToLinearHeading(traj1.end().plus(new Pose2d(-5.0, 0.0, Math.toRadians(180.0))), 0.0)
+                .splineToLinearHeading(traj1.end().plus(new Pose2d(-9.0, -4.0, Math.toRadians(180.0))), 0.0)
                 .build();
 
         addCommands(
@@ -67,7 +67,7 @@ public class InitialMovement extends SequentialCommandGroup{
                 new WaitCommand(500),
                 new RapidFireCommand(shooter),
                 new ParallelDeadlineGroup(
-                        new WaitCommand(200),
+                        new WaitCommand(150),
                         new TurnCommand(drive, Math.toRadians(-10)),
                         new Com_PutDown(wobbleSystem)
                 ),
