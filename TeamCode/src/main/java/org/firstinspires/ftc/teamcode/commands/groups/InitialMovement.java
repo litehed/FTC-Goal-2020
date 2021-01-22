@@ -39,7 +39,7 @@ public class InitialMovement extends SequentialCommandGroup{
                 .lineToConstantHeading(shootPose)
                 .build();
 
-        Vector2d secondWobble = traj2.end().vec().plus(new Vector2d(-17.0, 12.0));
+        Vector2d secondWobble = traj2.end().vec().plus(new Vector2d(-12.0, 12.0));
 
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end(), 0.0)
                 .splineToLinearHeading(new Pose2d(secondWobble, 0.0), Math.toRadians(-90.0))
@@ -73,7 +73,7 @@ public class InitialMovement extends SequentialCommandGroup{
                 new TrajectoryFollowerCommand(drive, traj3),
                 new TrajectoryFollowerCommand(drive, traj4),
                 new InstantCommand(wobbleSystem::closeGrabber, wobbleSystem),
-                new WaitCommand(600),
+                new WaitCommand(1000),
                 new Com_PickUp(wobbleSystem),
                 new TrajectoryFollowerCommand(drive, traj5),
                 new TurnCommand(drive, Math.toRadians(180)),
