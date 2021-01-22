@@ -69,7 +69,7 @@ public class TeleMain extends CommandOpMode {
         arm = new Motor(hardwareMap, "wobble", Motor.GoBILDA.RPM_312);
 
         flicker = new SimpleServo(hardwareMap, "flicker", 0, 270);
-        grabber = new SimpleServo(hardwareMap, "wobbleS", 0, 270);
+        grabber = new SimpleServo(hardwareMap, "wobbleS", -90, 180);
 
         //imu
         imu = new RevIMU(hardwareMap);

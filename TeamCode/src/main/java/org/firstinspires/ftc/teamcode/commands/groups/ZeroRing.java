@@ -17,12 +17,11 @@ import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
 
-public class InitialMovement extends SequentialCommandGroup{
+public class ZeroRing extends SequentialCommandGroup{
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
-    private Pose2d secondPose = new Pose2d(-65.0, -51.0, Math.toRadians(0.0));
 
-    public InitialMovement(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem, ShooterSubsystem shooter){
+    public ZeroRing(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem, ShooterSubsystem shooter){
         drive.setPoseEstimate(startPose);
         Trajectory traj0 = drive.trajectoryBuilder(startPose)
                 .strafeLeft(12)
