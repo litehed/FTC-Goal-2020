@@ -49,7 +49,7 @@ public class InitialMovement extends SequentialCommandGroup{
                 .splineToConstantHeading(traj3.end().vec().plus(new Vector2d(-2.5, 8.0)), 0.0)
                 .build();
 
-        Trajectory traj5 = drive.trajectoryBuilder(traj4.end(), 180.0)
+        Trajectory traj5 = drive.trajectoryBuilder(new Pose2d(traj4.end().vec().rotated(Math.toRadians(180)), 180), 180)
                 .splineTo(traj4.end().vec().plus(new Vector2d(16.0, 0.0)), 0.0)
                 .splineToLinearHeading(traj1.end().plus(new Pose2d(-9.0, -4.0, Math.toRadians(180.0))), 0.0)
                 .build();
