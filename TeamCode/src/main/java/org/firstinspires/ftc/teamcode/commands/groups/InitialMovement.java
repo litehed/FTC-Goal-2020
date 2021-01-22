@@ -46,15 +46,16 @@ public class InitialMovement extends SequentialCommandGroup{
                 .build();
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end(), false)
-                .splineToConstantHeading(traj3.end().vec().plus(new Vector2d(-2.5, 8.0)), 0.0)
+                .splineToConstantHeading(traj3.end().vec().plus(new Vector2d(-2, 8.0)), 0.0)
                 .build();
 
-        Trajectory traj5 = drive.trajectoryBuilder(new Pose2d(traj4.end().vec(), 180), 180)
+        Trajectory traj5 = drive.trajectoryBuilder(traj4.end(), 0)
                 .splineTo(traj4.end().vec().plus(new Vector2d(16.0, 0.0)), 0.0)
                 .splineToLinearHeading(traj1.end().plus(new Pose2d(-9.0, -4.0, Math.toRadians(180.0))), 0.0)
                 .build();
 
         addCommands(
+                new InstantCommand(shooter::shoot, shooter),
                 new TrajectoryFollowerCommand(drive, traj0),
                 new TrajectoryFollowerCommand(drive, traj1),
                 new Com_PutDown(wobbleSystem),
@@ -62,21 +63,20 @@ public class InitialMovement extends SequentialCommandGroup{
                 new WaitCommand(500),
                 new Com_PickUp(wobbleSystem),
                 new TrajectoryFollowerCommand(drive, traj2),
-                new InstantCommand(shooter::shoot, shooter),
                 new TurnCommand(drive, Math.toRadians(10)),
-                new WaitCommand(500),
                 new RapidFireCommand(shooter),
                 new ParallelDeadlineGroup(
                         new TurnCommand(drive, Math.toRadians(-10)),
-                        new Com_PutDown(wobbleSystem)
+                        new Com_PutDown(wobbleSystem),
+                        new InstantCommand(shooter::stop, shooter)
                 ),
                 new TrajectoryFollowerCommand(drive, traj3),
                 new TrajectoryFollowerCommand(drive, traj4),
                 new InstantCommand(wobbleSystem::closeGrabber, wobbleSystem),
                 new WaitCommand(1000),
                 new Com_PickUp(wobbleSystem),
-                new TurnCommand(drive, Math.toRadians(180)),
                 new TrajectoryFollowerCommand(drive, traj5),
+                new TurnCommand(drive, Math.toRadians(180)),
                 new Com_PutDown(wobbleSystem),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem)
         );
