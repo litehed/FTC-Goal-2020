@@ -67,7 +67,6 @@ public class InitialMovement extends SequentialCommandGroup{
                 new WaitCommand(500),
                 new RapidFireCommand(shooter),
                 new ParallelDeadlineGroup(
-                        new WaitCommand(150),
                         new TurnCommand(drive, Math.toRadians(-10)),
                         new Com_PutDown(wobbleSystem)
                 ),
@@ -76,7 +75,9 @@ public class InitialMovement extends SequentialCommandGroup{
                 new InstantCommand(wobbleSystem::closeGrabber, wobbleSystem),
                 new WaitCommand(1000),
                 new Com_PickUp(wobbleSystem),
+                new TurnCommand(drive, Math.toRadians(180)),
                 new TrajectoryFollowerCommand(drive, traj5),
+                new Com_PutDown(wobbleSystem),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem)
         );
     }
