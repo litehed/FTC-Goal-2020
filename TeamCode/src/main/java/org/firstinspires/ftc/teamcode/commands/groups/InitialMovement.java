@@ -33,13 +33,13 @@ public class InitialMovement extends SequentialCommandGroup{
                 .splineToConstantHeading(new Vector2d(1.0, -60.0), 0.0)
                 .build();
 
-        Vector2d shootPose = traj1.end().vec().plus(new Vector2d(-22.0, 22.0));
+        Vector2d shootPose = traj1.end().vec().plus(new Vector2d(-30.0, 22.0));
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end(), true)
                 .lineToConstantHeading(shootPose)
                 .build();
 
-        Vector2d secondWobble = traj2.end().vec().plus(new Vector2d(-25.0, 12.0));
+        Vector2d secondWobble = traj2.end().vec().plus(new Vector2d(-17.0, 12.0));
 
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end(), 0.0)
                 .splineToLinearHeading(new Pose2d(secondWobble, 0.0), Math.toRadians(-90.0))
