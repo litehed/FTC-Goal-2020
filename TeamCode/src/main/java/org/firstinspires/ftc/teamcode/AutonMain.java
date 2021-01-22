@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.commands.groups.FourRing;
 import org.firstinspires.ftc.teamcode.commands.groups.ZeroRing;
 import org.firstinspires.ftc.teamcode.commands.groups.OneRing;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -89,7 +90,7 @@ public class AutonMain extends CommandOpMode {
                 new SelectCommand(new HashMap<Object, Command>() {{
                         put(VisionSystem.Size.ZERO, new ScheduleCommand(new ZeroRing(drive, wobble, shooterSystem)));
                         put(VisionSystem.Size.ONE, new ScheduleCommand(new OneRing(drive, wobble, shooterSystem)));
-                        put(VisionSystem.Size.FOUR, new ScheduleCommand(new OneRing(drive, wobble, shooterSystem)));
+                        put(VisionSystem.Size.FOUR, new ScheduleCommand(new FourRing(drive, wobble, shooterSystem)));
                     }},visionSystem::getStackSize)
         );
         schedule(autonomous);
