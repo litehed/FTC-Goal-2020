@@ -125,7 +125,7 @@ public class TeleMain extends CommandOpMode {
         m_driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenHeld(outtakeCommand);
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(grabberCommand);
-        m_driverOp.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(pickUpCommand, putDownCommand);
+        m_driverOp.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(putDownCommand, pickUpCommand);
         
         register(driveSystem);
         driveSystem.setDefaultCommand(driveCommand);
