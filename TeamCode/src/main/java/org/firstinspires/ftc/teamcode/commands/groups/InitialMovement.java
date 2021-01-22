@@ -25,7 +25,7 @@ public class InitialMovement extends SequentialCommandGroup{
     public InitialMovement(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem, ShooterSubsystem shooter){
         drive.setPoseEstimate(startPose);
         Trajectory traj0 = drive.trajectoryBuilder(startPose)
-                .forward(20)
+                .back(30)
                 .build();
 
         Trajectory traj1 = drive.trajectoryBuilder(traj0.end())
