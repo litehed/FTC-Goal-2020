@@ -18,7 +18,7 @@ public class ShooterSubsystem extends SubsystemBase {
         this.flywheel = flywheel;
 
         this.flywheel.setRunMode(Motor.RunMode.VelocityControl);
-        this.flywheel.setVeloCoefficients(0.3, 0, 0.01);
+        this.flywheel.setVeloCoefficients(1.1, 0, 0.02);
         this.flywheel.setFeedforwardCoefficients(0, 1.1);
 
         this.flicker = flicker;

@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.vision.UGContourRingDetector;
@@ -12,11 +11,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.commands.groups.InitialMovement;
-import org.firstinspires.ftc.teamcode.commands.vision.Com_Contour;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.ContourVisionSystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.VisionSystem;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
 import org.firstinspires.ftc.teamcode.util.TimedAction;
 
@@ -34,7 +33,6 @@ public class AutonMain extends CommandOpMode {
     //Vision
     private UGContourRingDetector ugContourRingDetector;
     private ContourVisionSystem visionSystem;
-    private Com_Contour visionCommand;
 
     //Extranious
     private TimedAction flickerAction;
@@ -71,16 +69,18 @@ public class AutonMain extends CommandOpMode {
         ugContourRingDetector.init();
         visionSystem = new ContourVisionSystem(ugContourRingDetector, telemetry);
         arm.resetEncoder();
-        visionCommand = new Com_Contour(visionSystem, time);
 
         drive = new MecanumDriveSubsystem(new SampleMecanumDrive(hardwareMap), false);
         wobble = new WobbleSubsystem(arm, grabber);
 
+        VisionSystem.Size height = VisionSystem.Size.ZERO;
+        while (!isStarted()) {
+            height = visionSystem.getStackSize();
+        }
+
         SequentialCommandGroup autonomous = new SequentialCommandGroup(
                 new InstantCommand(wobble::closeGrabber),
-                new WaitUntilCommand(this::isStarted),
-                visionCommand,
-                new InitialMovement(drive, wobble,shooterSystem)
+                new InitialMovement(drive, wobble, shooterSystem)
         );
         schedule(autonomous);
     }
