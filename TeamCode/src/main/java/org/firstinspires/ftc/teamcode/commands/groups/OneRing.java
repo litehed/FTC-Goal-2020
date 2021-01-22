@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
 @Config
 public class OneRing extends SequentialCommandGroup {
 
-    public static double xBox = 1.0, yBox = -60.0;
+    public static double xBox = 24.0, yBox = -36.0;
     public static double shootPosX = -30.0, shootPosY = 22.0;
     public static double secWobblePosX = -12.0, secWobblePosY = 12.0;
     public static double wobbleXTwo = -2.2, wobbleYTwo = 8.0;
@@ -38,7 +38,7 @@ public class OneRing extends SequentialCommandGroup {
 
         Trajectory traj1 = drive.trajectoryBuilder(traj0.end())
                 .back(1.0)
-                .splineToConstantHeading(new Vector2d(xBox, yBox), 0.0)
+                .splineToConstantHeading(new Vector2d(24.0, -36.0), 0.0)
                 .build();
 
         Vector2d shootPose = traj1.end().vec().plus(new Vector2d(shootPosX, shootPosY));
