@@ -46,7 +46,7 @@ public class InitialMovement extends SequentialCommandGroup{
                 .build();
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end(), false)
-                .splineToConstantHeading(traj3.end().vec().plus(new Vector2d(-3.0, 8.0)), 0.0)
+                .splineToConstantHeading(traj3.end().vec().plus(new Vector2d(-2.5, 8.0)), 0.0)
                 .build();
 
         Trajectory traj5 = drive.trajectoryBuilder(traj4.end(), 0.0)
@@ -75,7 +75,6 @@ public class InitialMovement extends SequentialCommandGroup{
                 new InstantCommand(wobbleSystem::closeGrabber, wobbleSystem),
                 new WaitCommand(1000),
                 new Com_PickUp(wobbleSystem),
-                new TurnCommand(drive, Math.toRadians(180)),
                 new TrajectoryFollowerCommand(drive, traj5),
                 new Com_PutDown(wobbleSystem),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem)
