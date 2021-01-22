@@ -69,7 +69,7 @@ public class InitialMovement extends SequentialCommandGroup{
                         new Com_PutDown(wobbleSystem),
                         new TurnCommand(drive, Math.toRadians(-10))
                 ),
-                new InstantCommand(shooter::stop, shooter)
+                new InstantCommand(shooter::stop, shooter),
                 new TrajectoryFollowerCommand(drive, traj3),
                 new TrajectoryFollowerCommand(drive, traj4),
                 new InstantCommand(wobbleSystem::closeGrabber, wobbleSystem),
