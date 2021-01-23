@@ -31,7 +31,6 @@ public class VisionTesting extends CommandOpMode {
     public void initialize() {
         ugContourRingDetector = new UGContourRingDetector(hardwareMap, "poopcam", telemetry, true);
         ugContourRingDetector.init();
-        visionSystem = new ContourVisionSystem(ugContourRingDetector, telemetry);
 
 
         height = VisionSystem.Size.ZERO;

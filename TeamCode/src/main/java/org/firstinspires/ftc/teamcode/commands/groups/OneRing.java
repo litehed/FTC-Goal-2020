@@ -22,11 +22,11 @@ import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
 public class OneRing extends SequentialCommandGroup {
 
     public static double xBox = 24.0, yBox = -36.0;
-    public static double shootPosX = -30.0, shootPosY = 22.0;
-    public static double secWobblePosX = -12.0, secWobblePosY = 12.0;
-    public static double wobbleXTwo = -2.2, wobbleYTwo = 8.0;
+    public static double shootPosX = -44.0, shootPosY = 22.0;
+    public static double secWobblePosX = -20.0, secWobblePosY = 0.0;
+    public static double wobbleXTwo = -3.8, wobbleYTwo = 0.0;
     public static double boxTwoX = 16.0, boxTwoY = 0.0;
-    public static double finalX = -15.0, finalY = -12.0;
+    public static double finalX = -10.0, finalY = -12.0;
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
 
@@ -38,7 +38,8 @@ public class OneRing extends SequentialCommandGroup {
 
         Trajectory traj1 = drive.trajectoryBuilder(traj0.end())
                 .back(1.0)
-                .splineToConstantHeading(new Vector2d(24.0, -36.0), 0.0)
+                .splineToConstantHeading(new Vector2d(1.0, -60.0), 0.0)
+                .splineToConstantHeading(new Vector2d(xBox, yBox), 0.0)
                 .build();
 
         Vector2d shootPose = traj1.end().vec().plus(new Vector2d(shootPosX, shootPosY));
@@ -71,7 +72,6 @@ public class OneRing extends SequentialCommandGroup {
                 new WaitCommand(500),
                 new Com_PickUp(wobbleSystem),
                 new TrajectoryFollowerCommand(drive, traj2),
-                new TurnCommand(drive, Math.toRadians(10)),
                 new RapidFireCommand(shooter),
                 new ParallelDeadlineGroup(
                         new Com_PutDown(wobbleSystem),

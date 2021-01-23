@@ -25,7 +25,7 @@ public class RapidFireCommand extends CommandBase {
 
     @Override
     public void execute() {
-        while (numShots < 4) {
+        while (numShots < 3) {
             if (!shooterSubsystem.isRunning()) {
                 shooterSubsystem.flickReset();
                 numShots++;
@@ -42,6 +42,6 @@ public class RapidFireCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return numShots == 4;
+        return numShots == 3;
     }
 }

@@ -23,6 +23,6 @@ public class Com_Contour extends CommandBase {
 
     @Override
     public boolean isFinished(){
-        return timer.seconds() >= 0.5;
+        return timer.seconds() >= 0.2;
     }
 }

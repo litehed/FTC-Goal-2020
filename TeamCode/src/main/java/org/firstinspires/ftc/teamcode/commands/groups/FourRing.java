@@ -21,12 +21,12 @@ import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
 @Config
 public class FourRing extends SequentialCommandGroup {
 
-    public static double xBox = 1.0, yBox = -60.0;
-    public static double shootPosX = -30.0, shootPosY = 22.0;
-    public static double secWobblePosX = -12.0, secWobblePosY = 12.0;
-    public static double wobbleXTwo = -2.2, wobbleYTwo = 8.0;
+    public static double xBox = 40.0, yBox = -60.0;
+    public static double shootPosX = -60.0, shootPosY = 45.0;
+    public static double secWobblePosX = -20.0, secWobblePosY = 0.0;
+    public static double wobbleXTwo = -3.4, wobbleYTwo = -2.0;
     public static double boxTwoX = 16.0, boxTwoY = 0.0;
-    public static double finalX = -15.0, finalY = -12.0;
+    public static double finalX = -5.0, finalY = -8.0;
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
 
@@ -71,12 +71,8 @@ public class FourRing extends SequentialCommandGroup {
                 new WaitCommand(500),
                 new Com_PickUp(wobbleSystem),
                 new TrajectoryFollowerCommand(drive, traj2),
-                new TurnCommand(drive, Math.toRadians(10)),
                 new RapidFireCommand(shooter),
-                new ParallelDeadlineGroup(
-                        new Com_PutDown(wobbleSystem),
-                        new TurnCommand(drive, Math.toRadians(-10))
-                ),
+                new Com_PutDown(wobbleSystem),
                 new InstantCommand(shooter::stop, shooter),
                 new TrajectoryFollowerCommand(drive, traj3),
                 new TrajectoryFollowerCommand(drive, traj4),
