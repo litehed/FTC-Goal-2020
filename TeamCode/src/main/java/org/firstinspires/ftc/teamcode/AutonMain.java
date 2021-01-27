@@ -83,11 +83,11 @@ public class AutonMain extends CommandOpMode {
         drive = new MecanumDriveSubsystem(new SampleMecanumDrive(hardwareMap), false);
         wobble = new WobbleSubsystem(arm, grabber);
 
+        new InstantCommand(wobble::closeGrabber);
 
         SequentialCommandGroup autonomous = new SequentialCommandGroup(
-                new WaitUntilCommand(this::isStarted),
+//                new WaitUntilCommand(this::isStarted),
                 visionCommand,
-                new InstantCommand(wobble::closeGrabber),
                 new SelectCommand(new HashMap<Object, Command>() {{
                         put(VisionSystem.Size.ZERO, (new ZeroRing(drive, wobble, shooterSystem)));
                         put(VisionSystem.Size.ONE, (new OneRing(drive, wobble, shooterSystem)));
