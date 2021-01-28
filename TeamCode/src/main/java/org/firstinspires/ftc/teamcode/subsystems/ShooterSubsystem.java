@@ -35,6 +35,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void stop(){
+        flywheel.setRunMode(Motor.RunMode.RawPower);
         flywheel.stopMotor();
     }
 

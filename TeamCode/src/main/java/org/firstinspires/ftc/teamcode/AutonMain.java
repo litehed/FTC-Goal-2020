@@ -86,7 +86,7 @@ public class AutonMain extends CommandOpMode {
         wobble.closeGrabber();
 
         SequentialCommandGroup autonomous = new SequentialCommandGroup(
-//                new WaitUntilCommand(this::isStarted),
+                 new WaitUntilCommand(this::isStarted),
                 visionCommand,
                 new SelectCommand(new HashMap<Object, Command>() {{
                         put(VisionSystem.Size.ZERO, (new ZeroRing(drive, wobble, shooterSystem)));
