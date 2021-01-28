@@ -83,7 +83,7 @@ public class AutonMain extends CommandOpMode {
         drive = new MecanumDriveSubsystem(new SampleMecanumDrive(hardwareMap), false);
         wobble = new WobbleSubsystem(arm, grabber);
 
-        new InstantCommand(wobble::closeGrabber);
+        wobble.closeGrabber();
 
         SequentialCommandGroup autonomous = new SequentialCommandGroup(
 //                new WaitUntilCommand(this::isStarted),
