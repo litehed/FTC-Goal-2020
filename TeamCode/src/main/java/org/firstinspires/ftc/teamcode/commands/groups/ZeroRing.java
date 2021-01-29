@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -57,9 +58,11 @@ public class ZeroRing extends SequentialCommandGroup{
 
         addCommands(
                 new InstantCommand(shooter::shoot, shooter),
-                new TrajectoryFollowerCommand(drive, traj0),
+                new ParallelCommandGroup(
+                        new TrajectoryFollowerCommand(drive, traj0),
+                        new Com_PutDown(wobbleSystem)
+                ),
                 new TrajectoryFollowerCommand(drive, traj1),
-                new Com_PutDown(wobbleSystem),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
                 new WaitCommand(500),
                 new Com_PickUp(wobbleSystem),
@@ -75,8 +78,10 @@ public class ZeroRing extends SequentialCommandGroup{
                 new TurnCommand(drive, Math.toRadians(180)),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
                 new WaitCommand(500),
-                new Com_PickUp(wobbleSystem),
-                new TrajectoryFollowerCommand(drive, traj5)
+                new ParallelCommandGroup(
+                        new Com_PickUp(wobbleSystem),
+                        new TrajectoryFollowerCommand(drive, traj5)
+                )
         );
     }
 }
