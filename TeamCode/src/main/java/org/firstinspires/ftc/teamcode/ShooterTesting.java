@@ -52,7 +52,7 @@ public class ShooterTesting extends CommandOpMode {
                 m_driverOp::getRightX, ()->mult);
         shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, telemetry);
 
-        m_driverOp.getGamepadButton(GamepadKeys.Button.B).whenPressed(
+        m_driverOp.getGamepadButton(GamepadKeys.Button.B).whenActive(
                 ()->{
                     if(!flickerAction.running()) {
                         flickerAction.reset();

@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.util.TimedAction;
 public class TeleMain extends CommandOpMode {
     //Servos and Motors
     private Motor fL, fR, bL, bR;
-    private Motor flyWheel, intakeA, arm;
+    private Motor flyWheel, intakeA, intakeB, arm;
     private SimpleServo flicker, grabber;
 
     //Subsystems
@@ -66,6 +66,7 @@ public class TeleMain extends CommandOpMode {
 
         flyWheel = new Motor(hardwareMap, "shoot");
         intakeA = new Motor(hardwareMap, "intakeA");
+        intakeB = new Motor(hardwareMap, "intakeB");
         arm = new Motor(hardwareMap, "wobble", Motor.GoBILDA.RPM_312);
 
         flicker = new SimpleServo(hardwareMap, "flicker", 0, 270);
@@ -98,7 +99,7 @@ public class TeleMain extends CommandOpMode {
         shootCommandGroup = new SequentialShooter(runFlyWheelCommand,
                 new WaitCommand(1500), shooterCommand);
 
-        intakeSystem = new IntakeSubsystem(intakeA);
+        intakeSystem = new IntakeSubsystem(intakeA, intakeB);
         intakeCommand = new Com_Intake(intakeSystem);
         outtakeCommand = new Com_Outtake(intakeSystem);
 

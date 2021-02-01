@@ -19,7 +19,7 @@ public class WobbleSubsystem extends SubsystemBase {
 
     public void openGrabber(){
         grabbing = false;
-        grabber.turnToAngle(-20);
+        grabber.setPosition(0.34);
     }
     public void closeGrabber(){
         grabbing = true;
