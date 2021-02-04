@@ -88,6 +88,8 @@ public class TeleMain extends CommandOpMode {
                 true
         );
 
+        //I DEMAND LEDS >:(
+
         //Subsystems and Commands
         driveSystem = new DriveSystem(fL, fR, bL, bR);
         driveCommand = new Com_Drive(driveSystem, m_driverOp::getLeftX, m_driverOp::getLeftY,
@@ -96,8 +98,6 @@ public class TeleMain extends CommandOpMode {
         shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, telemetry);
         shooterCommand = new Com_Shooter(shooterSystem);
         runFlyWheelCommand = new InstantCommand(shooterSystem::shoot, shooterSystem);
-        shootCommandGroup = new SequentialShooter(runFlyWheelCommand,
-                new WaitCommand(1500), shooterCommand);
 
         intakeSystem = new IntakeSubsystem(intakeA, intakeB);
         intakeCommand = new Com_Intake(intakeSystem);
@@ -120,7 +120,7 @@ public class TeleMain extends CommandOpMode {
         m_driverOp.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenPressed(()->mult = 0.5, ()->mult = 1.0);
 
-        m_driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(shootCommandGroup);
+        m_driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(shooterCommand);
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(intakeCommand);
         m_driverOp.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenHeld(outtakeCommand);
@@ -130,5 +130,6 @@ public class TeleMain extends CommandOpMode {
         
         register(driveSystem);
         driveSystem.setDefaultCommand(driveCommand);
+        schedule(runFlyWheelCommand);
     }
 }
