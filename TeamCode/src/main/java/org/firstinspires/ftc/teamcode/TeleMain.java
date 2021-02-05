@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -47,7 +48,7 @@ public class TeleMain extends CommandOpMode {
     private Com_PutDown putDownCommand;
     private SequentialShooter shootCommandGroup;
     private InstantCommand grabberCommand;
-    private InstantCommand runFlyWheelCommand;
+    private RunCommand runFlyWheelCommand;
 
     //Extranious
     private GamepadEx m_driverOp;
@@ -99,7 +100,7 @@ public class TeleMain extends CommandOpMode {
 
         shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, telemetry, voltageSensor);
         shooterCommand = new Com_Shooter(shooterSystem);
-        runFlyWheelCommand = new InstantCommand(shooterSystem::shoot, shooterSystem);
+        runFlyWheelCommand = new RunCommand(shooterSystem::shoot, shooterSystem);
 
         intakeSystem = new IntakeSubsystem(intakeA, intakeB);
         intakeCommand = new Com_Intake(intakeSystem);
