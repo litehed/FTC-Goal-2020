@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.commands.groups.FourRing;
@@ -46,6 +47,7 @@ public class AutonMain extends CommandOpMode {
     //Extranious
     private TimedAction flickerAction;
     private ElapsedTime time;
+    private VoltageSensor voltageSensor;
     //Poses
 
     //Trajectories
@@ -70,8 +72,9 @@ public class AutonMain extends CommandOpMode {
                 600,
                 true
         );
+        voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
-        shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, telemetry);
+        shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, telemetry, voltageSensor);
 
         ugContourRingDetector = new UGContourRingDetector(hardwareMap, "poopcam", telemetry, true);
         ugContourRingDetector.init();

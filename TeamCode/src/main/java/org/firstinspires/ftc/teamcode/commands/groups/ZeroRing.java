@@ -33,32 +33,33 @@ public class ZeroRing extends SequentialCommandGroup{
                 .splineToConstantHeading(new Vector2d(1.0, -60.0), 0.0)
                 .build();
 
-        Vector2d shootPose = traj1.end().vec().plus(new Vector2d(-30.0, 22.0));
+        Vector2d shootPose = traj1.end().vec().plus(new Vector2d(-25.0, 22.0));
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end(), true)
                 .lineToConstantHeading(shootPose)
                 .build();
 
-        Vector2d secondWobble = traj2.end().vec().plus(new Vector2d(-6.0, 15.5));
+        //-34 , -24
+//        Vector2d secondWobble = traj2.end().vec().plus(new Vector2d(-14.0, 15.5));
 
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end(), 0.0)
-                .splineToLinearHeading(new Pose2d(secondWobble, 0.0), Math.toRadians(-90.0))
+                .splineToLinearHeading(new Pose2d(-34.0,-24.0, 0.0), Math.toRadians(-90.0))
                 .build();
 
-
-        Trajectory traj4 = drive.trajectoryBuilder(traj3.end(), 0)
-                .splineTo(traj3.end().vec().plus(new Vector2d(16.0, 0.0)), 0.0)
-                .splineToLinearHeading(traj1.end().plus(new Pose2d(-15.0, -12.0, Math.toRadians(180.0))), 0.0)
+        Trajectory traj4 = drive.trajectoryBuilder(traj3.end(), 0.0)
+                .splineToSplineHeading(traj3.end().plus(new Pose2d(16.0, 0.0, Math.toRadians(180.0))), 0.0)
+                .splineToConstantHeading(traj1.end().vec().plus(new Vector2d(-12.0, -3.5)), 0.0)
                 .build();
 
-        Trajectory traj5 = drive.trajectoryBuilder(traj4.end(),  Math.toRadians(180.0))
-                .splineTo(traj4.end().vec().plus(new Vector2d(0.0, 16.0)), 0.0)
-                .splineTo(traj4.end().vec().plus(new Vector2d(-16.0, 16.0)), 0.0)
+        Trajectory traj5 = drive.trajectoryBuilder(traj4.end())
+                .splineToConstantHeading(traj4.end().vec().plus(new Vector2d(-10.0, 16.0)), 0.0)
+//                .splineTo(traj4.end().vec().plus(new Vector2d(-16.0, 16.0)), 0.0)
+                .splineTo(traj4.end().vec().plus(new Vector2d(25.0, 20.0)), 0.0)
                 .build();
 
         addCommands(
                 new InstantCommand(shooter::shoot, shooter),
-                new ParallelCommandGroup(
+                new ParallelDeadlineGroup(
                         new TrajectoryFollowerCommand(drive, traj0),
                         new Com_PutDown(wobbleSystem)
                 ),
@@ -75,7 +76,6 @@ public class ZeroRing extends SequentialCommandGroup{
                 new InstantCommand(wobbleSystem::closeGrabber, wobbleSystem),
                 new WaitCommand(1000),
                 new TrajectoryFollowerCommand(drive, traj4),
-                new TurnCommand(drive, Math.toRadians(180)),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
                 new WaitCommand(500),
                 new ParallelCommandGroup(

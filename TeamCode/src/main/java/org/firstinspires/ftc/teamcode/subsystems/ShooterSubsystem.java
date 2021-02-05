@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.TimedAction;
@@ -14,12 +15,13 @@ public class ShooterSubsystem extends SubsystemBase {
     private TimedAction timedAction;
     private Telemetry telemetry;
 
-    public ShooterSubsystem(Motor flywheel, SimpleServo flicker, TimedAction timedAction, Telemetry telemetry){
+    public ShooterSubsystem(Motor flywheel, SimpleServo flicker, TimedAction timedAction,
+                            Telemetry telemetry, VoltageSensor voltageSensor){
         this.flywheel = flywheel;
 
         this.flywheel.setRunMode(Motor.RunMode.VelocityControl);
         this.flywheel.setVeloCoefficients(1.1, 0, 0.05);
-        this.flywheel.setFeedforwardCoefficients(0, 1.0);
+        this.flywheel.setFeedforwardCoefficients(0, 1.0 * 12 / voltageSensor.getVoltage());
 
         this.flicker = flicker;
         this.timedAction = timedAction;

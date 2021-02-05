@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.commands.Com_Intake;
 import org.firstinspires.ftc.teamcode.commands.Com_Outtake;
@@ -54,6 +55,7 @@ public class TeleMain extends CommandOpMode {
     private RevIMU imu;
     private FtcDashboard dashboard;
     private TimedAction flickerAction;
+    private VoltageSensor voltageSensor;
     public double mult = 1.0;
 
     @Override
@@ -89,13 +91,13 @@ public class TeleMain extends CommandOpMode {
         );
 
         //I DEMAND LEDS >:(
-
+        voltageSensor = hardwareMap.voltageSensor.iterator().next();
         //Subsystems and Commands
         driveSystem = new DriveSystem(fL, fR, bL, bR);
         driveCommand = new Com_Drive(driveSystem, m_driverOp::getLeftX, m_driverOp::getLeftY,
                 m_driverOp::getRightX, ()->mult);
 
-        shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, telemetry);
+        shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, telemetry, voltageSensor);
         shooterCommand = new Com_Shooter(shooterSystem);
         runFlyWheelCommand = new InstantCommand(shooterSystem::shoot, shooterSystem);
 
@@ -127,7 +129,10 @@ public class TeleMain extends CommandOpMode {
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(grabberCommand);
         m_driverOp.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(putDownCommand, pickUpCommand);
-        
+
+        m_driverOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+                .toggleWhenPressed(shooterSystem::stop, shooterSystem::shoot);
+
         register(driveSystem);
         driveSystem.setDefaultCommand(driveCommand);
         schedule(runFlyWheelCommand);
