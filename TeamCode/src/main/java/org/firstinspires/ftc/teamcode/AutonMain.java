@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
@@ -75,7 +76,7 @@ public class AutonMain extends CommandOpMode {
         );
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
-        shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, ()->powerShotMode, voltageSensor);
+        shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, voltageSensor);
 
         ugContourRingDetector = new UGContourRingDetector(hardwareMap, "poopcam", telemetry, true);
         ugContourRingDetector.init();
@@ -98,6 +99,6 @@ public class AutonMain extends CommandOpMode {
                         put(VisionSystem.Size.FOUR, (new FourRing(drive, wobble, shooterSystem)));
                     }},visionSystem::getStackSize)
         );
-        schedule(autonomous);
+        schedule(new RunCommand(shooterSystem::shoot, shooterSystem), autonomous);
     }
 }

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
@@ -10,24 +11,25 @@ import org.firstinspires.ftc.teamcode.util.TimedAction;
 
 import java.util.function.BooleanSupplier;
 
+@Config
 public class ShooterSubsystem extends SubsystemBase {
 
     private Motor flywheel;
     private SimpleServo flicker;
     private TimedAction timedAction;
-    private BooleanSupplier powerShotMode;
+    public static double kP = 1.2, kI = 0.0, kD = 0.05;
+    public static double kS = 0.0, kV = 1.2;
 
     public ShooterSubsystem(Motor flywheel, SimpleServo flicker, TimedAction timedAction,
-                            BooleanSupplier powerShotMode, VoltageSensor voltageSensor){
+                            VoltageSensor voltageSensor){
         this.flywheel = flywheel;
 
         this.flywheel.setRunMode(Motor.RunMode.VelocityControl);
-        this.flywheel.setVeloCoefficients(1.1, 0, 0.05);
-        this.flywheel.setFeedforwardCoefficients(0, 1.0 * 12 / voltageSensor.getVoltage());
+        this.flywheel.setVeloCoefficients(kP, kI, kD);
+        this.flywheel.setFeedforwardCoefficients(kS, kV * 12 / voltageSensor.getVoltage());
 
         this.flicker = flicker;
         this.timedAction = timedAction;
-        this.powerShotMode = powerShotMode;
     }
 
     public boolean isRunning() {
@@ -35,7 +37,6 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void shoot(){
-            flywheel.set(0.8);
             flywheel.set(1.0);
     }
 

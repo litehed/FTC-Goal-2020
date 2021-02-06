@@ -60,7 +60,6 @@ public class OneRing extends SequentialCommandGroup {
                 .build();
 
         addCommands(
-                new InstantCommand(shooter::shoot, shooter),
                 new ParallelDeadlineGroup(
                         new TrajectoryFollowerCommand(drive, traj0),
                         new Com_PutDown(wobbleSystem)
