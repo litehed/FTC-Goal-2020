@@ -48,6 +48,7 @@ public class AutonMain extends CommandOpMode {
     private TimedAction flickerAction;
     private ElapsedTime time;
     private VoltageSensor voltageSensor;
+    public boolean powerShotMode = false;
     //Poses
 
     //Trajectories
@@ -74,7 +75,7 @@ public class AutonMain extends CommandOpMode {
         );
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
-        shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, telemetry, voltageSensor);
+        shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, ()->powerShotMode, voltageSensor);
 
         ugContourRingDetector = new UGContourRingDetector(hardwareMap, "poopcam", telemetry, true);
         ugContourRingDetector.init();
