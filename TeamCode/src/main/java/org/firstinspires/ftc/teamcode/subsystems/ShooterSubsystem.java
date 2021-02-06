@@ -35,9 +35,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void shoot(){
-        if(powerShotMode.getAsBoolean())
             flywheel.set(0.8);
-        else
             flywheel.set(1.0);
     }
 

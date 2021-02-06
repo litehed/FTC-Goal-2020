@@ -145,8 +145,6 @@ public class TeleMain extends CommandOpMode {
                                 new RunCommand(shooterSystem::stop, shooterSystem)
                         )
                 );
-        m_driverOp.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-                .toggleWhenPressed(()->powerMode = true, ()->powerMode = false);
 
         register(driveSystem);
         driveSystem.setDefaultCommand(driveCommand);
