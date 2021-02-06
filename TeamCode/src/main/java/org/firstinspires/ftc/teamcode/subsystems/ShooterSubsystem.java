@@ -8,15 +8,17 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.TimedAction;
 
+import java.util.function.BooleanSupplier;
+
 public class ShooterSubsystem extends SubsystemBase {
 
     private Motor flywheel;
     private SimpleServo flicker;
     private TimedAction timedAction;
-    private Telemetry telemetry;
+    private BooleanSupplier powerShotMode;
 
     public ShooterSubsystem(Motor flywheel, SimpleServo flicker, TimedAction timedAction,
-                            Telemetry telemetry, VoltageSensor voltageSensor){
+                            BooleanSupplier powerShotMode, VoltageSensor voltageSensor){
         this.flywheel = flywheel;
 
         this.flywheel.setRunMode(Motor.RunMode.VelocityControl);
@@ -25,7 +27,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
         this.flicker = flicker;
         this.timedAction = timedAction;
-        this.telemetry = telemetry;
+        this.powerShotMode = powerShotMode;
     }
 
     public boolean isRunning() {
@@ -33,7 +35,10 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void shoot(){
-        flywheel.set(1.0);
+        if(powerShotMode.getAsBoolean())
+            flywheel.set(0.8);
+        else
+            flywheel.set(1.0);
     }
 
     public void stop(){

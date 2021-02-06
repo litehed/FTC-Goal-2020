@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -58,6 +59,7 @@ public class TeleMain extends CommandOpMode {
     private TimedAction flickerAction;
     private VoltageSensor voltageSensor;
     public double mult = 1.0;
+    public boolean powerMode = false;
 
     @Override
     public void initialize() {
@@ -68,6 +70,7 @@ public class TeleMain extends CommandOpMode {
         bR = new Motor(hardwareMap, "bR");
 
         flyWheel = new Motor(hardwareMap, "shoot");
+        flyWheel.setRunMode(Motor.RunMode.VelocityControl);
         intakeA = new Motor(hardwareMap, "intakeA");
         intakeB = new Motor(hardwareMap, "intakeB");
         arm = new Motor(hardwareMap, "wobble", Motor.GoBILDA.RPM_312);
@@ -98,7 +101,7 @@ public class TeleMain extends CommandOpMode {
         driveCommand = new Com_Drive(driveSystem, m_driverOp::getLeftX, m_driverOp::getLeftY,
                 m_driverOp::getRightX, ()->mult);
 
-        shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, telemetry, voltageSensor);
+        shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, ()->powerMode, voltageSensor);
         shooterCommand = new Com_Shooter(shooterSystem);
         runFlyWheelCommand = new RunCommand(shooterSystem::shoot, shooterSystem);
 
@@ -132,7 +135,18 @@ public class TeleMain extends CommandOpMode {
         m_driverOp.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(putDownCommand, pickUpCommand);
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .toggleWhenPressed(shooterSystem::stop, shooterSystem::shoot);
+                .toggleWhenPressed(
+                        new SequentialCommandGroup(
+                                new InstantCommand(() -> flyWheel.setRunMode(Motor.RunMode.VelocityControl)),
+                                new RunCommand(shooterSystem::shoot, shooterSystem)
+                        ),
+                        new SequentialCommandGroup(
+                                new InstantCommand(() -> flyWheel.setRunMode(Motor.RunMode.RawPower)),
+                                new RunCommand(shooterSystem::stop, shooterSystem)
+                        )
+                );
+        m_driverOp.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .toggleWhenPressed(()->powerMode = true, ()->powerMode = false);
 
         register(driveSystem);
         driveSystem.setDefaultCommand(driveCommand);
