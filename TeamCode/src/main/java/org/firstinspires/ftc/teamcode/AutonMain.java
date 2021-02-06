@@ -99,6 +99,6 @@ public class AutonMain extends CommandOpMode {
                         put(VisionSystem.Size.FOUR, (new FourRing(drive, wobble, shooterSystem)));
                     }},visionSystem::getStackSize)
         );
-        schedule(new RunCommand(shooterSystem::shoot, shooterSystem), autonomous);
+        schedule(new RunCommand(shooterSystem::shoot), autonomous);
     }
 }
