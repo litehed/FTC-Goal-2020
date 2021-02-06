@@ -59,7 +59,6 @@ public class TeleMain extends CommandOpMode {
     private TimedAction flickerAction;
     private VoltageSensor voltageSensor;
     public double mult = 1.0;
-    public boolean powerMode = false;
 
     @Override
     public void initialize() {
@@ -101,7 +100,7 @@ public class TeleMain extends CommandOpMode {
         driveCommand = new Com_Drive(driveSystem, m_driverOp::getLeftX, m_driverOp::getLeftY,
                 m_driverOp::getRightX, ()->mult);
 
-        shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, ()->powerMode, voltageSensor);
+        shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, voltageSensor);
         shooterCommand = new Com_Shooter(shooterSystem);
         runFlyWheelCommand = new RunCommand(shooterSystem::shoot, shooterSystem);
 
