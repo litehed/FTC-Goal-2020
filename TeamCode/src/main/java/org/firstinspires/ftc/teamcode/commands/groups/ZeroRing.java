@@ -79,7 +79,7 @@ public class ZeroRing extends SequentialCommandGroup{
                 new WaitCommand(1000),
                 new TrajectoryFollowerCommand(drive, traj4),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
-                new WaitCommand(500),
+                new WaitCommand(600),
                 new ParallelCommandGroup(
                         new Com_PickUp(wobbleSystem),
                         new TrajectoryFollowerCommand(drive, traj5)
