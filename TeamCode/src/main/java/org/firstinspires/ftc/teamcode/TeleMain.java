@@ -70,7 +70,7 @@ public class TeleMain extends CommandOpMode {
         bR = new Motor(hardwareMap, "bR");
 
         flyWheel = new Motor(hardwareMap, "shoot");
-        flyWheel.setRunMode(Motor.RunMode.VelocityControl);
+//        flyWheel.setRunMode(Motor.RunMode.VelocityControl);
         intakeA = new Motor(hardwareMap, "intakeA");
         intakeB = new Motor(hardwareMap, "intakeB");
         arm = new Motor(hardwareMap, "wobble", Motor.GoBILDA.RPM_312);
@@ -137,7 +137,7 @@ public class TeleMain extends CommandOpMode {
         m_driverOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .toggleWhenPressed(
                         new SequentialCommandGroup(
-                                new InstantCommand(() -> flyWheel.setRunMode(Motor.RunMode.VelocityControl)),
+//                                new InstantCommand(() -> flyWheel.setRunMode(Motor.RunMode.VelocityControl)),
                                 new RunCommand(shooterSystem::shoot, shooterSystem)
                         ),
                         new SequentialCommandGroup(
