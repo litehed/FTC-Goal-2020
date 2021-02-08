@@ -17,7 +17,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private Motor flywheel;
     private SimpleServo flicker;
     private TimedAction timedAction;
-    public static double kP = 2.0, kI = 0.0, kD = 0.05;
+    public static double kP = 1.2, kI = 0.0, kD = 0.05;
     public static double kS = 0.0, kV = 1.2;
 
     public ShooterSubsystem(Motor flywheel, SimpleServo flicker, TimedAction timedAction,
