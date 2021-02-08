@@ -69,7 +69,7 @@ public class AutonMain extends CommandOpMode {
         flicker = new SimpleServo(hardwareMap, "flicker", 0, 270);
 
         flickerAction = new TimedAction(
-                ()-> flicker.setPosition(0.85),
+                ()-> flicker.setPosition(0.90),
                 ()-> flicker.setPosition(0.55),
                 310,
                 700
