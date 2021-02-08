@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
@@ -62,6 +63,7 @@ public class TeleMain extends CommandOpMode {
 
     @Override
     public void initialize() {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         //Servos and Motors
         fL = new Motor(hardwareMap, "fL");
         fR = new Motor(hardwareMap, "fR");
@@ -87,10 +89,10 @@ public class TeleMain extends CommandOpMode {
 
         //FlickerAction
         flickerAction = new TimedAction(
-                ()-> flicker.setPosition(0.5),
-                ()-> flicker.setPosition(0.27),
-                600,
-                true
+                ()-> flicker.setPosition(0.85),
+                ()-> flicker.setPosition(0.55),
+                310,
+                700
         );
 
         //I DEMAND LEDS >:(
@@ -147,6 +149,9 @@ public class TeleMain extends CommandOpMode {
 
         register(driveSystem);
         driveSystem.setDefaultCommand(driveCommand);
-        schedule(runFlyWheelCommand);
+        schedule(runFlyWheelCommand, new RunCommand(() -> {
+            telemetry.addData("FlywheelSpeed", flyWheel.getCorrectedVelocity());
+            telemetry.update();
+        }));
     }
 }
