@@ -69,10 +69,10 @@ public class AutonMain extends CommandOpMode {
         flicker = new SimpleServo(hardwareMap, "flicker", 0, 270);
 
         flickerAction = new TimedAction(
-                ()-> flicker.setPosition(0.5),
-                ()-> flicker.setPosition(0.27),
-                600,
-                true
+                ()-> flicker.setPosition(0.85),
+                ()-> flicker.setPosition(0.55),
+                310,
+                700
         );
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
