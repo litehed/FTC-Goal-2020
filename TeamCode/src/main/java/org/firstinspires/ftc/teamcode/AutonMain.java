@@ -50,6 +50,7 @@ public class AutonMain extends CommandOpMode {
     private ElapsedTime time;
     private VoltageSensor voltageSensor;
     public boolean powerShotMode = false;
+    private VisionSystem.Size height;
     //Poses
 
     //Trajectories
@@ -89,16 +90,20 @@ public class AutonMain extends CommandOpMode {
         wobble = new WobbleSubsystem(arm, grabber);
 
         wobble.closeGrabber();
-
         SequentialCommandGroup autonomous = new SequentialCommandGroup(
 //                new WaitUntilCommand(this::isStarted),  Jacksons favorite line of code
-                visionCommand,
                 new SelectCommand(new HashMap<Object, Command>() {{
                         put(VisionSystem.Size.ZERO, (new ZeroRing(drive, wobble, shooterSystem)));
                         put(VisionSystem.Size.ONE, (new OneRing(drive, wobble, shooterSystem)));
                         put(VisionSystem.Size.FOUR, (new FourRing(drive, wobble, shooterSystem)));
-                    }},visionSystem::getStackSize)
+                    }},()-> height)
         );
+        while(!isStarted() && !isStopRequested()){
+            height = visionSystem.getStackSize();
+        }
+        if(isStopRequested()){
+            return;
+        }
         schedule(new RunCommand(shooterSystem::shoot), autonomous);
     }
 }
