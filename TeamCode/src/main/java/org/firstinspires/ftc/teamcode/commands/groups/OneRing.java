@@ -33,7 +33,7 @@ public class OneRing extends SequentialCommandGroup {
     public OneRing(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem, ShooterSubsystem shooter){
         drive.setPoseEstimate(startPose);
         Trajectory traj0 = drive.trajectoryBuilder(startPose)
-                .strafeLeft(12)
+                .strafeLeft(14.5)
                 .build();
 
         Trajectory traj1 = drive.trajectoryBuilder(traj0.end())
@@ -51,7 +51,7 @@ public class OneRing extends SequentialCommandGroup {
 //        Vector2d secondWobble = traj2.end().vec().plus(new Vector2d(secWobblePosX, secWobblePosY));
 
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end(), 0.0)
-                .splineToLinearHeading(new Pose2d(-39.5,-22.5, 0.0), Math.toRadians(-90.0))
+                .splineToLinearHeading(new Pose2d(-37.8,-18.5, 0.0), Math.toRadians(-90.0))
                 .build();
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end(), 0)

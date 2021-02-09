@@ -24,7 +24,7 @@ public class WobbleSubsystem extends SubsystemBase {
     public void closeGrabber(){
         grabbing = true;
         //poop
-        grabber.setPosition(0.0);
+        grabber.setPosition(0.21);
     }
     public boolean isGrabbing(){
         return grabbing;
@@ -41,6 +41,6 @@ public class WobbleSubsystem extends SubsystemBase {
     }
 
     public void armDown(){
-        arm.set(0.2);
+        arm.set(0.3);
     }
 }

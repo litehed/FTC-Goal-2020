@@ -21,11 +21,11 @@ import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
 @Config
 public class FourRing extends SequentialCommandGroup {
 
-    public static double xBox = 45.0, yBox = -60.0;
-    public static double shootPosX = -57.5, shootPosY = 45.0;
+    public static double xBox = 55.0, yBox = -60.0;
+    public static double shootPosX = -68.4, shootPosY = 45.0;
     public static double secWobblePosX = -20.0, secWobblePosY = 0.0;
     public static double wobbleXTwo = -3.4, wobbleYTwo = -2.0;
-    public static double boxTwoX = 30.0, boxTwoY = 0.0;
+    public static double boxTwoX = 45.0, boxTwoY = 0.0;
     public static double finalX = -8.8, finalY = -8.0;
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
@@ -33,7 +33,7 @@ public class FourRing extends SequentialCommandGroup {
     public FourRing(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem, ShooterSubsystem shooter){
         drive.setPoseEstimate(startPose);
         Trajectory traj0 = drive.trajectoryBuilder(startPose)
-                .strafeLeft(12)
+                .strafeLeft(14.5)
                 .build();
 
         Trajectory traj1 = drive.trajectoryBuilder(traj0.end())
@@ -55,20 +55,20 @@ public class FourRing extends SequentialCommandGroup {
 
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end(), 0)
-                .splineToSplineHeading(traj3.end().plus(new Pose2d(boxTwoX, boxTwoY, Math.toRadians(180.0))), Math.toRadians(-90.0))
+                .splineToSplineHeading(traj3.end().plus(new Pose2d(boxTwoX, boxTwoY, Math.toRadians(-179.0))), Math.toRadians(-90.0))
                 .splineToConstantHeading(traj1.end().vec().plus(new Vector2d(finalX, finalY)), 0.0)
                 .build();
 
         Trajectory traj5 = drive.trajectoryBuilder(traj4.end(), 0)
-                .forward(30.0)
+                .forward(35.0)
                 .build();
 
         addCommands(
+                new TrajectoryFollowerCommand(drive, traj0),
                 new ParallelDeadlineGroup(
-                        new TrajectoryFollowerCommand(drive, traj0),
+                        new TrajectoryFollowerCommand(drive, traj1),
                         new Com_PutDown(wobbleSystem)
                 ),
-                new TrajectoryFollowerCommand(drive, traj1),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
                 new WaitCommand(600),
                 new Com_PickUp(wobbleSystem),

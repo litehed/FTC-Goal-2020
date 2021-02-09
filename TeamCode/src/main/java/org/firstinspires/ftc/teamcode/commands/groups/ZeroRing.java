@@ -25,7 +25,7 @@ public class ZeroRing extends SequentialCommandGroup{
     public ZeroRing(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem, ShooterSubsystem shooter){
         drive.setPoseEstimate(startPose);
         Trajectory traj0 = drive.trajectoryBuilder(startPose)
-                .strafeLeft(12)
+                .strafeLeft(14.5)
                 .build();
 
         Trajectory traj1 = drive.trajectoryBuilder(traj0.end())
@@ -43,7 +43,7 @@ public class ZeroRing extends SequentialCommandGroup{
 //        Vector2d secondWobble = traj2.end().vec().plus(new Vector2d(-14.0, 15.5));
 
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end(), 0.0)
-                .splineToLinearHeading(new Pose2d(-36.0,-22.5, 0.0), Math.toRadians(-90.0))
+                .splineToLinearHeading(new Pose2d(-35.3,-23, 0.0), Math.toRadians(-90.0))
                 .build();
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end(), 0.0)
