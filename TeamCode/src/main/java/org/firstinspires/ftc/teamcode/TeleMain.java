@@ -92,7 +92,7 @@ public class TeleMain extends CommandOpMode {
                 ()-> flicker.setPosition(0.90),
                 ()-> flicker.setPosition(0.55),
                 350,
-                700
+                true
         );
 
         //I DEMAND LEDS >:(
