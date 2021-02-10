@@ -74,7 +74,6 @@ public class FourRing extends SequentialCommandGroup {
                 new Com_PickUp(wobbleSystem),
                 new TrajectoryFollowerCommand(drive, traj2),
                 new RapidFireCommand(shooter),
-                new InstantCommand(shooter::stop, shooter),
                 new ParallelDeadlineGroup(
                         new TrajectoryFollowerCommand(drive, traj3),
                         new Com_PutDown(wobbleSystem)

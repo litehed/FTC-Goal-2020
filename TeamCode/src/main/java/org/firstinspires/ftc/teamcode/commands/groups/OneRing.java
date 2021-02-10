@@ -55,8 +55,8 @@ public class OneRing extends SequentialCommandGroup {
                 .build();
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end(), 0)
-                .splineTo(traj3.end().vec().plus(new Vector2d(boxTwoX, boxTwoY)), 0.0)
-                .splineToLinearHeading(traj1.end().plus(new Pose2d(finalX, finalY, Math.toRadians(180.0))), 0.0)
+                .splineToSplineHeading(traj3.end().plus(new Pose2d(boxTwoX, boxTwoY,  Math.toRadians(180.0))), 0.0)
+                .splineToConstantHeading(traj1.end().vec().plus(new Vector2d(finalX, finalY)), 0.0)
                 .build();
 
         addCommands(
@@ -70,7 +70,6 @@ public class OneRing extends SequentialCommandGroup {
                 new Com_PickUp(wobbleSystem),
                 new TrajectoryFollowerCommand(drive, traj2),
                 new RapidFireCommand(shooter),
-                new InstantCommand(shooter::stop, shooter),
                 new ParallelDeadlineGroup(
                         new TrajectoryFollowerCommand(drive, traj3),
                         new Com_PutDown(wobbleSystem)
