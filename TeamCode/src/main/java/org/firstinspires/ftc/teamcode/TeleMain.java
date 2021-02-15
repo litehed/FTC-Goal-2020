@@ -71,7 +71,7 @@ public class TeleMain extends CommandOpMode {
         bR = new Motor(hardwareMap, "bR");
 
         flyWheel = new Motor(hardwareMap, "shoot");
-        flyWheel.setRunMode(Motor.RunMode.VelocityControl);
+        flyWheel.resetEncoder();
         intakeA = new Motor(hardwareMap, "intakeA");
         intakeB = new Motor(hardwareMap, "intakeB");
         arm = new Motor(hardwareMap, "wobble", Motor.GoBILDA.RPM_312);
@@ -104,7 +104,7 @@ public class TeleMain extends CommandOpMode {
 
         shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, voltageSensor);
         shooterCommand = new Com_Shooter(shooterSystem);
-        runFlyWheelCommand = new RunCommand(shooterSystem::shoot, shooterSystem);
+        runFlyWheelCommand = new RunCommand(shooterSystem::shoot);
 
         intakeSystem = new IntakeSubsystem(intakeA, intakeB);
         intakeCommand = new Com_Intake(intakeSystem);
@@ -139,11 +139,11 @@ public class TeleMain extends CommandOpMode {
                 .toggleWhenPressed(
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> flyWheel.setRunMode(Motor.RunMode.VelocityControl)),
-                                new RunCommand(shooterSystem::shoot, shooterSystem)
+                                new RunCommand(shooterSystem::shoot)
                         ),
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> flyWheel.setRunMode(Motor.RunMode.RawPower)),
-                                new RunCommand(shooterSystem::stop, shooterSystem)
+                                new RunCommand(shooterSystem::stop)
                         )
                 );
 
