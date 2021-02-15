@@ -73,8 +73,9 @@ public class AutonMain extends CommandOpMode {
                 ()-> flicker.setPosition(0.90),
                 ()-> flicker.setPosition(0.55),
                 350,
-                700
+                true
         );
+
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
         shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, voltageSensor);

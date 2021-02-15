@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
 @Config
 public class FourRing extends SequentialCommandGroup {
 
-    public static double xBox = 55.0, yBox = -60.0;
+    public static double xBox = 53.0, yBox = -60.0;
     public static double shootPosX = -68.4, shootPosY = 45.0;
     public static double secWobblePosX = -20.0, secWobblePosY = 0.0;
     public static double wobbleXTwo = -3.4, wobbleYTwo = -2.0;
