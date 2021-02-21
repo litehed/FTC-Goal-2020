@@ -6,7 +6,6 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.RevIMU;
@@ -73,8 +72,9 @@ public class TeleMain extends CommandOpMode {
         flyWheel = new Motor(hardwareMap, "shoot");
         flyWheel.resetEncoder();
         intakeA = new Motor(hardwareMap, "intakeA");
-        intakeB = new Motor(hardwareMap, "intakeB");
+        intakeB = new Motor(hardwareMap, "intakeB", Motor.GoBILDA.RPM_312);
         arm = new Motor(hardwareMap, "wobble", Motor.GoBILDA.RPM_312);
+        arm.encoder = intakeB.encoder;  // cool feature, hope it works
 
         flicker = new SimpleServo(hardwareMap, "flicker", 0, 270);
         grabber = new SimpleServo(hardwareMap, "wobbleS", -90, 180);
