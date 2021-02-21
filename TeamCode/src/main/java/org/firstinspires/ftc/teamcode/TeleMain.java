@@ -77,6 +77,7 @@ public class TeleMain extends CommandOpMode {
         intakeB.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeB.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         arm = new Motor(hardwareMap, "wobble", Motor.GoBILDA.RPM_312);
+        arm.motor.setDirection(DcMotor.Direction.REVERSE);
         arm.encoder = intakeB.encoder;  // cool feature, hope it works
 
         flicker = new SimpleServo(hardwareMap, "flicker", 0, 270);
