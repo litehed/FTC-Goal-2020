@@ -62,6 +62,7 @@ public class AutonMain extends CommandOpMode {
         intakeB = new Motor(hardwareMap, "intakeB", Motor.GoBILDA.RPM_312);
         intakeB.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeB.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        arm.motor.setDirection(DcMotor.Direction.REVERSE);
         arm.encoder = intakeB.encoder;
         grabber = new SimpleServo(hardwareMap, "wobbleS", -90, 180);
         time = new ElapsedTime();
