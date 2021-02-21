@@ -151,6 +151,7 @@ public class TeleMain extends CommandOpMode {
         driveSystem.setDefaultCommand(driveCommand);
         schedule(new RunCommand(() -> {
             telemetry.addData("FlywheelSpeed", flyWheel.getCorrectedVelocity());
+            telemetry.addData("wobbleposition", arm.getCurrentPosition());
             telemetry.update();
         }));
     }
