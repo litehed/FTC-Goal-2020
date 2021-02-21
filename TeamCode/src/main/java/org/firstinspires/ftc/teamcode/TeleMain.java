@@ -12,6 +12,7 @@ import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.commands.Com_Intake;
@@ -73,6 +74,8 @@ public class TeleMain extends CommandOpMode {
         flyWheel.resetEncoder();
         intakeA = new Motor(hardwareMap, "intakeA");
         intakeB = new Motor(hardwareMap, "intakeB", Motor.GoBILDA.RPM_312);
+        intakeB.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intakeB.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         arm = new Motor(hardwareMap, "wobble", Motor.GoBILDA.RPM_312);
         arm.encoder = intakeB.encoder;  // cool feature, hope it works
 
