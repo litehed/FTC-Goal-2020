@@ -33,7 +33,7 @@ public class ZeroRing extends SequentialCommandGroup{
                 .splineToConstantHeading(new Vector2d(1.0, -60.0), 0.0)
                 .build();
 
-        Vector2d shootPose = traj1.end().vec().plus(new Vector2d(-25.0, 24.0));
+        Vector2d shootPose = traj1.end().vec().plus(new Vector2d(-24.0, 25.3));
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end(), true)
                 .lineToConstantHeading(shootPose)
@@ -43,7 +43,7 @@ public class ZeroRing extends SequentialCommandGroup{
 //        Vector2d secondWobble = traj2.end().vec().plus(new Vector2d(-14.0, 15.5));
 
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end(), 0.0)
-                .splineToLinearHeading(new Pose2d(-34.7,-23, 0.0), Math.toRadians(-90.0))
+                .splineToLinearHeading(new Pose2d(-36.5,-23, 0.0), Math.toRadians(-90.0))
                 .build();
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end(), 0.0)

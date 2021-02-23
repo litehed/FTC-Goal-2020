@@ -26,7 +26,7 @@ public class FourRing extends SequentialCommandGroup {
     public static double secWobblePosX = -20.0, secWobblePosY = 0.0;
     public static double wobbleXTwo = -3.4, wobbleYTwo = -2.0;
     public static double boxTwoX = 45.0, boxTwoY = 0.0;
-    public static double finalX = -8.8, finalY = -8.0;
+    public static double finalX = -8.8, finalY = -1.0;
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
 
@@ -50,7 +50,7 @@ public class FourRing extends SequentialCommandGroup {
 //        Vector2d secondWobble = traj2.end().vec().plus(new Vector2d(secWobblePosX, secWobblePosY));
 
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end(), 0.0)
-                .splineToLinearHeading(new Pose2d(-39.5,-22.5, 0.0), Math.toRadians(-90.0))
+                .splineToLinearHeading(new Pose2d(-37.3,-22.8, 0.0), Math.toRadians(-90.0))
                 .build();
 
 
