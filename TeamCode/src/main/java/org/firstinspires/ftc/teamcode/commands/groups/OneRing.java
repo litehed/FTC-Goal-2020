@@ -13,10 +13,10 @@ import org.firstinspires.ftc.teamcode.commands.Com_PickUp;
 import org.firstinspires.ftc.teamcode.commands.Com_PutDown;
 import org.firstinspires.ftc.teamcode.commands.RapidFireCommand;
 import org.firstinspires.ftc.teamcode.commands.rr.TrajectoryFollowerCommand;
-import org.firstinspires.ftc.teamcode.commands.rr.TurnCommand;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
 @Config
 public class OneRing extends SequentialCommandGroup {
@@ -30,7 +30,8 @@ public class OneRing extends SequentialCommandGroup {
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
 
-    public OneRing(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem, ShooterSubsystem shooter){
+    public OneRing(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem, ShooterSubsystem shooter,
+                   IntakeSubsystem intake){
         drive.setPoseEstimate(startPose);
         Trajectory traj0 = drive.trajectoryBuilder(startPose)
                 .strafeLeft(14.5)
@@ -55,8 +56,16 @@ public class OneRing extends SequentialCommandGroup {
                 .build();
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end(), 0)
-                .splineToSplineHeading(traj3.end().plus(new Pose2d(boxTwoX, boxTwoY, Math.toRadians(-179.0))), Math.toRadians(-90.0))
+                .splineToSplineHeading((new Pose2d(-10, -18, Math.toRadians(-170.0))), Math.toRadians(-30.0))
                 .splineToConstantHeading(traj1.end().vec().plus(new Vector2d(finalX, finalY)), 0.0)
+                .build();
+
+        Trajectory traj5 = drive.trajectoryBuilder(traj4.end(), 0)
+                .splineToConstantHeading(new Vector2d(-20, -36), 0.0)
+                .build();
+
+        Trajectory traj6 = drive.trajectoryBuilder(traj4.end(), 0)
+                .splineToConstantHeading(new Vector2d(14, -36), 0.0)
                 .build();
 
         addCommands(
@@ -79,7 +88,14 @@ public class OneRing extends SequentialCommandGroup {
                 new TrajectoryFollowerCommand(drive, traj4),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
                 new WaitCommand(500),
-                new Com_PickUp(wobbleSystem)
+                new Com_PickUp(wobbleSystem),
+                new InstantCommand(intake::start, intake),
+                new TrajectoryFollowerCommand(drive, traj5),
+                new WaitCommand(300),
+                new InstantCommand(intake::stop, intake),
+                new RapidFireCommand(shooter, 1),
+                new TrajectoryFollowerCommand(drive, traj6)
+
         );
     }
 }

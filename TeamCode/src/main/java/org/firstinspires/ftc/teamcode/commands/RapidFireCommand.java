@@ -15,6 +15,11 @@ public class RapidFireCommand extends CommandBase {
         numShots = 0;
         addRequirements(shooterSubsystem);
     }
+    public RapidFireCommand(ShooterSubsystem subsystem, int shots){
+        shooterSubsystem = subsystem;
+        numShots = 3-shots;
+        addRequirements(shooterSubsystem);
+    }
 
     @Override
     public void initialize() {

@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.commands.groups.ZeroRing;
 import org.firstinspires.ftc.teamcode.commands.vision.Com_Contour;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.ContourVisionSystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.UGContourRingDetector;
@@ -30,13 +31,14 @@ import java.util.HashMap;
 @Autonomous(name="PogU")
 public class AutonMain extends CommandOpMode {
     //Servos and Motors
-    private Motor fL, fR, bL, bR, arm, flyWheel, intakeB;
+    private Motor fL, fR, bL, bR, arm, flyWheel, intakeB, intakeA;
     private SimpleServo flicker, grabber;
 
     //Subsystems
     private MecanumDriveSubsystem drive;
     private WobbleSubsystem wobble;
     private ShooterSubsystem shooterSystem;
+    private IntakeSubsystem intakeSystem;
 
     //Vision
     private UGContourRingDetector ugContourRingDetector;
@@ -62,6 +64,10 @@ public class AutonMain extends CommandOpMode {
         intakeB = new Motor(hardwareMap, "intakeB", Motor.GoBILDA.RPM_312);
         intakeB.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeB.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        intakeA = new Motor(hardwareMap, "intakeB", Motor.GoBILDA.RPM_312);
+        intakeA.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intakeA.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         arm.motor.setDirection(DcMotor.Direction.REVERSE);
         arm.encoder = intakeB.encoder;
         grabber = new SimpleServo(hardwareMap, "wobbleS", -90, 180);
@@ -81,6 +87,8 @@ public class AutonMain extends CommandOpMode {
 
         shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, voltageSensor);
 
+        intakeSystem = new IntakeSubsystem(intakeA, intakeB);
+
         ugContourRingDetector = new UGContourRingDetector(hardwareMap, "poopcam", telemetry, true);
         ugContourRingDetector.init();
         visionSystem = new ContourVisionSystem(ugContourRingDetector, telemetry);
@@ -96,7 +104,7 @@ public class AutonMain extends CommandOpMode {
 //                new WaitUntilCommand(this::isStarted),  Jacksons favorite line of code
                 new SelectCommand(new HashMap<Object, Command>() {{
                         put(VisionSystem.Size.ZERO, (new ZeroRing(drive, wobble, shooterSystem)));
-                        put(VisionSystem.Size.ONE, (new OneRing(drive, wobble, shooterSystem)));
+                        put(VisionSystem.Size.ONE, (new OneRing(drive, wobble, shooterSystem, intakeSystem)));
                         put(VisionSystem.Size.FOUR, (new FourRing(drive, wobble, shooterSystem)));
                     }},()-> height)
         );
