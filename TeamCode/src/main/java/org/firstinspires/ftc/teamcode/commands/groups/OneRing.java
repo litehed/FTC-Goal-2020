@@ -4,6 +4,10 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -13,10 +17,13 @@ import org.firstinspires.ftc.teamcode.commands.Com_PickUp;
 import org.firstinspires.ftc.teamcode.commands.Com_PutDown;
 import org.firstinspires.ftc.teamcode.commands.RapidFireCommand;
 import org.firstinspires.ftc.teamcode.commands.rr.TrajectoryFollowerCommand;
+import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+
+import java.util.Arrays;
 
 @Config
 public class OneRing extends SequentialCommandGroup {
@@ -57,7 +64,13 @@ public class OneRing extends SequentialCommandGroup {
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end(), 0)
                 .splineToSplineHeading((new Pose2d(-10, -18, Math.toRadians(-170.0))), Math.toRadians(-30.0))
-                .splineToConstantHeading(traj1.end().vec().plus(new Vector2d(finalX, finalY)), 0.0)
+                .splineToConstantHeading(traj1.end().vec().plus(new Vector2d(finalX, finalY)), 0.0,
+                        new MinVelocityConstraint(Arrays.asList(
+                                new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
+                                new MecanumVelocityConstraint(45, DriveConstants.TRACK_WIDTH)
+                            )
+                        ),
+                        new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
         Trajectory traj5 = drive.trajectoryBuilder(traj4.end(), 0)
