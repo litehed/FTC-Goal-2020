@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.groups;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.drive.Drive;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.teamcode.commands.Com_PickUp;
 import org.firstinspires.ftc.teamcode.commands.Com_PutDown;
 import org.firstinspires.ftc.teamcode.commands.RapidFireCommand;
 import org.firstinspires.ftc.teamcode.commands.rr.TrajectoryFollowerCommand;
+import org.firstinspires.ftc.teamcode.commands.rr.TurnCommand;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
@@ -47,7 +49,13 @@ public class OneRing extends SequentialCommandGroup {
         Trajectory traj1 = drive.trajectoryBuilder(traj0.end())
                 .back(1.0)
                 .splineToConstantHeading(new Vector2d(1.0, -60.0), 0.0)
-                .splineToConstantHeading(new Vector2d(xBox, yBox), 0.0)
+                .splineToConstantHeading(new Vector2d(xBox, yBox), 0.0,
+                        new MinVelocityConstraint(Arrays.asList(
+                                new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
+                                new MecanumVelocityConstraint(50, DriveConstants.TRACK_WIDTH)
+                        )),
+                                new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL)
+                        )
                 .build();
 
         Vector2d shootPose = traj1.end().vec().plus(new Vector2d(shootPosX, shootPosY));
@@ -63,14 +71,8 @@ public class OneRing extends SequentialCommandGroup {
                 .build();
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end(), 0)
-                .splineToSplineHeading((new Pose2d(-10, -18, Math.toRadians(-170.0))), Math.toRadians(-30.0))
-                .splineToConstantHeading(traj1.end().vec().plus(new Vector2d(finalX, finalY)), 0.0,
-                        new MinVelocityConstraint(Arrays.asList(
-                                new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
-                                new MecanumVelocityConstraint(45, DriveConstants.TRACK_WIDTH)
-                            )
-                        ),
-                        new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .splineToSplineHeading((new Pose2d(-10, -18, Math.toRadians(-180.0))), Math.toRadians(-30.0))
+                .splineToConstantHeading(traj1.end().vec().plus(new Vector2d(finalX, finalY)), 0.0)
                 .build();
 
         Trajectory traj5 = drive.trajectoryBuilder(traj4.end(), 0)
@@ -101,9 +103,13 @@ public class OneRing extends SequentialCommandGroup {
                 new TrajectoryFollowerCommand(drive, traj4),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
                 new WaitCommand(500),
-                new Com_PickUp(wobbleSystem),
                 new InstantCommand(intake::start, intake),
+                new ParallelDeadlineGroup(
+                        new TrajectoryFollowerCommand(drive, traj5),
+                    new Com_PickUp(wobbleSystem)
+                ),
                 new TrajectoryFollowerCommand(drive, traj5),
+                new TurnCommand(drive, Math.toRadians(10)),
                 new WaitCommand(300),
                 new InstantCommand(intake::stop, intake),
                 new RapidFireCommand(shooter, 1),
