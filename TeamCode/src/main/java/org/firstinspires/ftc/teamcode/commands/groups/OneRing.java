@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.commands.Com_PickUp;
 import org.firstinspires.ftc.teamcode.commands.Com_PutDown;
 import org.firstinspires.ftc.teamcode.commands.RapidFireCommand;
 import org.firstinspires.ftc.teamcode.commands.rr.TrajectoryFollowerCommand;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
@@ -30,7 +29,7 @@ public class OneRing extends SequentialCommandGroup {
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
 
-    public OneRing(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem, ShooterSubsystem shooter, IntakeSubsystem intakeSubsystem){
+    public OneRing(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem, ShooterSubsystem shooter){
         drive.setPoseEstimate(startPose);
 
         Trajectory traj0 = drive.trajectoryBuilder(startPose)
@@ -68,10 +67,6 @@ public class OneRing extends SequentialCommandGroup {
                 .splineToConstantHeading(traj1.end().vec().plus(new Vector2d(finalX, finalY)), 0.0)
                 .build();
 
-        Trajectory traj5 = drive.trajectoryBuilder(traj4.end(), 0)
-                .splineTo(new Vector2d(-23, -36), 0)
-                .build();
-
         addCommands(
                 new ParallelDeadlineGroup(
                         new TrajectoryFollowerCommand(drive, traj0),
@@ -92,14 +87,7 @@ public class OneRing extends SequentialCommandGroup {
                 new TrajectoryFollowerCommand(drive, traj4),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
                 new WaitCommand(500),
-                new InstantCommand(() -> {
-                    intakeSubsystem.intakeA.set(0.75);
-                    intakeSubsystem.intakeB.set(1.0);
-                }),
-                new ParallelDeadlineGroup(
-                        new TrajectoryFollowerCommand(drive, traj5),
-                        new Com_PickUp(wobbleSystem)
-                )
+                new Com_PickUp(wobbleSystem)
         );
     }
 }
