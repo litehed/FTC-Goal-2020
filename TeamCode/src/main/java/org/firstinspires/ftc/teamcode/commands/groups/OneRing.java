@@ -68,6 +68,10 @@ public class OneRing extends SequentialCommandGroup {
                 .splineToConstantHeading(traj1.end().vec().plus(new Vector2d(finalX, finalY)), 0.0)
                 .build();
 
+        Trajectory traj5 = drive.trajectoryBuilder(traj4.end(), 0)
+                .forward(30)
+                .build();
+
         addCommands(
                 new ParallelDeadlineGroup(
                         new TrajectoryFollowerCommand(drive, traj0),
@@ -88,7 +92,12 @@ public class OneRing extends SequentialCommandGroup {
                 new TrajectoryFollowerCommand(drive, traj4),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
                 new WaitCommand(500),
-                new Com_PickUp(wobbleSystem)
+                new InstantCommand(intakeSubsystem::start),
+                new ParallelDeadlineGroup(
+                        new TrajectoryFollowerCommand(drive, traj5),
+                        new Com_PickUp(wobbleSystem)
+                ),
+                new InstantCommand(intakeSubsystem::stop)
         );
     }
 }
