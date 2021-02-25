@@ -110,10 +110,6 @@ public class AutonMain extends CommandOpMode {
         if(isStopRequested()){
             return;
         }
-        schedule(new RunCommand(shooterSystem::shoot),
-                new RunCommand(()-> {
-                    telemetry.addData("testomg", "hello");
-                    telemetry.update();
-                }), autonomous);
+        schedule(autonomous, new RunCommand(shooterSystem::shoot));
     }
 }
