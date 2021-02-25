@@ -75,11 +75,11 @@ public class OneRing extends SequentialCommandGroup {
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end(), 0)
                 .splineToSplineHeading((new Pose2d(-10, -18, Math.toRadians(-180.0))), Math.toRadians(-30.0))
-                .splineToConstantHeading(new Vector2d(20, -5), 0.0)
                 .splineToConstantHeading(traj1.end().vec().plus(new Vector2d(finalX, finalY)), 0.0)
                 .build();
 
         Trajectory traj5 = drive.trajectoryBuilder(traj4.end(), 0)
+                .splineToConstantHeading(new Vector2d(-15, -36), 0.0)
                 .splineToConstantHeading(new Vector2d(-20, -36), 0.0)
                 .build();
 
@@ -114,7 +114,7 @@ public class OneRing extends SequentialCommandGroup {
                 ),
                 new TrajectoryFollowerCommand(drive, traj5),
                 new TurnCommand(drive, Math.toRadians(10)),
-                new WaitCommand(300),
+                new WaitCommand(1000),
                 new InstantCommand(intake::stop, intake),
                 new RapidFireCommand(shooter, 1),
                 new TrajectoryFollowerCommand(drive, traj6)
