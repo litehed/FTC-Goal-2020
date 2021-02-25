@@ -92,12 +92,10 @@ public class OneRing extends SequentialCommandGroup {
                 new TrajectoryFollowerCommand(drive, traj4),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
                 new WaitCommand(500),
-                new InstantCommand(intakeSubsystem::start),
                 new ParallelDeadlineGroup(
                         new TrajectoryFollowerCommand(drive, traj5),
                         new Com_PickUp(wobbleSystem)
-                ),
-                new InstantCommand(intakeSubsystem::stop)
+                )
         );
     }
 }
