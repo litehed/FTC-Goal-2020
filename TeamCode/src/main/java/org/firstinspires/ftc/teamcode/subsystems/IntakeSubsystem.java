@@ -5,8 +5,8 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-    private Motor intakeA;
-    private Motor intakeB;
+    public Motor intakeA;
+    public Motor intakeB;
 
     public IntakeSubsystem(Motor intakeA, Motor intakeB){
         this.intakeA = intakeA;
