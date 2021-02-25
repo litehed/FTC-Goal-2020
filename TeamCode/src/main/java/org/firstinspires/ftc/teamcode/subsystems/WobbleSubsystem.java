@@ -41,6 +41,6 @@ public class WobbleSubsystem extends SubsystemBase {
     }
 
     public void armDown(){
-        arm.set(0.3);
+        arm.set(0.2);
     }
 }
