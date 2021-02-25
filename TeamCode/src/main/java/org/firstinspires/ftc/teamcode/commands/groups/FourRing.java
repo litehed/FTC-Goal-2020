@@ -49,7 +49,7 @@ public class FourRing extends SequentialCommandGroup {
 //        Vector2d secondWobble = traj2.end().vec().plus(new Vector2d(secWobblePosX, secWobblePosY));
 
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end(), 0.0)
-                .splineToLinearHeading(new Pose2d(-37.3,-22.8, 0.0), Math.toRadians(-90.0))
+                .splineToLinearHeading(new Pose2d(-37.5,-22.9, 0.0), Math.toRadians(-90.0))
                 .build();
 
 
@@ -78,11 +78,14 @@ public class FourRing extends SequentialCommandGroup {
                         new Com_PutDown(wobbleSystem)
                 ),
                 new InstantCommand(wobbleSystem::closeGrabber, wobbleSystem),
-                new WaitCommand(1000),
+                new WaitCommand(800),
                 new TrajectoryFollowerCommand(drive, traj4),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
                 new WaitCommand(700),
-                new Com_PickUp(wobbleSystem),
+                new ParallelDeadlineGroup(
+                        new WaitCommand(300),
+                        new Com_PickUp(wobbleSystem)
+                ),
                 new TrajectoryFollowerCommand(drive, traj5)
         );
     }

@@ -37,7 +37,7 @@ public class WobbleSubsystem extends SubsystemBase {
         arm.stopMotor();
     }
     public void armUp(){
-        arm.set(0.3);
+        arm.set(0.35);
     }
 
     public void armDown(){
