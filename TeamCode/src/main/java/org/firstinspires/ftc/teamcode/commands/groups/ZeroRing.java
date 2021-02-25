@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.commands.Com_PutDown;
 import org.firstinspires.ftc.teamcode.commands.RapidFireCommand;
 import org.firstinspires.ftc.teamcode.commands.rr.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.rr.TurnCommand;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
@@ -22,7 +23,7 @@ public class ZeroRing extends SequentialCommandGroup{
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
 
-    public ZeroRing(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem, ShooterSubsystem shooter){
+    public ZeroRing(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem, ShooterSubsystem shooter, IntakeSubsystem intakeSubsystem){
         drive.setPoseEstimate(startPose);
         Trajectory traj0 = drive.trajectoryBuilder(startPose)
                 .strafeLeft(14.5)
