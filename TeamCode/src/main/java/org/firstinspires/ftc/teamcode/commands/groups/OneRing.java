@@ -41,7 +41,6 @@ public class OneRing extends SequentialCommandGroup {
 
     public OneRing(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem, ShooterSubsystem shooter,
                    IntakeSubsystem intake){
-
         drive.setPoseEstimate(startPose);
 
         Trajectory traj0 = drive.trajectoryBuilder(startPose)
