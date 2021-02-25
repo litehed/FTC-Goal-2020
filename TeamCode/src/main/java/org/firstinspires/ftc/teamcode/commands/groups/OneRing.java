@@ -113,6 +113,7 @@ public class OneRing extends SequentialCommandGroup {
                         new TrajectoryFollowerCommand(drive, traj5),
                         new Com_PickUp(wobbleSystem)
                 ),
+                new WaitCommand(500),
                 new TurnCommand(drive, Math.toRadians(10)),
                 new WaitCommand(700),
                 new InstantCommand(intake::stop, intake),
