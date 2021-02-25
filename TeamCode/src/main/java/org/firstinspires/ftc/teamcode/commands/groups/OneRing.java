@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.commands.Com_PickUp;
 import org.firstinspires.ftc.teamcode.commands.Com_PutDown;
 import org.firstinspires.ftc.teamcode.commands.RapidFireCommand;
 import org.firstinspires.ftc.teamcode.commands.rr.TrajectoryFollowerCommand;
+import org.firstinspires.ftc.teamcode.commands.rr.TurnCommand;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
@@ -68,12 +69,11 @@ public class OneRing extends SequentialCommandGroup {
                 .splineToSplineHeading((new Pose2d(-10, -18, Math.toRadians(180.0))), Math.toRadians(-30.0))
                 .splineToConstantHeading(traj1.end().vec().plus(new Vector2d(finalX, finalY)), 0.0)
                 .build();
-//
-//        Trajectory traj5 = drive.trajectoryBuilder(traj4.end(), 0)
-//                .splineToConstantHeading(new Vector2d(-15, -36), 0.0)
-//                .splineToConstantHeading(new Vector2d(-20, -36), 0.0)
-//                .build();
-//
+
+        Trajectory traj5 = drive.trajectoryBuilder(traj4.end(), 0)
+                .splineToConstantHeading(new Vector2d(-20, -36), 0.0)
+                .build();
+
 //        Trajectory traj6 = drive.trajectoryBuilder(traj4.end(), 0)
 //                .splineToConstantHeading(new Vector2d(6.9, -36), 0.0)
 //                .build();
@@ -98,16 +98,16 @@ public class OneRing extends SequentialCommandGroup {
                 new TrajectoryFollowerCommand(drive, traj4),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
                 new WaitCommand(500),
-//                new InstantCommand(intake::start, intake),
-//                new ParallelDeadlineGroup(
-//                        new TrajectoryFollowerCommand(drive, traj5),
+                new InstantCommand(intake::start, intake),
+                new ParallelDeadlineGroup(
+                        new TrajectoryFollowerCommand(drive, traj5),
                         new Com_PickUp(wobbleSystem)
-//                ),
-//                new WaitCommand(500),
-//                new TurnCommand(drive, Math.toRadians(10)),
-//                new WaitCommand(700),
-//                new InstantCommand(intake::stop, intake),
-//                new RapidFireCommand(shooter),
+                ),
+                new WaitCommand(500),
+                new TurnCommand(drive, Math.toRadians(10)),
+                new WaitCommand(700),
+                new InstantCommand(intake::stop, intake),
+                new RapidFireCommand(shooter)
 //                new TrajectoryFollowerCommand(drive, traj6)
         );
     }
