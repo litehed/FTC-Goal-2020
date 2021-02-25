@@ -13,7 +13,6 @@ import org.firstinspires.ftc.teamcode.commands.Com_PickUp;
 import org.firstinspires.ftc.teamcode.commands.Com_PutDown;
 import org.firstinspires.ftc.teamcode.commands.RapidFireCommand;
 import org.firstinspires.ftc.teamcode.commands.rr.TrajectoryFollowerCommand;
-import org.firstinspires.ftc.teamcode.commands.rr.TurnCommand;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
@@ -71,7 +70,7 @@ public class FourRing extends SequentialCommandGroup {
                 ),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
                 new WaitCommand(600),
-                new Com_PickUp(wobbleSystem),
+                new Com_PickUp(wobbleSystem).raceWith(new WaitCommand(750)),
                 new TrajectoryFollowerCommand(drive, traj2),
                 new RapidFireCommand(shooter),
                 new ParallelDeadlineGroup(

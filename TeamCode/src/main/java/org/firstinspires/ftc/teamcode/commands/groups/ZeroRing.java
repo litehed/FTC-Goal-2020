@@ -65,7 +65,7 @@ public class ZeroRing extends SequentialCommandGroup{
                 new TrajectoryFollowerCommand(drive, traj1),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
                 new WaitCommand(500),
-                new Com_PickUp(wobbleSystem),
+                new Com_PickUp(wobbleSystem).raceWith(new WaitCommand(750)),
                 new TrajectoryFollowerCommand(drive, traj2),
                 new TurnCommand(drive, Math.toRadians(10)),
                 new RapidFireCommand(shooter),
