@@ -15,7 +15,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.commands.groups.FourRing;
 import org.firstinspires.ftc.teamcode.commands.groups.OneRing;
 import org.firstinspires.ftc.teamcode.commands.groups.ZeroRing;
-import org.firstinspires.ftc.teamcode.commands.vision.Com_Contour;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.ContourVisionSystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -43,7 +42,6 @@ public class AutonMain extends CommandOpMode {
     //Vision
     private UGContourRingDetector ugContourRingDetector;
     private ContourVisionSystem visionSystem;
-    private Com_Contour visionCommand;
 
     //Extranious
     private TimedAction flickerAction;
@@ -91,7 +89,6 @@ public class AutonMain extends CommandOpMode {
         ugContourRingDetector = new UGContourRingDetector(hardwareMap, "poopcam", telemetry, true);
         ugContourRingDetector.init();
         visionSystem = new ContourVisionSystem(ugContourRingDetector, telemetry);
-        visionCommand = new Com_Contour(visionSystem, time);
 
         arm.resetEncoder();
 
@@ -103,7 +100,7 @@ public class AutonMain extends CommandOpMode {
 //                new WaitUntilCommand(this::isStarted),  Jacksons favorite line of code
                 new SelectCommand(new HashMap<Object, Command>() {{
                         put(VisionSystem.Size.ZERO, (new ZeroRing(drive, wobble, shooterSystem)));
-                        put(VisionSystem.Size.ONE, (new OneRing(drive, wobble, shooterSystem, intakeSystem)));
+//                        put(VisionSystem.Size.ONE, (new OneRing(drive, wobble, shooterSystem, intakeSystem)));
                         put(VisionSystem.Size.FOUR, (new FourRing(drive, wobble, shooterSystem)));
                     }},()-> height)
         );
@@ -113,6 +110,10 @@ public class AutonMain extends CommandOpMode {
         if(isStopRequested()){
             return;
         }
-        schedule(new RunCommand(shooterSystem::shoot), autonomous);
+        schedule(new RunCommand(shooterSystem::shoot),
+                new RunCommand(()-> {
+                    telemetry.addData("testomg", "hello");
+                    telemetry.update();
+                }), autonomous);
     }
 }
