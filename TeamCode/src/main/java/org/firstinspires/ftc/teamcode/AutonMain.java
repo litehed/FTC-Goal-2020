@@ -100,8 +100,8 @@ public class AutonMain extends CommandOpMode {
 //                new WaitUntilCommand(this::isStarted),  Jacksons favorite line of code
                 new SelectCommand(new HashMap<Object, Command>() {{
                         put(VisionSystem.Size.ZERO, (new ZeroRing(drive, wobble, shooterSystem, intakeSystem)));
-                        put(VisionSystem.Size.ONE, (new OneRing(drive, wobble, shooterSystem)));
-                        put(VisionSystem.Size.FOUR, (new FourRing(drive, wobble, shooterSystem)));
+                        put(VisionSystem.Size.ONE, (new OneRing(drive, wobble, shooterSystem, intakeSystem)));
+                        put(VisionSystem.Size.FOUR, (new FourRing(drive, wobble, shooterSystem, intakeSystem)));
                     }},()-> height)
         );
         while(!isStarted() && !isStopRequested()){
