@@ -62,7 +62,7 @@ public class AutonMain extends CommandOpMode {
         intakeB = new Motor(hardwareMap, "intakeB", Motor.GoBILDA.RPM_312);
         intakeB.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeB.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        intakeA = new Motor(hardwareMap, "intakeA", Motor.GoBILDA.RPM_312);
+//        intakeA = new Motor(hardwareMap, "intakeA", Motor.GoBILDA.RPM_312);
 
 
         arm.motor.setDirection(DcMotor.Direction.REVERSE);
@@ -84,7 +84,7 @@ public class AutonMain extends CommandOpMode {
 
         shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, voltageSensor);
 
-        intakeSystem = new IntakeSubsystem(intakeA, intakeB);
+//        intakeSystem = new IntakeSubsystem(intakeA, intakeB);
 
         ugContourRingDetector = new UGContourRingDetector(hardwareMap, "poopcam", telemetry, true);
         ugContourRingDetector.init();
