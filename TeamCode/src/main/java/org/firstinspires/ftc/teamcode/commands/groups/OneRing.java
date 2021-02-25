@@ -41,7 +41,9 @@ public class OneRing extends SequentialCommandGroup {
 
     public OneRing(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem, ShooterSubsystem shooter,
                    IntakeSubsystem intake){
+
         drive.setPoseEstimate(startPose);
+
         Trajectory traj0 = drive.trajectoryBuilder(startPose)
                 .strafeLeft(14.5)
                 .build();
@@ -49,14 +51,15 @@ public class OneRing extends SequentialCommandGroup {
         Trajectory traj1 = drive.trajectoryBuilder(traj0.end())
                 .back(1.0)
                 .splineToConstantHeading(new Vector2d(1.0, -60.0), 0.0)
-                .splineToConstantHeading(new Vector2d(xBox, yBox), 0.0,
-                        new MinVelocityConstraint(Arrays.asList(
-                                new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
-                                new MecanumVelocityConstraint(50, DriveConstants.TRACK_WIDTH)
-                        )),
-                                new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL)
-                        )
+                .splineToConstantHeading(new Vector2d(xBox, yBox), 0.0)
                 .build();
+
+//                        new MinVelocityConstraint(Arrays.asList(
+//                                new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
+//                                new MecanumVelocityConstraint(50, DriveConstants.TRACK_WIDTH)
+//                        )),
+//                                new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL)
+//                        )
 
         Vector2d shootPose = traj1.end().vec().plus(new Vector2d(shootPosX, shootPosY));
 
@@ -72,6 +75,7 @@ public class OneRing extends SequentialCommandGroup {
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end(), 0)
                 .splineToSplineHeading((new Pose2d(-10, -18, Math.toRadians(-180.0))), Math.toRadians(-30.0))
+                .splineToConstantHeading(new Vector2d(20, -5), 0.0)
                 .splineToConstantHeading(traj1.end().vec().plus(new Vector2d(finalX, finalY)), 0.0)
                 .build();
 
