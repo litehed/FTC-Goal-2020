@@ -74,7 +74,8 @@ public class OneRing extends SequentialCommandGroup {
                 .build();
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end(), 0)
-                .splineToSplineHeading((new Pose2d(-10, -18, Math.toRadians(181.0))), Math.toRadians(-30.0))
+                .splineTo(traj3.end().vec().plus(new Vector2d(0, 8)), 0.0)
+                .splineToSplineHeading((new Pose2d(-10, -18, Math.toRadians(180.0))), Math.toRadians(-30.0))
                 .splineToConstantHeading(traj1.end().vec().plus(new Vector2d(finalX, finalY)), 0.0)
                 .build();
 
