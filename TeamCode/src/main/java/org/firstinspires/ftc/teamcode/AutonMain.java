@@ -113,6 +113,6 @@ public class AutonMain extends CommandOpMode {
         if(isStopRequested()){
             return;
         }
-        schedule(autonomous, new RunCommand(shooterSystem::shoot));
+        schedule(new RunCommand(shooterSystem::shoot), autonomous);
     }
 }
