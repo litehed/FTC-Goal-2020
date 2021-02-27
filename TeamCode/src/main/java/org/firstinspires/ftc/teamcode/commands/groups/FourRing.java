@@ -82,10 +82,7 @@ public class FourRing extends SequentialCommandGroup {
                 new TrajectoryFollowerCommand(drive, traj4),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
                 new WaitCommand(700),
-                new ParallelDeadlineGroup(
-                        new WaitCommand(300),
-                        new Com_PickUp(wobbleSystem)
-                ),
+                new Com_PickUp(wobbleSystem).raceWith(new WaitCommand(300)),
                 new TrajectoryFollowerCommand(drive, traj5)
         );
     }
