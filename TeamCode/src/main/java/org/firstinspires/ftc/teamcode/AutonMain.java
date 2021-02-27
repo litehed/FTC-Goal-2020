@@ -105,13 +105,14 @@ public class AutonMain extends CommandOpMode {
                         put(VisionSystem.Size.FOUR, (new FourRing(drive, wobble, shooterSystem)));
                     }},()-> height)
         );
+//        FtcDashboard.getInstance().startCameraStream(ugContourRingDetector.getCamera(), 30);
+
         while(!isStarted() && !isStopRequested()){
             height = visionSystem.getStackSize();
         }
         if(isStopRequested()){
             return;
         }
-        FtcDashboard.getInstance().startCameraStream(ugContourRingDetector.getCamera(), 30);
         schedule(autonomous, new RunCommand(shooterSystem::shoot));
     }
 }

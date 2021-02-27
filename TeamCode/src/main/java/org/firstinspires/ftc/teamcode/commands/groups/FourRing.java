@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
 public class FourRing extends SequentialCommandGroup {
 
     public static double xBox = 53.0, yBox = -60.0;
-    public static double shootPosX = -68.4, shootPosY = 45.0;
+    public static double shootPosX = -68.2, shootPosY = 44.3;
     public static double secWobblePosX = -20.0, secWobblePosY = 0.0;
     public static double wobbleXTwo = -3.4, wobbleYTwo = -2.0;
     public static double boxTwoX = 45.0, boxTwoY = 0.0;
@@ -49,9 +49,12 @@ public class FourRing extends SequentialCommandGroup {
 //        Vector2d secondWobble = traj2.end().vec().plus(new Vector2d(secWobblePosX, secWobblePosY));
 
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end(), 0.0)
-                .splineToLinearHeading(new Pose2d(-37.5,-22.9, 0.0), Math.toRadians(-90.0))
+                .splineToLinearHeading(new Pose2d(-34,-23.0, 0.0), Math.toRadians(-90.0))
                 .build();
 
+//        Trajectory trajAlmost4 = drive.trajectoryBuilder(traj3.end(), 0.0)
+//                .splineToLinearHeading(new Pose2d(-38.2,-23.0, 0.0), 0.0)
+//                .build();
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end(), 0)
                 .splineToSplineHeading(traj3.end().plus(new Pose2d(boxTwoX, boxTwoY, Math.toRadians(-179.0))), Math.toRadians(-90.0))
@@ -77,6 +80,7 @@ public class FourRing extends SequentialCommandGroup {
                         new TrajectoryFollowerCommand(drive, traj3),
                         new Com_PutDown(wobbleSystem)
                 ),
+//                new TrajectoryFollowerCommand(drive, trajAlmost4),
                 new InstantCommand(wobbleSystem::closeGrabber, wobbleSystem),
                 new WaitCommand(800),
                 new TrajectoryFollowerCommand(drive, traj4),
