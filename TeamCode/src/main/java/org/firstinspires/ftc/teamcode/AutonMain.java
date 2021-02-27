@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.RunCommand;
@@ -110,6 +111,7 @@ public class AutonMain extends CommandOpMode {
         if(isStopRequested()){
             return;
         }
+        FtcDashboard.getInstance().startCameraStream(ugContourRingDetector.getCamera(), 30);
         schedule(autonomous, new RunCommand(shooterSystem::shoot));
     }
 }
