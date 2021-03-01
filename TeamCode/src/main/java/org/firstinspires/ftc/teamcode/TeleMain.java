@@ -147,7 +147,7 @@ public class TeleMain extends CommandOpMode {
                 .toggleWhenPressed(
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> flyWheel.setRunMode(Motor.RunMode.VelocityControl)),
-                                new RunCommand(()->shooterSystem.shootSpecSpeed(()->pwerShot))
+                                new RunCommand(shooterSystem::shoot)
                         ),
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> flyWheel.setRunMode(Motor.RunMode.RawPower)),
