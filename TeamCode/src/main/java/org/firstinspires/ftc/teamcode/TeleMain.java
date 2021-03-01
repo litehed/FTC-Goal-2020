@@ -129,7 +129,7 @@ public class TeleMain extends CommandOpMode {
 //                .toggleWhenPressed(()->mult = 0.5, ()->mult = 1.0);
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.Y)
-                .toggleWhenPressed(()->mult = 0.5, ()->mult = 1.0);
+                .toggleWhenPressed(()->mult = 0.75, ()->mult = 1.0);
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(shooterCommand);
 
