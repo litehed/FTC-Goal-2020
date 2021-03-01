@@ -22,9 +22,7 @@ public class OneRing extends SequentialCommandGroup {
 
     public static double xBox = 24.0, yBox = -36.0;
     public static double shootPosX = -44.0, shootPosY = 22.0;
-    public static double secWobblePosX = -20.0, secWobblePosY = 0.0;
-    public static double wobbleXTwo = 16.0, wobbleYTwo = 0.0;
-    public static double boxTwoX = 16.0, boxTwoY = 0.0;
+    public static double secondWobbleX = -38.5, secondWobbleY = -21.0;
     public static double finalX = -10.0, finalY = -5.0;
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
@@ -62,7 +60,7 @@ public class OneRing extends SequentialCommandGroup {
                 .build();
 
         Trajectory trajAlmost4 = drive.trajectoryBuilder(traj3.end(), 0.0)
-                .splineToConstantHeading(new Vector2d(-38.5,-21.0), 0.0)
+                .splineToConstantHeading(new Vector2d(secondWobbleX, secondWobbleY), 0.0)
                 .build();
 
         Trajectory traj4 = drive.trajectoryBuilder(trajAlmost4.end(), 0)

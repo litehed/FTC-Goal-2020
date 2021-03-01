@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.TimedAction;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 @Config
 public class ShooterSubsystem extends SubsystemBase {
@@ -36,8 +37,15 @@ public class ShooterSubsystem extends SubsystemBase {
         return timedAction.running();
     }
 
+    public void setSpeed(){
+
+    }
+
     public void shoot(){
             flywheel.set(1.0);
+    }
+    public void shootSpecSpeed(DoubleSupplier speed){
+        flywheel.set(speed.getAsDouble());
     }
 
     public void stop(){

@@ -60,6 +60,7 @@ public class TeleMain extends CommandOpMode {
     private TimedAction flickerAction;
     private VoltageSensor voltageSensor;
     public double mult = 1.0;
+    public double pwerShot = 1.0;
 
     @Override
     public void initialize() {
@@ -131,6 +132,9 @@ public class TeleMain extends CommandOpMode {
         m_driverOp.getGamepadButton(GamepadKeys.Button.Y)
                 .toggleWhenPressed(()->mult = 0.75, ()->mult = 1.0);
 
+        m_driverOp.getGamepadButton(GamepadKeys.Button.BACK)
+                .toggleWhenPressed(()->pwerShot = 0.90,()->pwerShot = 1.0);
+
         m_driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(shooterCommand);
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenHeld(intakeCommand);
@@ -143,7 +147,7 @@ public class TeleMain extends CommandOpMode {
                 .toggleWhenPressed(
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> flyWheel.setRunMode(Motor.RunMode.VelocityControl)),
-                                new RunCommand(shooterSystem::shoot)
+                                new RunCommand(()->shooterSystem.shootSpecSpeed(()->pwerShot))
                         ),
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> flyWheel.setRunMode(Motor.RunMode.RawPower)),

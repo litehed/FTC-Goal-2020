@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.groups;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
@@ -18,7 +19,10 @@ import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
 
+@Config
 public class ZeroRing extends SequentialCommandGroup{
+
+    public static double secondWobbleX = -36.5, secondWobbleY = -23.0;
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
 
@@ -43,7 +47,7 @@ public class ZeroRing extends SequentialCommandGroup{
 //        Vector2d secondWobble = traj2.end().vec().plus(new Vector2d(-14.0, 15.5));
 
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end(), 0.0)
-                .splineToLinearHeading(new Pose2d(-36.5,-23, 0.0), Math.toRadians(-90.0))
+                .splineToLinearHeading(new Pose2d(secondWobbleX, secondWobbleY, 0.0), Math.toRadians(-90.0))
                 .build();
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end(), 0.0)
