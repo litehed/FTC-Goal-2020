@@ -22,7 +22,7 @@ public class FourRing extends SequentialCommandGroup {
 
     public static double xBox = 53.0, yBox = -60.0;
     public static double shootPosX = -68.2, shootPosY = 42.3;
-    public static double secondWobbleX = -36.9, secondWobbleY = -22.4;
+    public static double secondWobbleX = -36.0, secondWobbleY = -22.4;
     public static double boxTwoX = 45.0, boxTwoY = 0.0;
     public static double finalX = -8.8, finalY = -1.0;
 
