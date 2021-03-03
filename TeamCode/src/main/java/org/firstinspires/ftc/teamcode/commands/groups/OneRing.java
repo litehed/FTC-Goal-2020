@@ -27,8 +27,8 @@ import java.time.Instant;
 public class OneRing extends SequentialCommandGroup {
 
     public static double xBox = 24.0, yBox = -36.0;
-    public static double shootPosX = -48.0, shootPosY = 22.0;
-    public static double secondWobbleX = -37, secondWobbleY = -21.0;
+    public static double shootPosX = -45, shootPosY = 22.0;
+    public static double secondWobbleX = -37.6, secondWobbleY = -21.0;
     public static double finalX = -10.0, finalY = 0.0;
     public static double backAmnt = 35.0;
 
