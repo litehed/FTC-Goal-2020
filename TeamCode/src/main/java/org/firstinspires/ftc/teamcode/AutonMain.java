@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.RunCommand;
@@ -50,6 +51,7 @@ public class AutonMain extends CommandOpMode {
     private VoltageSensor voltageSensor;
     public boolean powerShotMode = false;
     private VisionSystem.Size height;
+    private TelemetryPacket packet;
     //Poses
 
     //Trajectories
@@ -105,14 +107,22 @@ public class AutonMain extends CommandOpMode {
                         put(VisionSystem.Size.FOUR, (new FourRing(drive, wobble, shooterSystem)));
                     }},()-> height)
         );
-//        FtcDashboard.getInstance().startCameraStream(ugContourRingDetector.getCamera(), 30);
+
+        FtcDashboard.getInstance().startCameraStream(ugContourRingDetector.getCamera(), 30);
+        packet = new TelemetryPacket();
 
         while(!isStarted() && !isStopRequested()){
             height = visionSystem.getStackSize();
+            packet.put("Rings detected", visionSystem.getStackSize());
+            FtcDashboard.getInstance().sendTelemetryPacket(packet);
         }
         if(isStopRequested()){
             return;
         }
-        schedule(new RunCommand(shooterSystem::shoot), autonomous);
+
+        schedule(new RunCommand(shooterSystem::shoot), autonomous, new RunCommand(()->{
+            packet.put("Voltage", voltageSensor.getVoltage());
+            FtcDashboard.getInstance().sendTelemetryPacket(packet);
+        }));
     }
 }
