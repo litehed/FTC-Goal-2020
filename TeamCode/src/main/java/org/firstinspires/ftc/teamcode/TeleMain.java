@@ -95,7 +95,7 @@ public class TeleMain extends CommandOpMode {
 
         createDrive();
         resetMotors();
-        
+
         flyWheel = new Motor(hardwareMap, "shoot");
         flyWheel.resetEncoder();
         intakeA = new Motor(hardwareMap, "intakeA");
@@ -162,7 +162,7 @@ public class TeleMain extends CommandOpMode {
                 .toggleWhenPressed(new InstantCommand(this::createDrive).andThen(
                         autoPowershotsCommand = new SequentialCommandGroup(
                         new InstantCommand(()->drive.setPoseEstimate(new Pose2d(63, -10, Math.toRadians(180)))),
-                        new TrajectoryFollowerCommand(drive, drive.trajectoryBuilder(drive.getPoseEstimate())
+                        new TrajectoryFollowerCommand(drive, drive.trajectoryBuilder(drive.getPoseEstimate(), true)
                                 .lineToConstantHeading(new Vector2d(0, -28.0))
                                 .build()),
                         new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
