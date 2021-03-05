@@ -112,6 +112,12 @@ public class TeleMain extends CommandOpMode {
         drive = new MecanumDriveSubsystem(new SampleMecanumDrive(hardwareMap), false);
         fL.motor.setDirection(DcMotor.Direction.FORWARD);
         bL.motor.setDirection(DcMotor.Direction.FORWARD);
+
+        fL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        bL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        bR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         driveSystem = new DriveSystem(fL, fR, bL, bR);
         driveCommand = new Com_Drive(driveSystem, m_driverOp::getLeftX, m_driverOp::getLeftY, m_driverOp::getRightX, ()->mult);
 
@@ -146,6 +152,14 @@ public class TeleMain extends CommandOpMode {
                         new InstantCommand(() -> {
                             fL.motor.setDirection(DcMotor.Direction.REVERSE);
                             bL.motor.setDirection(DcMotor.Direction.REVERSE);
+                            fL.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                            fR.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                            bL.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                            bR.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                            fL.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                            fR.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                            bL.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                            bR.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                         }),
                         new InstantCommand(()->drive.setPoseEstimate(new Pose2d(63, -10, Math.toRadians(180)))),
                         new TrajectoryFollowerCommand(drive, drive.trajectoryBuilder(drive.getPoseEstimate(), true)
@@ -162,6 +176,10 @@ public class TeleMain extends CommandOpMode {
                         new InstantCommand(() -> {
                             fL.motor.setDirection(DcMotor.Direction.FORWARD);
                             bL.motor.setDirection(DcMotor.Direction.FORWARD);
+                            fL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                            fR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                            bL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                            bR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                         })
                 ), new InstantCommand(()->{
                         autoPowershotsCommand.cancel();
