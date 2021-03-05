@@ -162,10 +162,10 @@ public class TeleMain extends CommandOpMode {
                                 .lineToConstantHeading(new Vector2d(0.6, -15.0))
                                 .build()),
                         new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
-                        new TurnCommand(drive, Math.toRadians(-2.7))
+                        new TurnCommand(drive, Math.toRadians(-4))
                                 .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(500)),
                         new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
-                        new TurnCommand(drive, Math.toRadians(-2.7))
+                        new TurnCommand(drive, Math.toRadians(-4))
                                 .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(500)),
                         new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
                         new InstantCommand(shooterSystem::homePos),
