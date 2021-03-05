@@ -156,7 +156,7 @@ public class TeleMain extends CommandOpMode {
                             fR.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                             bL.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                             bR.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                        }),
+                        }, driveSystem),
                         new InstantCommand(()->drive.setPoseEstimate(new Pose2d(63, -10, Math.toRadians(180)))),
                         new TrajectoryFollowerCommand(drive, drive.trajectoryBuilder(new Pose2d(63, -10, Math.toRadians(180)), true)
                                 .lineToConstantHeading(new Vector2d(0, -28.0))
