@@ -110,9 +110,10 @@ public class TeleMain extends CommandOpMode {
 
         //Subsystems and Commands
         drive = new MecanumDriveSubsystem(new SampleMecanumDrive(hardwareMap), false);
+        fL.motor.setDirection(DcMotor.Direction.FORWARD);
+        bL.motor.setDirection(DcMotor.Direction.FORWARD);
         driveSystem = new DriveSystem(fL, fR, bL, bR);
-        driveCommand = new Com_Drive(driveSystem, m_driverOp::getLeftX, () -> -m_driverOp.getRightX(),
-                () -> -m_driverOp.getLeftY(), ()->mult);
+        driveCommand = new Com_Drive(driveSystem, m_driverOp::getLeftX, m_driverOp::getLeftY, m_driverOp::getRightX, ()->mult);
 
         shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, voltageSensor);
         shooterCommand = new Com_Shooter(shooterSystem);
@@ -142,6 +143,10 @@ public class TeleMain extends CommandOpMode {
         m_driverOp.getGamepadButton(GamepadKeys.Button.BACK)
                 .toggleWhenPressed(
                         autoPowershotsCommand = new SequentialCommandGroup(
+                        new InstantCommand(() -> {
+                            fL.motor.setDirection(DcMotor.Direction.REVERSE);
+                            bL.motor.setDirection(DcMotor.Direction.REVERSE);
+                        }),
                         new InstantCommand(()->drive.setPoseEstimate(new Pose2d(63, -10, Math.toRadians(180)))),
                         new TrajectoryFollowerCommand(drive, drive.trajectoryBuilder(drive.getPoseEstimate(), true)
                                 .lineToConstantHeading(new Vector2d(0, -28.0))
@@ -153,7 +158,11 @@ public class TeleMain extends CommandOpMode {
                         new TurnCommand(drive, Math.toRadians(-6))
                                 .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(350)),
                         new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
-                        new InstantCommand(shooterSystem::homePos)
+                        new InstantCommand(shooterSystem::homePos),
+                        new InstantCommand(() -> {
+                            fL.motor.setDirection(DcMotor.Direction.FORWARD);
+                            bL.motor.setDirection(DcMotor.Direction.FORWARD);
+                        })
                 ), new InstantCommand(()->{
                         autoPowershotsCommand.cancel();
                         shooterSystem.homePos();
