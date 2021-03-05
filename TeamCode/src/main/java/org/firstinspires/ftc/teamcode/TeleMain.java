@@ -148,23 +148,6 @@ public class TeleMain extends CommandOpMode {
         pickUpCommand = new Com_PickUp(wobbleSystem);
         putDownCommand = new Com_PutDown(wobbleSystem);
 
-        autoPowershotsCommand = new SequentialCommandGroup(
-
-                new InstantCommand(()->drive.setPoseEstimate(new Pose2d(63, -10, Math.toRadians(180)))),
-                new TrajectoryFollowerCommand(drive, drive.trajectoryBuilder(drive.getPoseEstimate())
-                        .lineToConstantHeading(new Vector2d(0, -28.0))
-                        .build()),
-                new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
-                new TurnCommand(drive, Math.toRadians(-6))
-                    .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(350)),
-                new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
-                new TurnCommand(drive, Math.toRadians(-6))
-                        .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(350)),
-                new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
-                new InstantCommand(shooterSystem::homePos),
-                new InstantCommand(this::resetMotors)
-        );
-
 //       Old Method no longer necessary:
 //        slowDrive = new GamepadButton(m_driverOp, GamepadKeys.Button.Y)
 //                .toggleWhenPressed(()->mult = 0.5, ()->mult = 1.0);
@@ -173,7 +156,22 @@ public class TeleMain extends CommandOpMode {
                 .toggleWhenPressed(()->mult = 0.75, ()->mult = 1.0);
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.BACK)
-                .toggleWhenPressed(autoPowershotsCommand.beforeStarting(this::createDrive), new InstantCommand(()->{
+                .toggleWhenPressed(new InstantCommand(this::createDrive).andThen(
+                        autoPowershotsCommand = new SequentialCommandGroup(
+                        new InstantCommand(()->drive.setPoseEstimate(new Pose2d(63, -10, Math.toRadians(180)))),
+                        new TrajectoryFollowerCommand(drive, drive.trajectoryBuilder(drive.getPoseEstimate())
+                                .lineToConstantHeading(new Vector2d(0, -28.0))
+                                .build()),
+                        new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
+                        new TurnCommand(drive, Math.toRadians(-6))
+                                .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(350)),
+                        new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
+                        new TurnCommand(drive, Math.toRadians(-6))
+                                .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(350)),
+                        new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
+                        new InstantCommand(shooterSystem::homePos),
+                        new InstantCommand(this::resetMotors)
+                ), new InstantCommand(()->{
                         autoPowershotsCommand.cancel();
                         shooterSystem.homePos();
                         resetMotors();
