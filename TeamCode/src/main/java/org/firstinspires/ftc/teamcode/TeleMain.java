@@ -161,7 +161,8 @@ public class TeleMain extends CommandOpMode {
                 new TurnCommand(drive, Math.toRadians(-6))
                         .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(350)),
                 new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
-                new InstantCommand(shooterSystem::homePos)
+                new InstantCommand(shooterSystem::homePos),
+                new InstantCommand(this::resetMotors)
         );
 
 //       Old Method no longer necessary:
