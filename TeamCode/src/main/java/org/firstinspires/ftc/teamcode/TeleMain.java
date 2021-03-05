@@ -152,10 +152,6 @@ public class TeleMain extends CommandOpMode {
                         new InstantCommand(() -> {
                             fL.motor.setDirection(DcMotor.Direction.REVERSE);
                             bL.motor.setDirection(DcMotor.Direction.REVERSE);
-                            fL.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                            fR.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                            bL.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                            bR.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                             fL.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                             fR.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                             bL.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -184,6 +180,12 @@ public class TeleMain extends CommandOpMode {
                 ), new InstantCommand(()->{
                         autoPowershotsCommand.cancel();
                         shooterSystem.homePos();
+                        fL.motor.setDirection(DcMotor.Direction.FORWARD);
+                        bL.motor.setDirection(DcMotor.Direction.FORWARD);
+                        fL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                        fR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                        bL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                        bR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 }));
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(shooterCommand);
