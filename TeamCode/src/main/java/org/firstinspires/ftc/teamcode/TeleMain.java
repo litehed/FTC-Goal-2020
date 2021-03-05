@@ -68,36 +68,6 @@ public class TeleMain extends CommandOpMode {
     private VoltageSensor voltageSensor;
     public double mult = 1.0;
 
-    public void createDrive(){
-        drive = new MecanumDriveSubsystem(new SampleMecanumDrive(hardwareMap), false);
-    }
-
-    public void resetMotors(){
-        fL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        fR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        bL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        bR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        fL.motor.setDirection(DcMotorSimple.Direction.FORWARD);
-        bL.motor.setDirection(DcMotorSimple.Direction.FORWARD);
-    }
-
-    public void useEncoders(){
-        fL.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        bL.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fR.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        bR.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        fL.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        fR.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        bL.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        bR.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        fL.motor.setDirection(DcMotorSimple.Direction.REVERSE);
-        bL.motor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-    }
-
     @Override
     public void initialize() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -106,9 +76,6 @@ public class TeleMain extends CommandOpMode {
         fR = new Motor(hardwareMap, "fR");
         bL = new Motor(hardwareMap, "bL");
         bR = new Motor(hardwareMap, "bR");
-
-        createDrive();
-        resetMotors();
 
         flyWheel = new Motor(hardwareMap, "shoot");
         flyWheel.resetEncoder();
@@ -173,7 +140,7 @@ public class TeleMain extends CommandOpMode {
                 .toggleWhenPressed(()->mult = 0.75, ()->mult = 1.0);
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.BACK)
-                .toggleWhenPressed(new InstantCommand(this::useEncoders).andThen(
+                .toggleWhenPressed(
                         autoPowershotsCommand = new SequentialCommandGroup(
                         new InstantCommand(()->drive.setPoseEstimate(new Pose2d(63, -10, Math.toRadians(180)))),
                         new TrajectoryFollowerCommand(drive, drive.trajectoryBuilder(drive.getPoseEstimate(), true)
@@ -186,13 +153,11 @@ public class TeleMain extends CommandOpMode {
                         new TurnCommand(drive, Math.toRadians(-6))
                                 .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(350)),
                         new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
-                        new InstantCommand(shooterSystem::homePos),
-                        new InstantCommand(this::resetMotors)
+                        new InstantCommand(shooterSystem::homePos)
                 ), new InstantCommand(()->{
                         autoPowershotsCommand.cancel();
                         shooterSystem.homePos();
-                        resetMotors();
-                })));
+                }));
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(shooterCommand);
 
