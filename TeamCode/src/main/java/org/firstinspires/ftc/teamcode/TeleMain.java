@@ -93,6 +93,9 @@ public class TeleMain extends CommandOpMode {
         bL = new Motor(hardwareMap, "bL");
         bR = new Motor(hardwareMap, "bR");
 
+        createDrive();
+        resetMotors();
+        
         flyWheel = new Motor(hardwareMap, "shoot");
         flyWheel.resetEncoder();
         intakeA = new Motor(hardwareMap, "intakeA");
