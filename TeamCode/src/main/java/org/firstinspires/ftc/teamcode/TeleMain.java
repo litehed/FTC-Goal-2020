@@ -16,7 +16,6 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.commands.Com_Intake;
@@ -110,6 +109,7 @@ public class TeleMain extends CommandOpMode {
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
         //Subsystems and Commands
+        drive = new MecanumDriveSubsystem(new SampleMecanumDrive(hardwareMap), false);
         driveSystem = new DriveSystem(fL, fR, bL, bR);
         driveCommand = new Com_Drive(driveSystem, m_driverOp::getLeftX, () -> -m_driverOp.getLeftY(),
                 m_driverOp::getRightX, ()->mult);
