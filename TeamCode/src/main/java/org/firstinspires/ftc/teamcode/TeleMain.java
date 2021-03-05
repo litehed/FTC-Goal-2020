@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
@@ -25,7 +24,6 @@ import org.firstinspires.ftc.teamcode.commands.Com_PickUp;
 import org.firstinspires.ftc.teamcode.commands.Com_PutDown;
 import org.firstinspires.ftc.teamcode.commands.Com_Shooter;
 import org.firstinspires.ftc.teamcode.commands.drive.Com_Drive;
-import org.firstinspires.ftc.teamcode.commands.groups.SequentialShooter;
 import org.firstinspires.ftc.teamcode.commands.rr.TrajectoryFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.rr.TurnCommand;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -113,7 +111,7 @@ public class TeleMain extends CommandOpMode {
         //Subsystems and Commands
         drive = new MecanumDriveSubsystem(new SampleMecanumDrive(hardwareMap), false);
         driveSystem = new DriveSystem(fL, fR, bL, bR);
-        driveCommand = new Com_Drive(driveSystem, m_driverOp::getLeftX, m_driverOp::getLeftY,
+        driveCommand = new Com_Drive(driveSystem, m_driverOp::getLeftX, () -> -m_driverOp.getLeftY(),
                 m_driverOp::getRightX, ()->mult);
 
         shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, voltageSensor);

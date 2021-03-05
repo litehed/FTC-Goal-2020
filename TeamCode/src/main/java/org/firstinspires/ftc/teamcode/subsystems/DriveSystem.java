@@ -4,7 +4,6 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class DriveSystem extends SubsystemBase {
     private MecanumDrive drive;
@@ -21,6 +20,7 @@ public class DriveSystem extends SubsystemBase {
         bR = backR;
         fieldCentric = false;
         drive = new MecanumDrive(fL, fR, bL, bR);
+        drive.setRightSideInverted(true);
     }
     public DriveSystem(Motor frontL, Motor frontR, Motor backL, Motor backR, RevIMU revimu){
         fL = frontL;
