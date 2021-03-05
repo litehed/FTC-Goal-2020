@@ -84,6 +84,17 @@ public class TeleMain extends CommandOpMode {
         bL.motor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
+    public void useEncoders(){
+        fL.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fR.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bL.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bR.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        fL.motor.setDirection(DcMotorSimple.Direction.REVERSE);
+        bL.motor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+    }
+
     @Override
     public void initialize() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -159,7 +170,7 @@ public class TeleMain extends CommandOpMode {
                 .toggleWhenPressed(()->mult = 0.75, ()->mult = 1.0);
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.BACK)
-                .toggleWhenPressed(new InstantCommand(this::createDrive).andThen(
+                .toggleWhenPressed(new InstantCommand(this::useEncoders).andThen(
                         autoPowershotsCommand = new SequentialCommandGroup(
                         new InstantCommand(()->drive.setPoseEstimate(new Pose2d(63, -10, Math.toRadians(180)))),
                         new TrajectoryFollowerCommand(drive, drive.trajectoryBuilder(drive.getPoseEstimate(), true)
