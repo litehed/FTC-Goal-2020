@@ -17,6 +17,7 @@ import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.commands.Com_Intake;
@@ -69,6 +70,20 @@ public class TeleMain extends CommandOpMode {
     private VoltageSensor voltageSensor;
     public double mult = 1.0;
 
+    public void createDrive(){
+        drive = new MecanumDriveSubsystem(new SampleMecanumDrive(hardwareMap), false);
+    }
+
+    public void resetMotors(){
+        fL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        bL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        bR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        fL.motor.setDirection(DcMotorSimple.Direction.FORWARD);
+        bL.motor.setDirection(DcMotorSimple.Direction.FORWARD);
+    }
+
     @Override
     public void initialize() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -111,7 +126,6 @@ public class TeleMain extends CommandOpMode {
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
         //Subsystems and Commands
-        drive = new MecanumDriveSubsystem(new SampleMecanumDrive(hardwareMap), false);
         driveSystem = new DriveSystem(fL, fR, bL, bR);
         driveCommand = new Com_Drive(driveSystem, m_driverOp::getLeftX, m_driverOp::getLeftY,
                 m_driverOp::getRightX, ()->mult);
@@ -135,15 +149,16 @@ public class TeleMain extends CommandOpMode {
         putDownCommand = new Com_PutDown(wobbleSystem);
 
         autoPowershotsCommand = new SequentialCommandGroup(
+
                 new InstantCommand(()->drive.setPoseEstimate(new Pose2d(63, -10, Math.toRadians(180)))),
                 new TrajectoryFollowerCommand(drive, drive.trajectoryBuilder(drive.getPoseEstimate())
                         .lineToConstantHeading(new Vector2d(0, -28.0))
                         .build()),
                 new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
-                new TurnCommand(drive, Math.toRadians(-10))
+                new TurnCommand(drive, Math.toRadians(-6))
                     .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(350)),
                 new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
-                new TurnCommand(drive, Math.toRadians(-10))
+                new TurnCommand(drive, Math.toRadians(-6))
                         .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(350)),
                 new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
                 new InstantCommand(shooterSystem::homePos)
@@ -157,9 +172,10 @@ public class TeleMain extends CommandOpMode {
                 .toggleWhenPressed(()->mult = 0.75, ()->mult = 1.0);
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.BACK)
-                .toggleWhenPressed(autoPowershotsCommand, new InstantCommand(()->{
+                .toggleWhenPressed(autoPowershotsCommand.beforeStarting(this::createDrive), new InstantCommand(()->{
                         autoPowershotsCommand.cancel();
                         shooterSystem.homePos();
+                        resetMotors();
                 }));
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(shooterCommand);
