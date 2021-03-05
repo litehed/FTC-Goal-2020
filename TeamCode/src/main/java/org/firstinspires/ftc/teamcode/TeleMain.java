@@ -111,8 +111,8 @@ public class TeleMain extends CommandOpMode {
         //Subsystems and Commands
         drive = new MecanumDriveSubsystem(new SampleMecanumDrive(hardwareMap), false);
         driveSystem = new DriveSystem(fL, fR, bL, bR);
-        driveCommand = new Com_Drive(driveSystem, m_driverOp::getLeftX, () -> -m_driverOp.getLeftY(),
-                m_driverOp::getRightX, ()->mult);
+        driveCommand = new Com_Drive(driveSystem, m_driverOp::getLeftX, () -> -m_driverOp.getRightX(),
+                () -> -m_driverOp.getLeftY(), ()->mult);
 
         shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, voltageSensor);
         shooterCommand = new Com_Shooter(shooterSystem);

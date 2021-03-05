@@ -20,7 +20,6 @@ public class DriveSystem extends SubsystemBase {
         bR = backR;
         fieldCentric = false;
         drive = new MecanumDrive(fL, fR, bL, bR);
-        drive.setRightSideInverted(true);
     }
     public DriveSystem(Motor frontL, Motor frontR, Motor backL, Motor backR, RevIMU revimu){
         fL = frontL;
