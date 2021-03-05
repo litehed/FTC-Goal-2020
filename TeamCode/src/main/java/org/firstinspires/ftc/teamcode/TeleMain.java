@@ -159,14 +159,14 @@ public class TeleMain extends CommandOpMode {
                         }, driveSystem),
                         new InstantCommand(()->drive.setPoseEstimate(new Pose2d(63, -10, Math.toRadians(180)))),
                         new TrajectoryFollowerCommand(drive, drive.trajectoryBuilder(new Pose2d(63, -10, Math.toRadians(180)), true)
-                                .lineToConstantHeading(new Vector2d(0, -28.0))
+                                .lineToConstantHeading(new Vector2d(0, -22.0))
                                 .build()),
                         new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
                         new TurnCommand(drive, Math.toRadians(-6))
-                                .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(350)),
+                                .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(500)),
                         new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
                         new TurnCommand(drive, Math.toRadians(-6))
-                                .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(350)),
+                                .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(500)),
                         new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
                         new InstantCommand(shooterSystem::homePos),
                         new InstantCommand(() -> {
