@@ -2,10 +2,14 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.RevIMU;
@@ -22,8 +26,12 @@ import org.firstinspires.ftc.teamcode.commands.Com_PutDown;
 import org.firstinspires.ftc.teamcode.commands.Com_Shooter;
 import org.firstinspires.ftc.teamcode.commands.drive.Com_Drive;
 import org.firstinspires.ftc.teamcode.commands.groups.SequentialShooter;
+import org.firstinspires.ftc.teamcode.commands.rr.TrajectoryFollowerCommand;
+import org.firstinspires.ftc.teamcode.commands.rr.TurnCommand;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
 import org.firstinspires.ftc.teamcode.util.TimedAction;
@@ -37,6 +45,7 @@ public class TeleMain extends CommandOpMode {
 
     //Subsystems
     private DriveSystem driveSystem;
+    private MecanumDriveSubsystem drive;
     private ShooterSubsystem shooterSystem;
     private IntakeSubsystem intakeSystem;
     private WobbleSubsystem wobbleSystem;
@@ -48,9 +57,8 @@ public class TeleMain extends CommandOpMode {
     private Com_Outtake outtakeCommand;
     private Com_PickUp pickUpCommand;
     private Com_PutDown putDownCommand;
-    private SequentialShooter shootCommandGroup;
     private InstantCommand grabberCommand;
-    private RunCommand runFlyWheelCommand;
+    private SequentialCommandGroup autoPowershotsCommand;
 
     //Extranious
     private GamepadEx m_driverOp;
@@ -60,7 +68,6 @@ public class TeleMain extends CommandOpMode {
     private TimedAction flickerAction;
     private VoltageSensor voltageSensor;
     public double mult = 1.0;
-    public double pwerShot = 1.0;
 
     @Override
     public void initialize() {
@@ -102,14 +109,15 @@ public class TeleMain extends CommandOpMode {
 
         //I DEMAND LEDS >:(
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
+
         //Subsystems and Commands
+        drive = new MecanumDriveSubsystem(new SampleMecanumDrive(hardwareMap), false);
         driveSystem = new DriveSystem(fL, fR, bL, bR);
         driveCommand = new Com_Drive(driveSystem, m_driverOp::getLeftX, m_driverOp::getLeftY,
                 m_driverOp::getRightX, ()->mult);
 
         shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, voltageSensor);
         shooterCommand = new Com_Shooter(shooterSystem);
-        runFlyWheelCommand = new RunCommand(shooterSystem::shoot);
 
         intakeSystem = new IntakeSubsystem(intakeA, intakeB);
         intakeCommand = new Com_Intake(intakeSystem);
@@ -122,8 +130,24 @@ public class TeleMain extends CommandOpMode {
             else
                 wobbleSystem.closeGrabber();
             }, wobbleSystem);
+
         pickUpCommand = new Com_PickUp(wobbleSystem);
         putDownCommand = new Com_PutDown(wobbleSystem);
+
+        autoPowershotsCommand = new SequentialCommandGroup(
+                new InstantCommand(()->drive.setPoseEstimate(new Pose2d(63, -10, Math.toRadians(180)))),
+                new TrajectoryFollowerCommand(drive, drive.trajectoryBuilder(drive.getPoseEstimate())
+                        .lineToConstantHeading(new Vector2d(0, -28.0))
+                        .build()),
+                new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
+                new TurnCommand(drive, Math.toRadians(10))
+                    .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(350)),
+                new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
+                new TurnCommand(drive, Math.toRadians(10))
+                        .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(350)),
+                new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
+                new InstantCommand(shooterSystem::homePos)
+        );
 
 //       Old Method no longer necessary:
 //        slowDrive = new GamepadButton(m_driverOp, GamepadKeys.Button.Y)
@@ -133,7 +157,10 @@ public class TeleMain extends CommandOpMode {
                 .toggleWhenPressed(()->mult = 0.75, ()->mult = 1.0);
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.BACK)
-                .toggleWhenPressed(()->pwerShot = 0.90,()->pwerShot = 1.0);
+                .toggleWhenPressed(autoPowershotsCommand, new InstantCommand(()->{
+                        autoPowershotsCommand.cancel();
+                        shooterSystem.homePos();
+                }));
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(shooterCommand);
 

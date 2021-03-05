@@ -74,6 +74,11 @@ public class ShooterSubsystem extends SubsystemBase {
         if (!timedAction.running())
             timedAction.reset();
     }
+
+    public void flickPos(){
+        flicker.setPosition(0.9);
+    }
+
     public void homePos(){
         flicker.setPosition(0.55);
     }
