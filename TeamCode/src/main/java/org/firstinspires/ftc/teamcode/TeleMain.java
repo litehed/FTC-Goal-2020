@@ -175,7 +175,7 @@ public class TeleMain extends CommandOpMode {
                         autoPowershotsCommand.cancel();
                         shooterSystem.homePos();
                         resetMotors();
-                }));
+                })));
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(shooterCommand);
 
