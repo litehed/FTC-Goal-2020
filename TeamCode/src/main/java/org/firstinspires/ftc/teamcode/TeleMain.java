@@ -85,6 +85,11 @@ public class TeleMain extends CommandOpMode {
     }
 
     public void useEncoders(){
+        fL.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bL.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fR.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bR.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         fL.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         fR.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bL.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
