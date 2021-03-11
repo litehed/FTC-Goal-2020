@@ -38,7 +38,7 @@ public class DriveSystem extends SubsystemBase {
     //Strafe Speed, Forward Speed, and Turn Speed
     public void drive(double strfSpd, double fSpd, double trnSpd){
         if(!fieldCentric)
-            drive.driveRobotCentric(-strfSpd, -fSpd, -trnSpd*0.85, true);
+            drive.driveRobotCentric(-strfSpd, -fSpd, -trnSpd, true);
         else
             drive.driveFieldCentric(-strfSpd, -fSpd, -trnSpd, imu.getHeading(), true);
     }
