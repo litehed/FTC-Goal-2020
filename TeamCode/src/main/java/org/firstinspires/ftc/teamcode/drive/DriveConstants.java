@@ -54,10 +54,10 @@ public class DriveConstants {
      * inches.
      */
     // Actual times 0.90 - 0.95 /2
-    public static double MAX_VEL = 76.220574833;
-    public static double MAX_ACCEL = 76.220574833;
-    public static double MAX_ANG_VEL = Math.toRadians(272.944828125);
-    public static double MAX_ANG_ACCEL = Math.toRadians(272.944828125);
+    public static double MAX_VEL = 55.0;
+    public static double MAX_ACCEL = 60.0;
+    public static double MAX_ANG_VEL = Math.toRadians(180.0);
+    public static double MAX_ANG_ACCEL = Math.toRadians(180.0);
 
 
     public static double encoderTicksToInches(double ticks) {
