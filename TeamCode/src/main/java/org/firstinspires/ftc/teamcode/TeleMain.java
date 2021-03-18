@@ -36,6 +36,7 @@ import org.firstinspires.ftc.teamcode.util.TimedAction;
 
 @TeleOp(name="KekW")
 public class TeleMain extends CommandOpMode {
+
     //Servos and Motors
     private Motor fL, fR, bL, bR;
     private Motor flyWheel, intakeA, intakeB, arm;
@@ -119,7 +120,7 @@ public class TeleMain extends CommandOpMode {
         bR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         driveSystem = new DriveSystem(fL, fR, bL, bR);
-        driveCommand = new Com_Drive(driveSystem, m_driverOp::getLeftX, m_driverOp::getLeftY, m_driverOp::getRightX, ()->mult);
+        driveCommand = new Com_Drive(driveSystem, m_driverOp::getLeftX, m_driverOp::getLeftY, m_driverOp::getRightX);
 
         shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, voltageSensor);
         shooterCommand = new Com_Shooter(shooterSystem);
@@ -142,9 +143,6 @@ public class TeleMain extends CommandOpMode {
 //       Old Method no longer necessary:
 //        slowDrive = new GamepadButton(m_driverOp, GamepadKeys.Button.Y)
 //                .toggleWhenPressed(()->mult = 0.5, ()->mult = 1.0);
-
-        m_driverOp.getGamepadButton(GamepadKeys.Button.Y)
-                .toggleWhenPressed(()->mult = 0.75, ()->mult = 1.0);
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.BACK)
                 .toggleWhenPressed(
