@@ -79,6 +79,7 @@ public class TeleMain extends CommandOpMode {
 
         flyWheel = new Motor(hardwareMap, "shoot");
         flyWheel.resetEncoder();
+        flyWheel.setInverted(true);
         intakeA = new Motor(hardwareMap, "intakeA");
         intakeB = new Motor(hardwareMap, "intakeB", Motor.GoBILDA.RPM_312);
         intakeB.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
