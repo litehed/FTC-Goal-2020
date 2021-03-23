@@ -12,6 +12,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.hardware.motors.MotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Config
 @Autonomous
@@ -38,7 +39,7 @@ public class SingleMotorPID extends CommandOpMode {
 
         motor = new  Motor(hardwareMap, "shoot");
         motor.setRunMode(Motor.RunMode.VelocityControl);
-        motor.setInverted(true);
+        motor.motor.setDirection(DcMotorSimple.Direction.REVERSE);
         gamepad = new GamepadEx(gamepad1);
 
         mode = Mode.TUNING_MODE;

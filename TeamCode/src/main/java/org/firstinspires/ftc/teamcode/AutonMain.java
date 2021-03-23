@@ -7,10 +7,12 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
+import com.arcrobotics.ftclib.hardware.RevIMU;
 import com.arcrobotics.ftclib.hardware.SimpleServo;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -74,6 +76,7 @@ public class AutonMain extends CommandOpMode {
         time = new ElapsedTime();
 
         flyWheel = new Motor(hardwareMap, "shoot");
+        flyWheel.motor.setDirection(DcMotorSimple.Direction.REVERSE);
         flicker = new SimpleServo(hardwareMap, "flicker", 0, 270);
 
         flickerAction = new TimedAction(
