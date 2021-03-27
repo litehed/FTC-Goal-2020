@@ -55,7 +55,7 @@ public class DriveConstants {
      */
     // Actual times 0.90 - 0.95 /2
     public static double MAX_VEL = 55.0;
-    public static double MAX_ACCEL = 60.0;
+    public static double MAX_ACCEL = 50.0;
     public static double MAX_ANG_VEL = Math.toRadians(180.0);
     public static double MAX_ANG_ACCEL = Math.toRadians(180.0);
 
