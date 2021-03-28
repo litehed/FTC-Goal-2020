@@ -102,9 +102,9 @@ public class TeleMain extends CommandOpMode {
 
         //FlickerAction
         flickerAction = new TimedAction(
-                ()-> flicker.setPosition(0.90),
-                ()-> flicker.setPosition(0.55),
-                200,
+                ()-> flicker.setPosition(0.37),
+                ()-> flicker.setPosition(0.6),
+                150,
                 true
         );
 

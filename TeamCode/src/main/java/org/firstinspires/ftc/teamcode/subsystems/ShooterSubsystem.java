@@ -76,11 +76,11 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void flickPos(){
-        flicker.setPosition(0.9);
+        flicker.setPosition(0.6);
     }
 
     public void homePos(){
-        flicker.setPosition(0.55);
+        flicker.setPosition(0.37);
     }
 
     public void setRunMode(Motor.RunMode runMode){
