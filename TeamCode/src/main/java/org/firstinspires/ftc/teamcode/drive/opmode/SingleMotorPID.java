@@ -71,7 +71,7 @@ public class SingleMotorPID extends CommandOpMode {
                 ()-> flicker.setPosition(0.37),
                 ()-> flicker.setPosition(0.6),
                 100,
-                200
+                true
         );
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();

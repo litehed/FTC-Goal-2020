@@ -117,7 +117,6 @@ public class TeleMain extends CommandOpMode {
         bL.motor.setDirection(DcMotor.Direction.FORWARD);
 
         fL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        fR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         bL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         bR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -150,12 +149,11 @@ public class TeleMain extends CommandOpMode {
                 .toggleWhenPressed(
                         autoPowershotsCommand = new SequentialCommandGroup(
                         new InstantCommand(() -> {
-                            fL.motor.setDirection(DcMotor.Direction.REVERSE);
-                            bL.motor.setDirection(DcMotor.Direction.REVERSE);
-                            fL.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                            fR.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                            bL.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                            bR.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//                            fL.motor.setDirection(DcMotor.Direction.REVERSE);
+////                            bL.motor.setDirection(DcMotor.Direction.REVERSE);
+////                            fL.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+////                            bL.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+////                            bR.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                         }, driveSystem),
                         new InstantCommand(()->drive.setPoseEstimate(new Pose2d(63, -10, Math.toRadians(180)))),
                         new TrajectoryFollowerCommand(drive, drive.trajectoryBuilder(new Pose2d(63, -10, Math.toRadians(180)), true)
@@ -170,22 +168,20 @@ public class TeleMain extends CommandOpMode {
                         new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
                         new InstantCommand(shooterSystem::homePos),
                         new InstantCommand(() -> {
-                            fL.motor.setDirection(DcMotor.Direction.FORWARD);
-                            bL.motor.setDirection(DcMotor.Direction.FORWARD);
-                            fL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                            fR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                            bL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                            bR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//                            fL.motor.setDirection(DcMotor.Direction.FORWARD);
+//                            bL.motor.setDirection(DcMotor.Direction.FORWARD);
+//                            fL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//                            bL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//                            bR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                         })
                 ), new InstantCommand(()->{
                         autoPowershotsCommand.cancel();
                         shooterSystem.homePos();
-                        fL.motor.setDirection(DcMotor.Direction.FORWARD);
-                        bL.motor.setDirection(DcMotor.Direction.FORWARD);
-                        fL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                        fR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                        bL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                        bR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//                        fL.motor.setDirection(DcMotor.Direction.FORWARD);
+//                        bL.motor.setDirection(DcMotor.Direction.FORWARD);
+//                        fL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//                        bL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//                        bR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 }));
 
         m_driverOp.getGamepadButton(GamepadKeys.Button.A).whenHeld(shooterCommand);
