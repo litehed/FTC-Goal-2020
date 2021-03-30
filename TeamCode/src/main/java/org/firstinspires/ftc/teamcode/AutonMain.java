@@ -82,7 +82,7 @@ public class AutonMain extends CommandOpMode {
         flickerAction = new TimedAction(
                 ()-> flicker.setPosition(0.37),
                 ()-> flicker.setPosition(0.6),
-                100,
+                150,
                 true
         );
 

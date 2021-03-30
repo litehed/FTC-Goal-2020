@@ -24,7 +24,7 @@ public class FourRing extends SequentialCommandGroup {
 
     public static double traj1X = -20.0, traj1Y = -51.0, traj1H = 190.0;
     public static double traj2X = -24.0, traj2Y = -62.0, traj2H = 90.0;
-    public static double traj3X = -26.0, traj3Y = -42.0;
+    public static double traj3X = -26.0, traj3Y = -32.0;
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
 
@@ -59,7 +59,7 @@ public class FourRing extends SequentialCommandGroup {
         addCommands(
                 new TrajectoryFollowerCommand(drive, traj0),
                 new TrajectoryFollowerCommand(drive, traj1),
-                new RapidFireCommand(shooter, 3),
+                new RapidFireCommand(shooter),
                 new TrajectoryFollowerCommand(drive, traj2),
                 new ParallelDeadlineGroup(
                     new TrajectoryFollowerCommand(drive, traj3),
