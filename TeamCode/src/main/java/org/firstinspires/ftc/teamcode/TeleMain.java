@@ -151,9 +151,14 @@ public class TeleMain extends CommandOpMode {
                         new InstantCommand(() -> {
                             fL.motor.setDirection(DcMotor.Direction.REVERSE);
                             bL.motor.setDirection(DcMotor.Direction.REVERSE);
+
                             fL.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                             bR.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                            fR.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                            bL.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                            fL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                            bR.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                            bL.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                         }, driveSystem),
                         new InstantCommand(()->drive.setPoseEstimate(new Pose2d(63, -10, Math.toRadians(180)))),
                         new TrajectoryFollowerCommand(drive, drive.trajectoryBuilder(new Pose2d(63, -10, Math.toRadians(180)), true)
