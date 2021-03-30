@@ -31,12 +31,16 @@ public class FourRing extends SequentialCommandGroup {
     public FourRing(MecanumDriveSubsystem drive, WobbleSubsystem wobbleSystem, ShooterSubsystem shooter,
                     IntakeSubsystem intakeSystem){
         drive.setPoseEstimate(startPose);
+
         Trajectory traj0 = drive.trajectoryBuilder(startPose)
                 .back(1.0)
+                .build();
+
+        Trajectory trajHalf = drive.trajectoryBuilder(traj0.end())
                 .strafeLeft(14.5)
                 .build();
 
-        Trajectory traj1 = drive.trajectoryBuilder(traj0.end())
+        Trajectory traj1 = drive.trajectoryBuilder(trajHalf.end())
                 .lineToLinearHeading(new Pose2d(traj1X, traj1Y, Math.toRadians(traj1H)))
                 .build();
 
