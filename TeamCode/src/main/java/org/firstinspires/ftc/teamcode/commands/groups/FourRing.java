@@ -22,8 +22,9 @@ import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
 @Config
 public class FourRing extends SequentialCommandGroup {
 
-    public static double boxTwoX = 45.0, boxTwoY = 0.0;
-    public static double finalX = -8.8, finalY = -1.0;
+    public static double traj1X = -20.0, traj1Y = -51.0, traj1H = -20.0;
+    public static double traj2X = -20.0, traj2Y = -62.0, traj2H = 90.0;
+    public static double traj3X = -22.0, traj3Y = -42.0;
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
 
@@ -35,15 +36,15 @@ public class FourRing extends SequentialCommandGroup {
                 .build();
 
         Trajectory traj1 = drive.trajectoryBuilder(traj0.end())
-                .lineToLinearHeading(new Pose2d(-20.0, -51.0, Math.toRadians(20.0)))
+                .lineToLinearHeading(new Pose2d(traj1X, traj1Y, Math.toRadians(traj1H)))
                 .build();
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end(), traj1.end().getHeading())
-                .splineToLinearHeading(new Pose2d(-20.0, -62.0, Math.toRadians(90.0)), 0.0)
+                .splineToLinearHeading(new Pose2d(traj2X, traj2Y, Math.toRadians(traj2H)), 0.0)
                 .build();
 
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end(), traj2.end().getHeading())
-                .lineToConstantHeading(new Vector2d(-22.0, -42.0))
+                .lineToConstantHeading(new Vector2d(traj3X, traj3Y))
                 .build();
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
@@ -53,7 +54,7 @@ public class FourRing extends SequentialCommandGroup {
         addCommands(
                 new TrajectoryFollowerCommand(drive, traj0),
                 new TrajectoryFollowerCommand(drive, traj1),
-                new RapidFireCommand(shooter),
+                new RapidFireCommand(shooter, 5),
                 new TrajectoryFollowerCommand(drive, traj2),
                 new ParallelDeadlineGroup(
                     new TrajectoryFollowerCommand(drive, traj3),
