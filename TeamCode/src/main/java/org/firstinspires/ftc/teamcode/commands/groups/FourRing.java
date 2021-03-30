@@ -22,8 +22,8 @@ import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
 @Config
 public class FourRing extends SequentialCommandGroup {
 
-    public static double traj1X = -20.0, traj1Y = -51.0, traj1H = 80.0;
-    public static double traj2X = -20.0, traj2Y = -62.0, traj2H = 90.0;
+    public static double traj1X = -20.0, traj1Y = -51.0, traj1H = 190.0;
+    public static double traj2X = -24.0, traj2Y = -62.0, traj2H = 90.0;
     public static double traj3X = -26.0, traj3Y = -42.0;
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
@@ -32,6 +32,7 @@ public class FourRing extends SequentialCommandGroup {
                     IntakeSubsystem intakeSystem){
         drive.setPoseEstimate(startPose);
         Trajectory traj0 = drive.trajectoryBuilder(startPose)
+                .back(1.0)
                 .strafeLeft(14.5)
                 .build();
 
