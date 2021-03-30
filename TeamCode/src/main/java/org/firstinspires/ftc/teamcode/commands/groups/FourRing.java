@@ -22,9 +22,9 @@ import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
 @Config
 public class FourRing extends SequentialCommandGroup {
 
-    public static double traj1X = -20.0, traj1Y = -51.0, traj1H = -20.0;
+    public static double traj1X = -20.0, traj1Y = -51.0, traj1H = 80.0;
     public static double traj2X = -20.0, traj2Y = -62.0, traj2H = 90.0;
-    public static double traj3X = -22.0, traj3Y = -42.0;
+    public static double traj3X = -26.0, traj3Y = -42.0;
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
 
@@ -47,20 +47,19 @@ public class FourRing extends SequentialCommandGroup {
                 .lineToConstantHeading(new Vector2d(traj3X, traj3Y))
                 .build();
 
-        Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
-                .strafeRight(10.0)
-                .build();
+//        Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
+//                .strafeRight(10.0)
+//                .build();
 
         addCommands(
                 new TrajectoryFollowerCommand(drive, traj0),
                 new TrajectoryFollowerCommand(drive, traj1),
-                new RapidFireCommand(shooter, 5),
+                new RapidFireCommand(shooter, 3),
                 new TrajectoryFollowerCommand(drive, traj2),
                 new ParallelDeadlineGroup(
                     new TrajectoryFollowerCommand(drive, traj3),
                     new InstantCommand(intakeSystem::start)
-                ),
-                new TrajectoryFollowerCommand(drive, traj4)
+                )
         );
     }
 }
