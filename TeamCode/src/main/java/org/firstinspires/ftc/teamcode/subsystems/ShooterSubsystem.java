@@ -18,8 +18,8 @@ public class ShooterSubsystem extends SubsystemBase {
     private Motor flywheel;
     private SimpleServo flicker;
     private TimedAction timedAction;
-    public static double kP = 1.2, kI = 0.0, kD = 0.005;
-    public static double kS = 0.0, kV = 1.4;
+    public static double kP = 1.8, kI = 0.0, kD = 0.07;
+    public static double kS = 0.0, kV = 1.5;
     public static DoubleSupplier shooterSpeed;
 
     public ShooterSubsystem(Motor flywheel, SimpleServo flicker, TimedAction timedAction,
@@ -28,7 +28,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
         this.flywheel.setRunMode(Motor.RunMode.VelocityControl);
         this.flywheel.setVeloCoefficients(kP, kI, kD);
-        this.flywheel.setFeedforwardCoefficients(kS, kV * 12 / voltageSensor.getVoltage());
+        this.flywheel.setFeedforwardCoefficients(kS, kV);
 
         this.flicker = flicker;
         this.timedAction = timedAction;

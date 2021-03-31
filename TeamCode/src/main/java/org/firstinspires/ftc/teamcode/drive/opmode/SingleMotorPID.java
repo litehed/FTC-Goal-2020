@@ -31,7 +31,7 @@ public class SingleMotorPID extends CommandOpMode {
         TUNING_MODE
     }
 
-    public static double kP = 1.1, kI = 0, kD = 0.05, kS = 0, kV = 1.4;
+    public static double kP = 11, kI = 0, kD = 0.1, kS = 0, kV = 1.65;
 
     private GamepadEx gamepad;
     private Motor motor;
@@ -70,7 +70,7 @@ public class SingleMotorPID extends CommandOpMode {
         flickerAction = new TimedAction(
                 ()-> flicker.setPosition(0.37),
                 ()-> flicker.setPosition(0.6),
-                100,
+                115,
                 true
         );
 
