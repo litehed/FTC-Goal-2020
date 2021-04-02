@@ -22,11 +22,10 @@ import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
 @Config
 public class FourRing extends SequentialCommandGroup {
 
-    public static double traj1X = -31.0, traj1Y = -55.0, traj1H = 202.0;
-    public static double traj2X = 60.0, traj2Y = -55.0;
-    public static double traj3X = -25.0, traj3Y = -44.0;
-    public static double traj4D = 14.0;
-    public static double traj5X = 0.0, traj5Y = 21.0;
+    public static double traj1X = 44.0, traj1Y = -54.0;
+    public static double traj2X = -27.0, traj2Y = -22.0, traj2H = 190.0;
+    public static double traj3D = 14.0;
+    public static double traj4X = 0.0, traj4Y = 21.0;
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
 
@@ -43,39 +42,38 @@ public class FourRing extends SequentialCommandGroup {
                 .build();
 
         Trajectory traj1 = drive.trajectoryBuilder(trajHalf.end())
-                .lineToLinearHeading(new Pose2d(traj1X, traj1Y, Math.toRadians(traj1H)))
+                .back(2.0)
+                .splineToConstantHeading(new Vector2d(traj1X, traj1Y),0.0)
                 .build();
 
-        Trajectory traj2 = drive.trajectoryBuilder(traj1.end(), traj1.end().getHeading())
-                .lineToConstantHeading(new Vector2d(traj2X, traj2Y))
+        Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
+                .splineToSplineHeading(new Pose2d(-5.0, -20.0, Math.toRadians(traj2H)), 0.0)
+                .splineToConstantHeading(new Vector2d(traj2X, traj2Y), 0.0)
                 .build();
-
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
-                .splineToConstantHeading(new Vector2d(traj3X, traj3Y), 0.0)
+                .forward(traj3D)
                 .build();
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
-                .forward(traj4D)
-                .build();
-        Trajectory traj5 = drive.trajectoryBuilder(traj4.end())
-                .forward(traj5Y)
+                .forward(traj4Y)
                 .build();
 
-//        Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
-//                .strafeRight(10.0)
-//                .build();
 
         addCommands(
                 new TrajectoryFollowerCommand(drive, traj0),
-                new TrajectoryFollowerCommand(drive, trajHalf),
-                new TrajectoryFollowerCommand(drive, traj1),
-                new RapidFireCommand(shooter),
-                new TrajectoryFollowerCommand(drive, traj2),
                 new ParallelDeadlineGroup(
-                    new TrajectoryFollowerCommand(drive, traj3),
-                    new InstantCommand(intakeSystem::start)
+                        new TrajectoryFollowerCommand(drive, trajHalf),
+                        new Com_PutDown(wobbleSystem)
                 ),
-                new TrajectoryFollowerCommand(drive, traj4),
-                new TrajectoryFollowerCommand(drive, traj5)
+                new TrajectoryFollowerCommand(drive, traj1),
+                new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
+                new WaitCommand(500),
+                new ParallelDeadlineGroup(
+                        new TrajectoryFollowerCommand(drive, traj2),
+                        new Com_PickUp(wobbleSystem)
+                ),
+                new RapidFireCommand(shooter),
+                new TrajectoryFollowerCommand(drive, traj3)
+//                new TrajectoryFollowerCommand(drive, traj4)
         );
     }
 }
