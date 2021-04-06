@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.RunCommand;
 import com.arcrobotics.ftclib.command.SelectCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -105,9 +106,9 @@ public class AutonMain extends CommandOpMode {
         SequentialCommandGroup autonomous = new SequentialCommandGroup(
 //                new WaitUntilCommand(this::isStarted),  Jacksons favorite line of code
                 new SelectCommand(new HashMap<Object, Command>() {{
-                        put(VisionSystem.Size.ZERO, (new ZeroRing(drive, wobble, shooterSystem)));
-                        put(VisionSystem.Size.ONE, (new OneRing(drive, wobble, shooterSystem, intakeSystem)));
-                        put(VisionSystem.Size.FOUR, (new FourRing(drive, wobble, shooterSystem, intakeSystem)));
+                        put(VisionSystem.Size.ZERO, (new InstantCommand(()->ugContourRingDetector.camera.stopStreaming()).andThen(new ZeroRing(drive, wobble, shooterSystem))));
+                        put(VisionSystem.Size.ONE, (new InstantCommand(()->ugContourRingDetector.camera.stopStreaming()).andThen(new OneRing(drive, wobble, shooterSystem, intakeSystem))));
+                        put(VisionSystem.Size.FOUR, (new InstantCommand(()->ugContourRingDetector.camera.stopStreaming()).andThen(new FourRing(drive, wobble, shooterSystem, intakeSystem))));
                     }},()-> height)
         );
 
