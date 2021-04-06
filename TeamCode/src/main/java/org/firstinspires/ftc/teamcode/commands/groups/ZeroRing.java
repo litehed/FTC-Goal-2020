@@ -25,7 +25,7 @@ import java.util.Vector;
 @Config
 public class ZeroRing extends SequentialCommandGroup{
 
-    public static double secondWobbleX = -36.8, secondWobbleY = -24.0;
+    public static double secondWobbleX = -34.0, secondWobbleY = -18.5;
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
 
@@ -37,10 +37,10 @@ public class ZeroRing extends SequentialCommandGroup{
 
         Trajectory traj1 = drive.trajectoryBuilder(traj0.end())
                 .back(1.0)
-                .splineToConstantHeading(new Vector2d(1.0, -60.0), 0.0)
+                .splineToConstantHeading(new Vector2d(2.0, -60.0), 0.0)
                 .build();
 
-        Vector2d shootPose = traj1.end().vec().plus(new Vector2d(-25.0, 25.3));
+        Vector2d shootPose = traj1.end().vec().plus(new Vector2d(-21.0, 25.3));
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end(), true)
                 .lineToConstantHeading(shootPose)
@@ -78,7 +78,7 @@ public class ZeroRing extends SequentialCommandGroup{
                 new WaitCommand(500),
                 new Com_PickUp(wobbleSystem).raceWith(new WaitCommand(750)),
                 new TrajectoryFollowerCommand(drive, traj2),
-                new TurnCommand(drive, Math.toRadians(10)),
+                new TurnCommand(drive, Math.toRadians(15)),
                 new RapidFireCommand(shooter),
                 new ParallelDeadlineGroup(
                     new TrajectoryFollowerCommand(drive, traj3),

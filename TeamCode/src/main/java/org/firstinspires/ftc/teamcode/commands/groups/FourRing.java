@@ -4,27 +4,34 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
+import org.firstinspires.ftc.teamcode.commands.Com_Intake;
 import org.firstinspires.ftc.teamcode.commands.Com_PickUp;
 import org.firstinspires.ftc.teamcode.commands.Com_PutDown;
 import org.firstinspires.ftc.teamcode.commands.RapidFireCommand;
 import org.firstinspires.ftc.teamcode.commands.rr.TrajectoryFollowerCommand;
+import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.WobbleSubsystem;
 
+import java.util.Arrays;
+
 @Config
 public class FourRing extends SequentialCommandGroup {
 
-    public static double traj1X = 44.0, traj1Y = -54.0;
-    public static double traj2X = -27.0, traj2Y = -22.0, traj2H = 190.0;
-    public static double traj3D = 14.0;
+    public static double traj1X = 49.0, traj1Y = -55.0;
+    public static double traj2X = -18.0, traj2Y = -19.0, traj2H = 188.0;
     public static double traj4X = 0.0, traj4Y = 21.0;
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
@@ -50,11 +57,28 @@ public class FourRing extends SequentialCommandGroup {
                 .splineToSplineHeading(new Pose2d(-5.0, -20.0, Math.toRadians(traj2H)), 0.0)
                 .splineToConstantHeading(new Vector2d(traj2X, traj2Y), 0.0)
                 .build();
-        Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
-                .forward(traj3D)
+
+        Trajectory traj3 = drive.trajectoryBuilder(traj2.end(), traj2.end().getHeading())
+                .splineToConstantHeading(new Vector2d(-27.0, -5.0), 0.0)
                 .build();
-        Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
-                .forward(traj4Y)
+
+        Trajectory traj3Half = drive.trajectoryBuilder(traj3.end())
+                .lineToLinearHeading(new Pose2d(-27.0, traj2Y, Math.toRadians(-90.0)))
+                .build();
+
+        Trajectory traj4 = drive.trajectoryBuilder(traj3Half.end(), traj3Half.end().getHeading())
+                .forward(20.0)
+                .build();
+
+        Trajectory traj5 = drive.trajectoryBuilder(traj3Half.end())
+                //-40
+                .splineToConstantHeading(new Vector2d(-27.0, -30.0),0.0,
+                        new MinVelocityConstraint(Arrays.asList(
+                        new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
+                        new MecanumVelocityConstraint(40, DriveConstants.TRACK_WIDTH)
+                        )),
+                        new ProfileAccelerationConstraint(45)
+                )
                 .build();
 
 
@@ -72,8 +96,11 @@ public class FourRing extends SequentialCommandGroup {
                         new Com_PickUp(wobbleSystem)
                 ),
                 new RapidFireCommand(shooter),
-                new TrajectoryFollowerCommand(drive, traj3)
-//                new TrajectoryFollowerCommand(drive, traj4)
+                new TrajectoryFollowerCommand(drive, traj3),
+                new TrajectoryFollowerCommand(drive, traj3Half),
+//                new TrajectoryFollowerCommand(drive, traj4),
+                new InstantCommand(intakeSystem::start),
+                new TrajectoryFollowerCommand(drive, traj5)
         );
     }
 }
