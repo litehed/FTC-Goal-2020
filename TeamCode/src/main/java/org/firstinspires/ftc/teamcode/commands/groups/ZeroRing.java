@@ -40,7 +40,7 @@ public class ZeroRing extends SequentialCommandGroup{
                 .splineToConstantHeading(new Vector2d(2.0, -60.0), 0.0)
                 .build();
 
-        Vector2d shootPose = traj1.end().vec().plus(new Vector2d(-21.0, 25.3));
+        Vector2d shootPose = traj1.end().vec().plus(new Vector2d(-20.0, 25.3));
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end(), true)
                 .lineToConstantHeading(shootPose)

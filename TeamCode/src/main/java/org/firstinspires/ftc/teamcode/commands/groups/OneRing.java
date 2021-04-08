@@ -27,11 +27,9 @@ import java.time.Instant;
 public class OneRing extends SequentialCommandGroup {
 
     public static double xBox = 24.0, yBox = -40.0;
-    public static double shootPosX = -43.0, shootPosY = 24.0;
-    public static double secondWobbleX = -37.0, secondWobbleY = -17.5;
-    public static double finalX = -10.0, finalY = 0.0;
-    public static double backAmnt = 35.0;
-
+    public static double shootPosX = -42.0, shootPosY = 24.0;
+    public static double secondWobbleX = -35.5, secondWobbleY = -20.0;
+    public static double finalX = -5.0, finalY = 1.0;
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
 
@@ -68,22 +66,22 @@ public class OneRing extends SequentialCommandGroup {
                 .splineToLinearHeading(new Pose2d(-20.0,-20.0, 0.0), Math.toRadians(-90.0))
                 .build();
 
-        Trajectory trajAlmost4 = drive.trajectoryBuilder(traj3.end(), 0.0)
+        Trajectory trajAlmost4 = drive.trajectoryBuilder(traj3.end())
                 .splineToConstantHeading(new Vector2d(secondWobbleX, secondWobbleY), 0.0)
                 .build();
 
-        Trajectory traj4 = drive.trajectoryBuilder(trajAlmost4.end(), 0.0)
+        Trajectory traj4 = drive.trajectoryBuilder(trajAlmost4.end())
                 .lineToConstantHeading(traj3.end().vec().plus(new Vector2d(0, 8)))
-                .splineToSplineHeading((new Pose2d(0.0, -18, Math.toRadians(180.0))), Math.toRadians(-90.0))
+                .splineToSplineHeading((new Pose2d(0.0, -18, Math.toRadians(181.0))), Math.toRadians(-90.0))
                 .splineToConstantHeading(traj1.end().vec().plus(new Vector2d(finalX, finalY)), 0.0)
                 .build();
 
-        Trajectory traj5 = drive.trajectoryBuilder(traj4.end(), traj4.end().getHeading())
+        Trajectory traj5 = drive.trajectoryBuilder(traj4.end())
                 .splineToConstantHeading(traj4.end().vec().plus(new Vector2d(-35.0, 7.0)), 0.0)
                 .build();
 
-        Trajectory traj6 = drive.trajectoryBuilder(traj5.end(), Math.toRadians(10))
-                .splineToSplineHeading(traj4.end().plus(new Pose2d(-10.0, 0.0, 0.0)), 0.0)
+        Trajectory traj6 = drive.trajectoryBuilder(traj5.end())
+                .splineToSplineHeading(traj4.end().plus(new Pose2d(-10.0, 1.0, 0.0)), 0.0)
                 .build();
 
         addCommands(
@@ -96,7 +94,6 @@ public class OneRing extends SequentialCommandGroup {
                 new WaitCommand(800),
                 new Com_PickUp(wobbleSystem).raceWith(new WaitCommand(750)),
                 new TrajectoryFollowerCommand(drive, traj2),
-                new TurnCommand(drive, Math.toRadians(5.0)),
                 new RapidFireCommand(shooter),
                 new ParallelDeadlineGroup(
                         new TrajectoryFollowerCommand(drive, traj3),
@@ -118,8 +115,8 @@ public class OneRing extends SequentialCommandGroup {
                         new InstantCommand(intakeSystem::start)
                 ),
                 new WaitCommand(400).andThen(new InstantCommand(intakeSystem::stop)),
-                new TurnCommand(drive, Math.toRadians(10)),
-                new RapidFireCommand(shooter, 2),
+                new TurnCommand(drive, Math.toRadians(15.0)),
+                new RapidFireCommand(shooter, 1),
                 new TrajectoryFollowerCommand(drive, traj6)
         );
     }
