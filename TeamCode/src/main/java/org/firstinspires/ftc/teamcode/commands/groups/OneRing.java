@@ -26,10 +26,10 @@ import java.time.Instant;
 @Config
 public class OneRing extends SequentialCommandGroup {
 
-    public static double xBox = 24.0, yBox = -40.0;
-    public static double shootPosX = -42.0, shootPosY = 24.0;
-    public static double secondWobbleX = -35.5, secondWobbleY = -20.0;
-    public static double finalX = -5.0, finalY = 1.0;
+    public static double xBox = 26.0, yBox = -44.0;
+    public static double shootPosX = -38.0, shootPosY = 24.0;
+    public static double secondWobbleX = -33, secondWobbleY = -20.0;
+    public static double finalX = -5.5, finalY = 1.0;
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
 
@@ -62,7 +62,7 @@ public class OneRing extends SequentialCommandGroup {
 
 //        Vector2d secondWobble = traj2.end().vec().plus(new Vector2d(secWobblePosX, secWobblePosY));
 
-        Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
+        Trajectory traj3 = drive.trajectoryBuilder(traj2.end(), Math.toRadians(192.0))
                 .splineToLinearHeading(new Pose2d(-20.0,-20.0, 0.0), Math.toRadians(-90.0))
                 .build();
 
@@ -91,8 +91,9 @@ public class OneRing extends SequentialCommandGroup {
                 ),
                 new TrajectoryFollowerCommand(drive, traj1),
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
-                new WaitCommand(800),
+                new WaitCommand(700),
                 new Com_PickUp(wobbleSystem).raceWith(new WaitCommand(750)),
+                new TurnCommand(drive, Math.toRadians(12)),
                 new TrajectoryFollowerCommand(drive, traj2),
                 new RapidFireCommand(shooter),
                 new ParallelDeadlineGroup(
@@ -101,7 +102,7 @@ public class OneRing extends SequentialCommandGroup {
                 ),
                 new TrajectoryFollowerCommand(drive, trajAlmost4),
                 new InstantCommand(wobbleSystem::closeGrabber, wobbleSystem),
-                new WaitCommand(800),
+                new WaitCommand(700),
                 new ParallelDeadlineGroup(
                         new TrajectoryFollowerCommand(drive, traj4),
                         new Com_PickUp(wobbleSystem)
@@ -115,7 +116,7 @@ public class OneRing extends SequentialCommandGroup {
                         new InstantCommand(intakeSystem::start)
                 ),
                 new WaitCommand(400).andThen(new InstantCommand(intakeSystem::stop)),
-                new TurnCommand(drive, Math.toRadians(15.0)),
+                new TurnCommand(drive, Math.toRadians(10.0)),
                 new RapidFireCommand(shooter, 1),
                 new TrajectoryFollowerCommand(drive, traj6)
         );
