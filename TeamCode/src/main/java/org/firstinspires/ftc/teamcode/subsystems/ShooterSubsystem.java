@@ -42,7 +42,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
         this.flywheel.setRunMode(Motor.RunMode.VelocityControl);
         this.flywheel.setVeloCoefficients(kP, kI, kD);
-        this.flywheel.setFeedforwardCoefficients(kS, kV * 12 / voltageSensor.getVoltage());
+        this.flywheel.setFeedforwardCoefficients(kS, kV * 13.5 / voltageSensor.getVoltage());
 
         this.flicker = flicker;
         this.timedAction = timedAction;

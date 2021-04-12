@@ -88,7 +88,14 @@ public class FourRing extends SequentialCommandGroup {
                 .build();
 
         Trajectory traj7 = drive.trajectoryBuilder(traj6.end())
-                .splineToSplineHeading(new Pose2d(40.0, -63.0, Math.toRadians(180.0)),0.0,
+                .splineToSplineHeading(new Pose2d(20.0, -50.0, Math.toRadians(179.0)),0.0,
+                        new MinVelocityConstraint(Arrays.asList(
+                                new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
+                                new MecanumVelocityConstraint(55, DriveConstants.TRACK_WIDTH)
+                        )),
+                        new ProfileAccelerationConstraint(55)
+                )
+                .splineToConstantHeading(new Vector2d(40.0, -62.0), 0.0,
                         new MinVelocityConstraint(Arrays.asList(
                                 new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
                                 new MecanumVelocityConstraint(55, DriveConstants.TRACK_WIDTH)
@@ -121,8 +128,10 @@ public class FourRing extends SequentialCommandGroup {
                 ),
                 new TurnCommand(drive, Math.toRadians(10.0)),
                 new RapidFireCommand(shooter),
-                new InstantCommand(intakeSystem::start),
-                new TurnCommand(drive, Math.toRadians(0.0)),
+                new ParallelCommandGroup(
+                        new InstantCommand(intakeSystem::start),
+                        new TurnCommand(drive, Math.toRadians(-10.0))
+                ),
                 new TrajectoryFollowerCommand(drive, traj3),
                 new TrajectoryFollowerCommand(drive, traj4),
                 new InstantCommand(intakeSystem::stop),
