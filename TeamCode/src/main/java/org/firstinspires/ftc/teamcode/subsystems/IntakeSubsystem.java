@@ -25,5 +25,9 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeA.set(-0.75);
         intakeB.set(-1.0);
     }
+    public void autoIntake(){
+        intakeA.set(0.70);
+        intakeB.set(1.0);
+    }
 
 }

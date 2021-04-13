@@ -32,7 +32,7 @@ import java.util.Arrays;
 public class FourRing extends SequentialCommandGroup {
 
     public static double traj1X = 50.0, traj1Y = -65.0;
-    public static double traj2X = 0.0, traj2Y = -33.0, traj2H = 180.0;
+    public static double traj2X = 0.0, traj2Y = -36.0, traj2H = 180.0;
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
 
@@ -50,41 +50,41 @@ public class FourRing extends SequentialCommandGroup {
 
         Trajectory traj1 = drive.trajectoryBuilder(trajHalf.end())
                 .back(2.0)
-                .splineToConstantHeading(new Vector2d(traj1X, traj1Y),0.0)
+                .splineToSplineHeading(new Pose2d(traj1X, traj1Y, Math.toRadians(177.0)),0.0)
                 .build();
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
                 .splineToSplineHeading(new Pose2d(10.0, -30.0, Math.toRadians(traj2H)), 0.0)
                 .splineToConstantHeading(new Vector2d(traj2X, traj2Y), 0.0)
-                .splineToConstantHeading(new Vector2d(-10.0, -34.0), 0.0)
+                .splineToConstantHeading(new Vector2d(-10.0, -38.0), 0.0)
                 .build();
 
         //Shoots 3 and intake starts
 
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
-                .splineToConstantHeading(new Vector2d(-40.0, -35.0),0.0,
+                .splineToConstantHeading(new Vector2d(-35.0, -35.0),0.0,
                         new MinVelocityConstraint(Arrays.asList(
                                 new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
-                                new MecanumVelocityConstraint(35.0, DriveConstants.TRACK_WIDTH)
+                                new MecanumVelocityConstraint(25.0, DriveConstants.TRACK_WIDTH)
                         )),
-                        new ProfileAccelerationConstraint(30.0)
+                        new ProfileAccelerationConstraint(20.0)
                 )
                 .build();
 
         //goes to shooter position
 
         Trajectory traj4 = drive.trajectoryBuilder(traj3.end())
-                .lineToLinearHeading(new Pose2d(-15, -26, Math.toRadians(185.0)))
+                .lineToLinearHeading(new Pose2d(-14.5, -26, Math.toRadians(185.0)))
                 .build();
 
         //shoots and intake stops
 
         Trajectory traj5 = drive.trajectoryBuilder(traj4.end())
-                .splineToLinearHeading(new Pose2d(-25.0, -17.0, Math.toRadians(0.0)), 0.0)
+                .splineToLinearHeading(new Pose2d(-25.0, -20.0, Math.toRadians(0.0)), 0.0)
                 .build();
 
         Trajectory traj6 = drive.trajectoryBuilder(traj5.end())
-                .lineTo(new Vector2d(-33.0, -17.0))
+                .lineTo(new Vector2d(-33.0, -21.0))
                 .build();
 
         Trajectory traj7 = drive.trajectoryBuilder(traj6.end())
@@ -95,7 +95,7 @@ public class FourRing extends SequentialCommandGroup {
                         )),
                         new ProfileAccelerationConstraint(55)
                 )
-                .splineToConstantHeading(new Vector2d(40.0, -62.0), 0.0,
+                .splineToConstantHeading(new Vector2d(40.0, -63.0), 0.0,
                         new MinVelocityConstraint(Arrays.asList(
                                 new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
                                 new MecanumVelocityConstraint(55, DriveConstants.TRACK_WIDTH)
@@ -126,16 +126,16 @@ public class FourRing extends SequentialCommandGroup {
                         new TrajectoryFollowerCommand(drive, traj2),
                         new Com_PickUp(wobbleSystem)
                 ),
-                new TurnCommand(drive, Math.toRadians(10.0)),
+                new TurnCommand(drive, Math.toRadians(15.0)),
                 new RapidFireCommand(shooter),
                 new ParallelCommandGroup(
-                        new InstantCommand(intakeSystem::start),
-                        new TurnCommand(drive, Math.toRadians(-10.0))
+                        new InstantCommand(intakeSystem::autoIntake),
+                        new TurnCommand(drive, Math.toRadians(-15.0))
                 ),
                 new TrajectoryFollowerCommand(drive, traj3),
                 new TrajectoryFollowerCommand(drive, traj4),
-                new InstantCommand(intakeSystem::stop),
                 new RapidFireCommand(shooter),
+                new InstantCommand(intakeSystem::stop),
                 new ParallelDeadlineGroup(
                         new TrajectoryFollowerCommand(drive, traj5),
                         new Com_PutDown(wobbleSystem)
