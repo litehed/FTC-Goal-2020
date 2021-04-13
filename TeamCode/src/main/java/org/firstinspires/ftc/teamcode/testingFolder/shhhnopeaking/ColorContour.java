@@ -23,7 +23,7 @@ public class ColorContour {
         List<MatOfPoint> contours = new ArrayList<>();
         Mat hierarchy = new Mat();
 
-        Imgproc.findContours(image, contours, hierarchy, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
+        Imgproc.findContours(image, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
 
         if(hierarchy.size().height > 0 && hierarchy.size().width > 0){
             for(int index = 0; index >= 0; index = (int) hierarchy.get(0, index)[0])
