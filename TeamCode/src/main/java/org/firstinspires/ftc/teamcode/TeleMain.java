@@ -68,6 +68,7 @@ public class TeleMain extends CommandOpMode {
     private TimedAction flickerAction;
     private VoltageSensor voltageSensor;
     public double mult = 1.0;
+    public double shootMult = 1.0;
 
     @Override
     public void initialize() {
@@ -123,7 +124,7 @@ public class TeleMain extends CommandOpMode {
         driveSystem = new DriveSystem(fL, fR, bL, bR);
         driveCommand = new Com_Drive(driveSystem, m_driverOp::getLeftX, m_driverOp::getLeftY, m_driverOp::getRightX);
 
-        shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, voltageSensor);
+        shooterSystem = new ShooterSubsystem(flyWheel, flicker, flickerAction, voltageSensor, ()->shootMult);
         shooterCommand = new Com_Shooter(shooterSystem);
 
         intakeSystem = new IntakeSubsystem(intakeA, intakeB);
@@ -165,10 +166,10 @@ public class TeleMain extends CommandOpMode {
                                 .lineToLinearHeading(new Pose2d(0.9, -15.0, Math.toRadians(185)))
                                 .build()),
                         new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
-                        new TurnCommand(drive, Math.toRadians(-5.5))
+                        new TurnCommand(drive, Math.toRadians(-6.0))
                                 .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(500)),
                         new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
-                        new TurnCommand(drive, Math.toRadians(-7.8))
+                        new TurnCommand(drive, Math.toRadians(-7.5))
                                 .alongWith(new InstantCommand(shooterSystem::homePos), new WaitCommand(500)),
                         new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
                         new InstantCommand(shooterSystem::homePos),
@@ -191,6 +192,16 @@ public class TeleMain extends CommandOpMode {
         m_driverOp.getGamepadButton(GamepadKeys.Button.X).whenPressed(grabberCommand);
         m_driverOp.getGamepadButton(GamepadKeys.Button.B).toggleWhenPressed(putDownCommand, pickUpCommand);
 
+        m_driverOp.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+                .toggleWhenPressed(
+                        new SequentialCommandGroup(
+                                new InstantCommand(()->{shootMult = 0.55;})
+                        ),
+                        new SequentialCommandGroup(
+                                new InstantCommand(()->{shootMult = 1.0;})
+
+                        )
+                );
         m_driverOp.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .toggleWhenPressed(
                         new SequentialCommandGroup(
@@ -205,10 +216,9 @@ public class TeleMain extends CommandOpMode {
 
         register(driveSystem);
         driveSystem.setDefaultCommand(driveCommand);
-//        schedule(new RunCommand(() -> {
-//            telemetry.addData("FlywheelSpeed", flyWheel.getCorrectedVelocity());
-//            telemetry.addData("wobbleposition", arm.getCurrentPosition());
-//            telemetry.update();
-//        }));
+        schedule(new RunCommand(() -> {
+            telemetry.addData("FlywheelSpeed", shootMult);
+            telemetry.update();
+        }));
     }
 }

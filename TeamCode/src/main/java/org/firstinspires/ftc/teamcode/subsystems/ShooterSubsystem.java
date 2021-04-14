@@ -58,6 +58,10 @@ public class ShooterSubsystem extends SubsystemBase {
             flywheel.set(shooterSpeed.getAsDouble());
     }
 
+    public void powerShoot(){
+        flywheel.set(0.85);
+    }
+
     public void stop(){
         flywheel.stopMotor();
     }

@@ -11,6 +11,7 @@ import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
 import org.apache.commons.math3.stat.descriptive.moment.VectorialCovariance;
+import org.firstinspires.ftc.teamcode.commands.Com_EndAutoPickUp;
 import org.firstinspires.ftc.teamcode.commands.Com_PickUp;
 import org.firstinspires.ftc.teamcode.commands.Com_PutDown;
 import org.firstinspires.ftc.teamcode.commands.RapidFireCommand;
@@ -91,7 +92,7 @@ public class ZeroRing extends SequentialCommandGroup{
                 new InstantCommand(wobbleSystem::openGrabber, wobbleSystem),
                 new WaitCommand(600),
                 new ParallelCommandGroup(
-                        new Com_PickUp(wobbleSystem),
+                        new Com_EndAutoPickUp(wobbleSystem),
                         new TrajectoryFollowerCommand(drive, traj5)
                 )
         );

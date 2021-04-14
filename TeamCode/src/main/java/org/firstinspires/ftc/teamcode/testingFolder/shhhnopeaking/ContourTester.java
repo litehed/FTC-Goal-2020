@@ -17,6 +17,7 @@ public class ContourTester extends OpenCvPipeline {
     Mat mask;
     Mat frame;
     Mat output;
+
     @Override
     public Mat processFrame(Mat input) {
         frame = new Mat();

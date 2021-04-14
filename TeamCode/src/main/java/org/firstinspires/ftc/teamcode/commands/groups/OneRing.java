@@ -10,6 +10,7 @@ import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
+import org.firstinspires.ftc.teamcode.commands.Com_EndAutoPickUp;
 import org.firstinspires.ftc.teamcode.commands.Com_Intake;
 import org.firstinspires.ftc.teamcode.commands.Com_PickUp;
 import org.firstinspires.ftc.teamcode.commands.Com_PutDown;
@@ -28,7 +29,7 @@ public class OneRing extends SequentialCommandGroup {
 
     public static double xBox = 26.0, yBox = -44.0;
     public static double shootPosX = -38.0, shootPosY = 24.0;
-    public static double secondWobbleX = -33, secondWobbleY = -20.0;
+    public static double secondWobbleX = -33, secondWobbleY = -22.0;
     public static double finalX = -5.5, finalY = 1.0;
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));
@@ -112,7 +113,7 @@ public class OneRing extends SequentialCommandGroup {
                 new WaitCommand(500),
                 new ParallelDeadlineGroup(
                         new TrajectoryFollowerCommand(drive, traj5),
-                        new Com_PickUp(wobbleSystem),
+                        new Com_EndAutoPickUp(wobbleSystem),
                         new InstantCommand(intakeSystem::start)
                 ),
                 new WaitCommand(400).andThen(new InstantCommand(intakeSystem::stop)),
