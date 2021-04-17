@@ -163,7 +163,7 @@ public class TeleMain extends CommandOpMode {
                         }, driveSystem),
                         new InstantCommand(()->drive.setPoseEstimate(new Pose2d(63, -10, Math.toRadians(180)))),
                         new TrajectoryFollowerCommand(drive, drive.trajectoryBuilder(new Pose2d(63, -10, Math.toRadians(180)), true)
-                                .lineToLinearHeading(new Pose2d(0.9, -15.0, Math.toRadians(185)))
+                                .lineToLinearHeading(new Pose2d(0.9, -15.0, Math.toRadians(180)))
                                 .build()),
                         new InstantCommand(shooterSystem::flickPos).andThen(new WaitCommand(350)),
                         new TurnCommand(drive, Math.toRadians(-6.0))
