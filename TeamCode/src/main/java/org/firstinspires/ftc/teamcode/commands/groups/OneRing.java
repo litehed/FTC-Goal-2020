@@ -29,7 +29,7 @@ public class OneRing extends SequentialCommandGroup {
 
     public static double xBox = 26.0, yBox = -44.0;
     public static double shootPosX = -38.0, shootPosY = 24.0;
-    public static double secondWobbleX = -33, secondWobbleY = -22.0;
+    public static double secondWobbleX = -32, secondWobbleY = -22.0;
     public static double finalX = -5.5, finalY = 1.0;
 
     private Pose2d startPose = new Pose2d(-63.0, -40.0, Math.toRadians(180.0));

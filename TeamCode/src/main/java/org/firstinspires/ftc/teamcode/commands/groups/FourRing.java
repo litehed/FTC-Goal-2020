@@ -66,12 +66,12 @@ public class FourRing extends SequentialCommandGroup {
                 .build();
 
         Trajectory traj3Half = drive.trajectoryBuilder(traj3.end())
-                .splineToConstantHeading(new Vector2d(-20.0, -45.0), 0.0,
+                .splineToConstantHeading(new Vector2d(-20.0, -50.0), 0.0,
                         new MinVelocityConstraint(Arrays.asList(
                                 new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
-                                new MecanumVelocityConstraint(50, DriveConstants.TRACK_WIDTH)
+                                new MecanumVelocityConstraint(45, DriveConstants.TRACK_WIDTH)
                         )),
-                        new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL)
+                        new ProfileAccelerationConstraint(40.0)
                 )
                 .build();
 
@@ -83,11 +83,11 @@ public class FourRing extends SequentialCommandGroup {
         //shoots and intake stops
 
         Trajectory traj5 = drive.trajectoryBuilder(traj4.end())
-                .splineToLinearHeading(new Pose2d(-25.0, -20.0, Math.toRadians(0.0)), 0.0)
+                .splineToLinearHeading(new Pose2d(-24.0, -21.0, Math.toRadians(0.0)), 0.0)
                 .build();
 
         Trajectory traj6 = drive.trajectoryBuilder(traj5.end())
-                .lineTo(new Vector2d(-33.0, -21.2))
+                .lineTo(new Vector2d(-31.0, -22))
                 .build();
 
         Trajectory traj7 = drive.trajectoryBuilder(traj6.end())
@@ -98,7 +98,7 @@ public class FourRing extends SequentialCommandGroup {
                         )),
                         new ProfileAccelerationConstraint(55)
                 )
-                .splineToConstantHeading(new Vector2d(42.0, -63.0), 0.0,
+                .splineToConstantHeading(new Vector2d(42.5, -64.0), 0.0,
                         new MinVelocityConstraint(Arrays.asList(
                                 new AngularVelocityConstraint(DriveConstants.MAX_ANG_VEL),
                                 new MecanumVelocityConstraint(55, DriveConstants.TRACK_WIDTH)
